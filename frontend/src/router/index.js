@@ -1,0 +1,41 @@
+import { createRouter, createWebHistory } from 'vue-router'
+
+import PublicLayout from '../layouts/PublicLayout.vue';
+import PrivateLayout from '../layouts/PrivateLayout.vue';
+import Login from '../views/Login.vue';
+
+const isAuthenticated = () => {
+  // A fazer autenticação
+  return false;
+};
+
+const routes = [
+  {
+    path: '/',
+    component: PublicLayout,
+    children: [
+      { path: '/', name: 'Login', component: Login},
+    ],
+  },
+  {
+    path: '/app',
+    component: PrivateLayout,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next();
+      } else {
+        next('/');
+      }
+    },
+    children: [
+     // { path: 'dashboard', name: 'Dashboard', component: Dashboard },
+    ],
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
