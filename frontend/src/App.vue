@@ -24,5 +24,6 @@ export default {
 
 #app{
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 </style>

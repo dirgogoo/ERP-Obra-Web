@@ -8,7 +8,7 @@
     <div id="background">
         <div id="login_container">
             <div id="logo_container">
-                <img id="logo" src="../assets/logo.png" alt="logo cora duarte" srcset="">
+                <img id="logo" src="../assets/img/logo.png" alt="logo cora duarte" srcset="">
             </div>
             <div id="form_container">
                 <TopLabelTextBox label="Login"/>
@@ -60,7 +60,7 @@
     #form_container{
         width: 85%;
         height: 65%;
-        margin-top: 10px;
+        margin-top: 30px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

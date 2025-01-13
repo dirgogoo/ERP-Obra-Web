@@ -6,13 +6,20 @@ import Login from '../views/Login.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
-  return false;
+  return true;
 };
 
 const routes = [
   {
     path: '/',
     component: PublicLayout,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next('/app');
+      } else {
+        next();
+      }
+    },
     children: [
       { path: '/', name: 'Login', component: Login},
     ],
