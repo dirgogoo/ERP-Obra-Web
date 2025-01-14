@@ -5,6 +5,7 @@ import PrivateLayout from '../layouts/PrivateLayout.vue';
 import Login from '../views/Login.vue';
 import Home from '@/views/Home.vue';
 import Cadastro from '@/views/Cadastro.vue';
+import ClienteCadastro from '@/views/ClienteCadastro.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -38,7 +39,8 @@ const routes = [
     },
     children: [
       { path: '/app/home', name: 'Home', component:Home },
-      { path: '/app/cadastro', name: 'Cadastro', component:Cadastro },
+      { path: '/app/cadastro', name: 'Cadastro', component:Cadastro},
+      { path: '/app/cadastro/cliente', name: 'Cliente', component:ClienteCadastro}
     ],
   },
 ]

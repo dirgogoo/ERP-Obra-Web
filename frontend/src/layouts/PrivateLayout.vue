@@ -6,6 +6,7 @@
     setTimeout(() => {
         document.getElementById(lastId).classList.add("menu-selected");
     }, 1000);
+    
    function clickMenu(id)
     {
         //console.log("added:",id);
@@ -73,6 +74,9 @@
         background-color: #f2f2f2;
         width: 100vw;
         height: 100vh;
+    }
+    #name-display{
+        font-size: 1.5em
     }
 
     #header-container{

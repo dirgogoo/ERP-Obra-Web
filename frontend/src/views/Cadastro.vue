@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router';
+
 
 </script>
 
@@ -14,10 +16,10 @@
                 <img id="helmet" src="../assets/img/servico.png" alt="Serviços">
                 <h2 class="label-element">Serviço</h2>
             </div>
-            <div class="menu-element">
+            <RouterLink class="menu-element" to="/app/cadastro/cliente" >
                 <img id="helmet" src="../assets/img/cliente.png" alt="Clientes">
                 <h2 class="label-element" id="label-cliente">Cliente</h2>
-            </div>
+            </RouterLink>
             <div class="menu-element">
                 <img id="helmet" src="../assets/img/etapa.png" alt="Etapas">
                 <h2 class="label-element">Etapa</h2>
@@ -35,7 +37,6 @@
     }
 
     #menu-container{
-        color: white;
         margin-top:7%;
         display: flex;
         justify-content: space-around;
@@ -45,11 +46,13 @@
     }
 
     .menu-element{
+        color: white;
         background-color: #1988F3;
         height: 100%;
         width: 18%;
         text-align: center;
         border-radius: 30px;
+        text-decoration: none;
     }
     .menu-element:hover{
         transform: scale(1.15);
