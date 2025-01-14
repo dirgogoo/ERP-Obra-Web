@@ -1,3 +1,28 @@
+
+<script setup>
+
+    var lastId = "homeRouter";
+   
+    setTimeout(() => {
+        document.getElementById(lastId).classList.add("menu-selected");
+    }, 1000);
+   function clickMenu(id)
+    {
+        //console.log("added:",id);
+        document.getElementById(id).classList.add("menu-selected");
+        if (id != lastId){
+            document.getElementById(lastId).classList.remove("menu-selected");
+            //console.log("removed:",lastId);
+        }
+        
+        console.log( document.getElementById(id).classList.value)
+        lastId = id;
+        
+        
+    } 
+
+</script>
+
 <template >
     <div id="background">
         
@@ -11,15 +36,15 @@
         
         <div id="menu-container">
             <nav>
-                <RouterLink class="menu-element menu-selected" to="/">
+                <RouterLink @click="clickMenu('homeRouter')"  class="menu-element" id="homeRouter" to="/app/home" >
                     <img id="home" src="../assets/img/Home.png" alt="Home">
                     <h2 class="menu-element-text">Home</h2>
                 </RouterLink>
-                <RouterLink class="menu-element" to="/">
+                <RouterLink @click="clickMenu('obraRouter')" class="menu-element" id="obraRouter" to="/app/home">
                     <img id="helmet" src="../assets/img/Helmet.png" alt="Obras">
                     <h2 class="menu-element-text">Obras</h2>
                 </RouterLink>
-                <RouterLink class="menu-element" to="/">
+                <RouterLink  @click="clickMenu('cadastroRouter')" class="menu-element" id="cadastroRouter" to="/app/cadastro">
                     <img id="pencil" src="../assets/img/pencil.png" alt="Cadastro">
                     <h2 class="menu-element-text">Cadastro</h2>
                 </RouterLink>
@@ -33,11 +58,15 @@
         </div>
         
         <div id="content-container">
-            <h1 style="margin:1.5%;">Home</h1>
+            <router-view />
         </div>
 
     </div>
 </template>
+
+
+
+
 
 <style scoped>
     #background{
@@ -116,15 +145,12 @@
         position: relative;
         text-decoration: none;  
         opacity: 0.8;
-
-        
     }
 
 
 
     .menu-element:hover{
         color:white;
-        border-left: 3px solid #ffffff;
         opacity: 1;
     }
 
@@ -161,14 +187,17 @@
     }
 
     #door{
-        height: 100%;
+        height: 60%;
         width: 50%;
     }
     
     #content-container{
-        width: 96%;
+        position: absolute;
+        left: 6%;
+        margin-top:1%;
+        width: 93%;
         height: 92%;
-        float: left;
+
     }
 
 </style>

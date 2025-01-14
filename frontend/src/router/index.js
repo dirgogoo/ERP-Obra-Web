@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import PublicLayout from '../layouts/PublicLayout.vue';
 import PrivateLayout from '../layouts/PrivateLayout.vue';
 import Login from '../views/Login.vue';
+import Home from '@/views/Home.vue';
+import Cadastro from '@/views/Cadastro.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -35,7 +37,8 @@ const routes = [
       }
     },
     children: [
-     // { path: 'dashboard', name: 'Dashboard', component: Dashboard },
+      { path: '/app/home', name: 'Home', component:Home },
+      { path: '/app/cadastro', name: 'Cadastro', component:Cadastro },
     ],
   },
 ]

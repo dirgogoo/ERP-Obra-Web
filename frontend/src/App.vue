@@ -16,14 +16,16 @@ export default {
 <style>
 *{
   margin: 0;
+  padding: 0;
   font-family: "Alexandria", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  overflow: hidden;
 }
 
 #app{
-  overflow-x: hidden;
-  overflow-y: hidden;
+  height: 100vh;
+  background-color:black;
 }
 </style>
