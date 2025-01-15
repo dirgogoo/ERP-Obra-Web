@@ -20,10 +20,10 @@ import { RouterLink } from 'vue-router';
                 <img id="helmet" src="../assets/img/cliente.png" alt="Clientes">
                 <h2 class="label-element" id="label-cliente">Cliente</h2>
             </RouterLink>
-            <div class="menu-element">
+            <RouterLink class="menu-element" to="/app/cadastro/etapa">
                 <img id="helmet" src="../assets/img/etapa.png" alt="Etapas">
                 <h2 class="label-element">Etapa</h2>
-            </div>
+            </RouterLink>
         </div>
     </div>
 </template>
