@@ -20,9 +20,9 @@
             @pagination-change-page="updatePage"
         ></pagination>
         <div v-if="clientes.length > perPage" id="selectionPage-container">
-            <h1 @click="updatePage(currentPage - 1)">&lt</h1>
+            <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
             <h1 id="page-label">{{currentPage}}</h1>
-            <div @click="updatePage(currentPage + 1)"><h1>&gt</h1> </div>
+            <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
         </div>
     </div>
 </template>
