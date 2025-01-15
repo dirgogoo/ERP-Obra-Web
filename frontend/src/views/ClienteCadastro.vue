@@ -3,7 +3,7 @@
     import Button from '../components/Button';
     import Searchbar from '../components/Searchbar.vue';
     import FilterSelector from '../components/FilterSelector.vue';
-
+    import TabelaClientes from '../components/TabelaClientes.vue';
     components: { Searchbar,Button,TopLabelTextBox,FilterSelector};
 </script>
 
@@ -22,7 +22,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-
+                <TabelaClientes/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Cliente</h1>
@@ -75,7 +75,7 @@
         height: 50%;
         width: 20%;
         margin-left: 2.5%;
-        margin-top: 6%;
+        margin-top: 4%;
         text-align: center;
         font-size: 0.65em;
         justify-content: space-between;

@@ -25,13 +25,18 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+       
     }
 
     input{
         background:none;
         border: none;
         width: 75%;
+        height: 40px;
+        outline:none;
+        font-size: 1.2em;
     }
+
 
     img{
         height: 55%;
