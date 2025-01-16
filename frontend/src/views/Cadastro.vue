@@ -8,10 +8,10 @@ import { RouterLink } from 'vue-router';
     <div id="main-container">
         <h2>Cadastro</h2>
         <div id="menu-container">
-            <div class="menu-element">
+            <RouterLink class="menu-element" to="/app/cadastro/material">
                 <img id="helmet" src="../assets/img/material.png" alt="Material">
                 <h2 class="label-element">Material</h2>
-            </div>
+            </RouterLink>
             <div class="menu-element">
                 <img id="helmet" src="../assets/img/servico.png" alt="Serviços">
                 <h2 class="label-element">Serviço</h2>
