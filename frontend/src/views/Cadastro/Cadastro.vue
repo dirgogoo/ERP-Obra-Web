@@ -9,19 +9,19 @@ import { RouterLink } from 'vue-router';
         <h2>Cadastro</h2>
         <div id="menu-container">
             <RouterLink class="menu-element" to="/app/cadastro/material">
-                <img id="helmet" src="../assets/img/material.png" alt="Material">
+                <img id="helmet" src="../../assets/img/material.png" alt="Material">
                 <h2 class="label-element">Material</h2>
             </RouterLink>
-            <div class="menu-element">
-                <img id="helmet" src="../assets/img/servico.png" alt="Serviços">
+            <RouterLink class="menu-element" to="/app/cadastro/servico">
+                <img id="helmet" src="../../assets/img/servico.png" alt="Serviços">
                 <h2 class="label-element">Serviço</h2>
-            </div>
+            </RouterLink>
             <RouterLink class="menu-element" to="/app/cadastro/cliente" >
-                <img id="helmet" src="../assets/img/cliente.png" alt="Clientes">
+                <img id="helmet" src="../../assets/img/cliente.png" alt="Clientes">
                 <h2 class="label-element" id="label-cliente">Cliente</h2>
             </RouterLink>
             <RouterLink class="menu-element" to="/app/cadastro/etapa">
-                <img id="helmet" src="../assets/img/etapa.png" alt="Etapas">
+                <img id="helmet" src="../../assets/img/etapa.png" alt="Etapas">
                 <h2 class="label-element">Etapa</h2>
             </RouterLink>
         </div>

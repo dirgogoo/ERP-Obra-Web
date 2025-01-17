@@ -4,10 +4,11 @@ import PublicLayout from '../layouts/PublicLayout.vue';
 import PrivateLayout from '../layouts/PrivateLayout.vue';
 import Login from '../views/Login.vue';
 import Home from '@/views/Home.vue';
-import Cadastro from '@/views/Cadastro.vue';
-import ClienteCadastro from '@/views/ClienteCadastro.vue';
-import EtapaCadastro from '@/views/EtapaCadastro.vue';
-import MaterialCadastro from '@/views/MaterialCadastro.vue';
+import Cadastro from '@/views/Cadastro/Cadastro.vue';
+import ClienteCadastro from '@/views/Cadastro/ClienteCadastro.vue';
+import EtapaCadastro from '@/views/Cadastro/EtapaCadastro.vue';
+import MaterialCadastro from '@/views/Cadastro/MaterialCadastro.vue';
+import ServicoCadastro from '@/views/Cadastro/ServicoCadastro.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -45,6 +46,7 @@ const routes = [
       { path: '/app/cadastro/cliente', name: 'Cliente', component:ClienteCadastro},
       { path: '/app/cadastro/etapa', name: 'Etapa', component:EtapaCadastro},
       { path: '/app/cadastro/material', name: 'Material', component:MaterialCadastro},
+      { path: '/app/cadastro/servico', name: 'Servico', component:ServicoCadastro},
     ],
   },
 ]
