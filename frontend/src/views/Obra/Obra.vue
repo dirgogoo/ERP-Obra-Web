@@ -19,10 +19,9 @@
             <div class="filter-container">
                 <FilterSelector label="Filtrar por:"/>
             </div>
-            <div id="button-container">
+            <RouterLink to="/app/obra/criar" id="button-container">
                 <Button label="Nova Obra"/>
-
-            </div>
+            </RouterLink>
         </div>
 
         <div id="bottom-container">
