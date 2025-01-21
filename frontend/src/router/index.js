@@ -9,6 +9,7 @@ import ClienteCadastro from '@/views/Cadastro/ClienteCadastro.vue';
 import EtapaCadastro from '@/views/Cadastro/EtapaCadastro.vue';
 import MaterialCadastro from '@/views/Cadastro/MaterialCadastro.vue';
 import ServicoCadastro from '@/views/Cadastro/ServicoCadastro.vue';
+import Obra from '@/views/Obra/Obra.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -42,6 +43,7 @@ const routes = [
     },
     children: [
       { path: '/app/home', name: 'Home', component:Home },
+      { path: '/app/obra', name: 'Obra', component:Obra},
       { path: '/app/cadastro', name: 'Cadastro', component:Cadastro},
       { path: '/app/cadastro/cliente', name: 'Cliente', component:ClienteCadastro},
       { path: '/app/cadastro/etapa', name: 'Etapa', component:EtapaCadastro},
