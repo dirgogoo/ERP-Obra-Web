@@ -15,7 +15,7 @@
 <style scoped>
 
     #textbox_container{
-        width: 100%;
+        width: 95%;
         display: flex;
         flex-direction: column;
         justify-content: center;
