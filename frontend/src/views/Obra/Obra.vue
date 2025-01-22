@@ -37,8 +37,8 @@
         display: flex;
         align-items: center;
         height: 10vh;
+        width: 100%;
         margin-top: 20px;
-        max-width: 1800px;
         margin-left: 20px;
     }
 
@@ -67,6 +67,7 @@
         font-size: 0.5em;
         width: 15%;
         margin-left: 50px;
+        justify-self: flex-end;
     }
     
 </style>

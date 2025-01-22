@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="obra in paginatedObras" :key="obra.Id">
+                <tr v-for="obra in paginatedObras" :key="obra.Id" @click="toRouteId(obra.Id)">
                     <td>{{ obra.Id }}</td>
                     <td>{{ obra.Nome }}</td>
                     <td>{{ obra.Cliente }}</td>
@@ -36,12 +36,14 @@
 <script>
 import { ref, computed } from 'vue';
 import Pagination from 'laravel-vue-pagination';
-
+import { useRouter } from 'vue-router';
 export default {
+
     name: 'TabelaObra',
     components: {
         Pagination
     },
+
     setup() {
         const obras = ref([
             { Id: 1, Nome: 'Obra 1', Cliente: 'Cliente 1', DataCriacao: '2023-01-01', Status: 'Em andamento' },
@@ -85,6 +87,10 @@ export default {
             { Id: 39, Nome: 'Obra 39', Cliente: 'Cliente 39', DataCriacao: '2023-02-08', Status: 'Pendente' },
             { Id: 40, Nome: 'Obra 40', Cliente: 'Cliente 40', DataCriacao: '2023-02-09', Status: 'Em andamento' },
         ]);
+
+       
+        const route = useRouter();
+
         const currentPage = ref(1);
         const perPage = ref(14);
 
@@ -100,12 +106,17 @@ export default {
             }
         };
 
+        const toRouteId = (id) => {
+            route.push(`/app/obra/${id}`);
+        };
+
         return {
             obras,
             currentPage,
             perPage,
             paginatedObras,
-            updatePage
+            updatePage,
+            toRouteId
         };
     }
 };
