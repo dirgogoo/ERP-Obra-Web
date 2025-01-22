@@ -11,6 +11,8 @@ import MaterialCadastro from '@/views/Cadastro/MaterialCadastro.vue';
 import ServicoCadastro from '@/views/Cadastro/ServicoCadastro.vue';
 import Obra from '@/views/Obra/Obra.vue';
 import ObraCriar from '@/views/Obra/ObraCriar.vue';
+import ObraId from '@/views/Obra/ObraId.vue';
+import ObraGeral from '@/views/Obra/ObraGeral.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -45,6 +47,9 @@ const routes = [
     children: [
       { path: '/app/home', name: 'Home', component:Home },
       { path: '/app/obra', name: 'Obra', component:Obra},
+      { path: '/app/obra/:id', name: 'ObraId', component:ObraId, children: [
+        { path: '/app/obra/:id/geral', name: 'ObraGeral', component:ObraGeral},
+      ]},
       { path: '/app/obra/criar', name: 'ObraCriar', component:ObraCriar},
       { path: '/app/cadastro', name: 'Cadastro', component:Cadastro},
       { path: '/app/cadastro/cliente', name: 'Cliente', component:ClienteCadastro},
