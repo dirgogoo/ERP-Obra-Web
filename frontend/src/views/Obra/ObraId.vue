@@ -1,13 +1,27 @@
 <script setup>
-import { ref } from "vue";
+  import { ref } from "vue";
+  import { useRouter } from 'vue-router';
 
-const menuOptions = ["Geral", "Etapas", "Itens","Solicitações" ,"Info"];
-const selected = ref("Geral");
+  const route = useRouter();
 
-function selectItem(item) {
-  selected.value = item; 
-}
+  const menuOptions = ["Geral", "Etapas", "Itens","Solicitações" ,"Info"];
+  const selected = ref("Geral");
+  
+  const currentPath = route.currentRoute.value.params.id;
+
+
+
+  function selectItem(item) {
+    selected.value = item; 
+    toRouteId(item);
+  }
+  const toRouteId = (item) => {
+    route.replace("/app/obra/"+currentPath+ '/' +item.toLowerCase());
+  };
+
+  toRouteId(selected.value);
 </script>
+
 
 <template>
   <div id="main-container">
@@ -71,12 +85,13 @@ ul {
   font-size: 1.4em;
   padding-top: 20px;
   padding-bottom: 20px;
-  padding-left: auto;
 }
 li {
   float: left;
   margin-right: 4%;
   border: none;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .active {
   border-bottom: 2px solid #2888E4;
@@ -84,7 +99,7 @@ li {
 
 #content-container {
   width: 100%;
-  height: 60vh;
+  height: 70vh;
   margin-top: 2vh;
 }
 </style>
