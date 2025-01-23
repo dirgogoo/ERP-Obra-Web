@@ -41,7 +41,7 @@
                     <img id="home" src="../assets/img/Home.png" alt="Home">
                     <h2 class="menu-element-text">Home</h2>
                 </RouterLink>
-                <RouterLink @click="clickMenu('obraRouter')" class="menu-element" id="obraRouter" to="/app/home">
+                <RouterLink @click="clickMenu('obraRouter')" class="menu-element" id="obraRouter" to="/app/obra">
                     <img id="helmet" src="../assets/img/Helmet.png" alt="Obras">
                     <h2 class="menu-element-text">Obras</h2>
                 </RouterLink>

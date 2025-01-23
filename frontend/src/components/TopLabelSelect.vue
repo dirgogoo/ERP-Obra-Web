@@ -1,7 +1,9 @@
 <template>
     <div id="textbox_container">
         <h1 id="label">{{ label }}:</h1>
-        <input type="text" autocomplete="off" name="Login" id="textbox">
+        <select name="selectTop" id="textbox">
+
+        </select>
     </div>
 </template>
 

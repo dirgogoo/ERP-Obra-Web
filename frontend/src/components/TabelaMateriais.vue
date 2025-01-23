@@ -64,7 +64,9 @@ export default {
         });
 
         const updatePage = (page) => {
-            currentPage.value = page;
+            if (page >= 1 && page <= Math.ceil(materiais.value.length / perPage.value)){
+                currentPage.value = page;
+            }
         };
 
         return {
