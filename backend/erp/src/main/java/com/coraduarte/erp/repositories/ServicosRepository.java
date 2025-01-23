@@ -15,6 +15,6 @@ public interface ServicosRepository  extends JpaRepository<Servicos, Long>{
     //@Query(value = "SELECT s FROM Servicos s WHERE s.cliente.id = : id")
     //List<Servicos> xyz( @Param ("id") Long id);
 
-    @Query(value = "SELECT * FROM services s WHERE t.cliente_id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM services s WHERE s.cliente_id = :id", nativeQuery = true)
     List<Servicos> findByCliente_Id(@Param("id") Long id);
 }
