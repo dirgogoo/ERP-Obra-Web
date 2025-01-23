@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = Services.TABLE_NAME)
+@Table(name = Servicos.TABLE_NAME)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 
-public class Services {
+public class Servicos {
     public static final String TABLE_NAME = "services";
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

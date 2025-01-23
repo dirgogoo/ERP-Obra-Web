@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 @EqualsAndHashCode
 @Entity
 
-public class Clients {
+public class Cliente {
 
     public interface CreateClient{}
     public interface UpdateClients {}

@@ -1,5 +1,6 @@
 package com.coraduarte.erp.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,22 +11,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.Column;
-
 
 @Entity
-@Table(name = Stages.TABLE_NAME)
+@Table(name = "materiais")
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 
-public class Stages {
-    public static final String TABLE_NAME = "stages";
-
+public class Materiais {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", unique = true )
@@ -36,15 +31,14 @@ public class Stages {
     @NotEmpty
     private String name;
 
-
     @Column(name = "price", nullable = false)
     @NotNull
     @NotEmpty
-    private Long price;
+    private Double price;
 
-    @Column(name = "deadline", nullable = false)
+    @Column(name = "unity", nullable = false)
     @NotNull
     @NotEmpty
-    private Integer deadline;
+    private String unity;
 
 }
