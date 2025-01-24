@@ -93,6 +93,11 @@ li {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+li:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
 .active {
   border-bottom: 2px solid #2888E4;
 }

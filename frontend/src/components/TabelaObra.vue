@@ -148,6 +148,7 @@ tr:nth-child(even) {
 
 tr:hover{
     background-color: #b8d9ff;
+    cursor: pointer;
 }
 
 #selectionPage-container{
