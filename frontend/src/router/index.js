@@ -13,6 +13,7 @@ import Obra from '@/views/Obra/Obra.vue';
 import ObraCriar from '@/views/Obra/ObraCriar.vue';
 import ObraId from '@/views/Obra/ObraId.vue';
 import ObraGeral from '@/views/Obra/ObraGeral.vue';
+import ObraEtapas from '@/views/Obra/ObraEtapas.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -49,6 +50,7 @@ const routes = [
       { path: '/app/obra', name: 'Obra', component:Obra},
       { path: '/app/obra/:id', name: 'ObraId', component:ObraId, children: [
         { path: '/app/obra/:id/geral', name: 'ObraGeral', component:ObraGeral},
+        { path: '/app/obra/:id/etapas', name: 'ObraEtapas', component:ObraEtapas},
       ]},
       { path: '/app/obra/criar', name: 'ObraCriar', component:ObraCriar},
       { path: '/app/cadastro', name: 'Cadastro', component:Cadastro},
