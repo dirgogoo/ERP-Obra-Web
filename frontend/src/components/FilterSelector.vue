@@ -22,19 +22,18 @@
 
     #main-container{
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
     }
 
     select{
         border: 0;
         background-color: #ECECEC;
-        width: 100%;
         margin-left:2%;
         height: 35px;
+        width: 65%;
     }
 
     #text-holder{
-        min-width: 160px;
         height: 35px;
     }
 
