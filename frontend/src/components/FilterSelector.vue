@@ -29,7 +29,7 @@
         border: 0;
         background-color: #ECECEC;
         margin-left:2%;
-        height: 35px;
+        height: 40px;
         width: 65%;
     }
 

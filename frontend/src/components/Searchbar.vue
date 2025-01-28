@@ -18,7 +18,7 @@
 
     #searchbar-container{
         width: 100%;
-       height: 40px;
+       height: 35px;
        border:0;
        background-color: #ECECEC;
         border-radius: 30px;
