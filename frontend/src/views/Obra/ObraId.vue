@@ -25,7 +25,7 @@
 
 <template>
   <div id="main-container">
-    <h2>Obra/{{ $route.params.id }}</h2>
+    <h2>Obra/{{ $route.fullPath.split("obra/")[1] }}</h2>
     <div id="info-container">
      
       <div id="info-grid">

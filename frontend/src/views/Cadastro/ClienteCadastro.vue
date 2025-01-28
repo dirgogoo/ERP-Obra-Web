@@ -28,7 +28,7 @@
                 <h1>Cadastro Cliente</h1>
                 <TopLabelTextBox label="Nome"/>
                 <TopLabelTextBox label="CNPJ"/>
-                <Button label="Cadastrar"/>
+                <Button label="Cadastrar" class="button"/>
             </div>
         </div>
     </div>
@@ -67,6 +67,10 @@
     #table-container{
         height: 100%;
         width: 70%;
+    }
+
+    .button{
+        height: 60px;
     }
 
     #form-container{

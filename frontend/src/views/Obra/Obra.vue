@@ -66,6 +66,7 @@
     #button-container{
         font-size: 0.5em;
         width: 15%;
+        height: 60px;
         margin-left: 50px;
         justify-self: flex-end;
     }

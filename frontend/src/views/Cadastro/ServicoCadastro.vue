@@ -29,8 +29,8 @@
                 <TopLabelTextBox label="Nome"/>
                 <TopLabelTextBox label="Unidade"/>
                 <TopLabelTextBox label="Preço"/>
-                <Button label="Cadastrar"/>
-                <ButtonRed class="ButtonRed" label="Excluir"/>
+                <Button class="button" label="Cadastrar"/>
+                <ButtonRed class="button" label="Excluir"/>
             </div>
         </div>
     </div>
@@ -81,5 +81,9 @@
         text-align: center;
         font-size: 0.65em;
         justify-content: space-between;
+    }
+
+    .button{
+        height: 60px;
     }
 </style>

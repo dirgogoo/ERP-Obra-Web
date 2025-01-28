@@ -24,8 +24,8 @@
                 <h1>Cadastro Etapa</h1>
                 <TopLabelTextBox label="Nome"/>
                 <div id="button-container">
-                    <Button label="Cadastrar"/>
-                    <ButtonRed class="ButtonRed" label="Excluir"/>
+                    <Button label="Cadastrar" class="button"/>
+                    <ButtonRed class="button" label="Excluir"/>
                 </div>
             </div>
         </div>
@@ -73,10 +73,16 @@
         gap: 30px;
     }
     
+    .button{
+        height: 60px;
+    }
+
     #button-container{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         gap: 30px;
     }
+
+    
 </style>

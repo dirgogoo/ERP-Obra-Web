@@ -114,7 +114,7 @@
     #button-container{
         display: flex;
         margin-top: 20px;
-        
+        height: 60px;
     }
 
     #form-button-container{

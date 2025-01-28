@@ -13,7 +13,7 @@
 <style scoped>
 
 input{
-    height:60px;
+    height:95%;
     width: 95%;
     border-radius: 15px;
     border-style: none;
