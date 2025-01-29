@@ -31,7 +31,7 @@ public class Cliente {
     public interface CreateClient{}
     public interface UpdateClients {}
 
-    public static final String TABLE_NAME = "clients";
+    public static final String TABLE_NAME = "cliente";
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
