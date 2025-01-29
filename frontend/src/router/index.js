@@ -16,6 +16,7 @@ import ObraGeral from '@/views/Obra/ObraGeral.vue';
 import ObraEtapas from '@/views/Obra/ObraEtapas.vue';
 import ObraItens from '@/views/Obra/ObraItens.vue';
 import ObraItensGerenciar from '@/views/Obra/ObraItensGerenciar.vue';
+import ObraInfo from '@/views/Obra/ObraInfo.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -55,7 +56,7 @@ const routes = [
         { path: '/app/obra/:id/etapas', name: 'ObraEtapas', component:ObraEtapas},
         { path: '/app/obra/:id/itens', name: 'ObraItens', component:ObraItens},
         { path: '/app/obra/:id/itens/gerenciar', name: 'ObraItensGerenciar', component:ObraItensGerenciar},
-
+        { path: '/app/obra/:id/info', name: 'ObraInfo', component:ObraInfo},
       ]},
       { path: '/app/obra/criar', name: 'ObraCriar', component:ObraCriar},
       { path: '/app/cadastro', name: 'Cadastro', component:Cadastro},
