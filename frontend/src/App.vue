@@ -26,6 +26,6 @@ export default {
 
 #app{
   height: 100vh;
-  background-color:black;
+  font-size: 0.96em;
 }
 </style>
