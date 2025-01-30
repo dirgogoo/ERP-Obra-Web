@@ -17,6 +17,7 @@ import ObraEtapas from '@/views/Obra/ObraEtapas.vue';
 import ObraItens from '@/views/Obra/ObraItens.vue';
 import ObraItensGerenciar from '@/views/Obra/ObraItensGerenciar.vue';
 import ObraInfo from '@/views/Obra/ObraInfo.vue';
+import Admin from '@/views/Admin.vue';
 
 const isAuthenticated = () => {
   // A fazer autenticação
@@ -64,6 +65,7 @@ const routes = [
       { path: '/app/cadastro/etapa', name: 'Etapa', component:EtapaCadastro},
       { path: '/app/cadastro/material', name: 'Material', component:MaterialCadastro},
       { path: '/app/cadastro/servico', name: 'Servico', component:ServicoCadastro},
+      { path: '/app/admin', name: 'Admin', component:Admin},
     ],
   },
 ]

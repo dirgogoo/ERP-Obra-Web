@@ -51,11 +51,18 @@
                 </RouterLink>
                 
             </nav>
+            <div id="menu-container-bottom">
+
+            
+                <RouterLink class="menu-element" id="menu-logout" to="/app/admin">
+                        <img id="admin" src="../assets/img/admin.png" alt="Logout">
+                        <h2 class="menu-element-text">Admin</h2>
+                </RouterLink>
                 <RouterLink class="menu-element" id="menu-logout" to="/">
-                        <img id="door" src="../assets/img/door.png" alt="Logout">
+                        <img id="door" src="../assets/img/door.png" alt="Painel Administrador">
                         <h2 class="menu-element-text">Sair</h2>
                 </RouterLink>
-                
+            </div>
         </div>
         
         <div id="content-container">
@@ -109,8 +116,8 @@
 
     #menu-container{
         background-color: #2888E4;
-        height: 98vh;
-        width: 6%;
+        height: 92vh;
+        width: 5%;
         max-width: 100px;
         display: flex;
         float: left;
@@ -127,14 +134,20 @@
     
     nav{
         margin-top: 30px;
-        height: 80%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap:3.5%
+        gap:20px;
     }
 
-
+    #menu-container-bottom{
+        width: 100%;
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
 
     .menu-element{
         display: flex;
@@ -183,6 +196,11 @@
     #helmet{
         height: 70%;
         width: 70%;
+    }
+
+    #admin{
+        height: 68%;
+        width: 68%;
     }
 
     #pencil{
