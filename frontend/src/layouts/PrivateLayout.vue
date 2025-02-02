@@ -1,28 +1,4 @@
 
-<script setup>
-
-    var lastId = "homeRouter";
-   
-    setTimeout(() => {
-        document.getElementById(lastId).classList.add("menu-selected");
-    }, 1000);
-    
-   function clickMenu(id)
-    {
-        //console.log("added:",id);
-        document.getElementById(id).classList.add("menu-selected");
-        if (id != lastId){
-            document.getElementById(lastId).classList.remove("menu-selected");
-            //console.log("removed:",lastId);
-        }
-        
-        console.log( document.getElementById(id).classList.value)
-        lastId = id;
-        
-        
-    } 
-
-</script>
 
 <template >
     <div id="background">
@@ -37,15 +13,15 @@
         
         <div id="menu-container">
             <nav>
-                <RouterLink @click="clickMenu('homeRouter')"  class="menu-element" id="homeRouter" to="/app/home" >
+                <RouterLink   class="menu-element" id="homeRouter" to="/app/home" >
                     <img id="home" src="../assets/img/Home.png" alt="Home">
                     <h2 class="menu-element-text">Home</h2>
                 </RouterLink>
-                <RouterLink @click="clickMenu('obraRouter')" class="menu-element" id="obraRouter" to="/app/obra">
+                <RouterLink class="menu-element" id="obraRouter" to="/app/obra">
                     <img id="helmet" src="../assets/img/Helmet.png" alt="Obras">
                     <h2 class="menu-element-text">Obras</h2>
                 </RouterLink>
-                <RouterLink  @click="clickMenu('cadastroRouter')" class="menu-element" id="cadastroRouter" to="/app/cadastro">
+                <RouterLink   class="menu-element" id="cadastroRouter" to="/app/cadastro">
                     <img id="pencil" src="../assets/img/pencil.png" alt="Cadastro">
                     <h2 class="menu-element-text">Cadastro</h2>
                 </RouterLink>
@@ -72,6 +48,16 @@
     </div>
 </template>
 
+<script>
+export default {
+    setup() {
+        
+    },
+    mounted(){
+        document.getElementById("homeRouter").focus();
+    }
+}
+</script>
 
 
 
@@ -85,6 +71,8 @@
     #name-display{
         font-size: 1.5em
     }
+
+    
 
     #header-container{
         background-color: white;
@@ -160,22 +148,24 @@
         padding: 0 1.2em;
         color: rgba(255, 255, 255, 0.5);
         position: relative;
-        text-decoration: none;  
         opacity: 0.8;
     }
 
-
+    
 
     .menu-element:hover{
         color:white;
         opacity: 1;
     }
 
-    .menu-selected{
+    .menu-element:focus{
         color:white;
-        border-left: 3px solid #ffffff;
         opacity: 1;
+        border-left: 2px solid white;
+        outline: none;
     }
+
+
 
     #menu-logout{
         opacity: 1;

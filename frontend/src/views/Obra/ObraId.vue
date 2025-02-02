@@ -4,7 +4,7 @@
 
   const route = useRouter();
 
-  const menuOptions = ["Geral", "Etapas", "Itens","Solicitações" ,"Info"];
+  const menuOptions = ["Geral", "Etapas", "Itens" ,"Info"];
   const selected = ref("Geral");
   
   const currentPath = route.currentRoute.value.params.id;

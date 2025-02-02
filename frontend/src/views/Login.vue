@@ -13,7 +13,9 @@
             <div id="form_container">
                 <TopLabelTextBox label="Login"/>
                 <TopLabelTextBox label="Senha"/>
-                <Button id="Button_Login" label="Entrar" />
+                <RouterLink  to="/app/home">
+                    <Button id="Button_Login" label="Entrar" />
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -67,7 +69,8 @@
     }
 
     #Button_Login{
-        margin-top:10%
+        margin-top:10%;
+        height:60px;
     }
     
 </style>
