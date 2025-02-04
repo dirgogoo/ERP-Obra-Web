@@ -60,6 +60,6 @@ export default defineComponent({
 
 <style scoped>
     #line{
-        width:100%
+        width:100%;
     }
 </style>
