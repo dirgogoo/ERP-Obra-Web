@@ -42,7 +42,7 @@ public class EtapaService {
         try {
             this.etapasRepository.deleteById(id);
         } catch (Exception e) {
-           throw new RuntimeException("Não é possível excluir!");
+           throw new RuntimeException("Não é possível excluir! ");
         }
     }
 
