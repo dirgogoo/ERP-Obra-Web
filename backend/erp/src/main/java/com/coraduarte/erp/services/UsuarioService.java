@@ -49,7 +49,7 @@ public class UsuarioService {
       try {
           this.usuarioRepository.deleteById(id);
       } catch (Exception e) {
-         throw new RuntimeException("Não é possível excluir este usuário!");
+         throw new RuntimeException("Não é possível excluir este usuário!" );
       }
    }
 }

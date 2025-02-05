@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.Materiais;
-import com.coraduarte.erp.repositories.MateriaisRepository;
+import com.coraduarte.erp.repositories.MaterialRepository;
 
 public class MaterialService {
     
    @Autowired
-   private MateriaisRepository materialRepository;
+   private MaterialRepository materialRepository;
 
    public Materiais findById(Long id){
       Optional<Materiais> material = this.materialRepository.findById(id);
@@ -32,7 +32,7 @@ public class MaterialService {
       try {
           this.materialRepository.deleteById(id);
       } catch (Exception e) {
-         throw new RuntimeException("Não é possível excluir!");
+         throw new RuntimeException("Não é possível excluir!" );
       }
    }
 
