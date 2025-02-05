@@ -1,13 +1,15 @@
 package com.coraduarte.erp.models;
 
 import java.sql.Date;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -65,8 +67,8 @@ public class Obras {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-
-    private EtapaObra[] etapa;
+    @OneToMany(mappedBy = "obra")
+    private List<EtapaObra> etapa = new ArrayList<EtapaObra>();
 
 
 }

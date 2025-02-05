@@ -1,5 +1,6 @@
 package com.coraduarte.erp.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -39,10 +40,10 @@ public class EtapaObra {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "obras_id", nullable = false) // Definindo chave estrangeira corretamente
+    @JoinColumn(name = "obra_id", nullable = false) // Definindo chave estrangeira corretamente
     @NotNull
-    private Obras obras;
+    private Obras obra;
 
-   @OneToMany(mappedBy = "etapa", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<itemEtapa> itens;
+   @OneToMany(mappedBy = "etapa")
+    private List<itemEtapa> itens = new ArrayList<itemEtapa>();
 }
