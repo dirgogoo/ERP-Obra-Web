@@ -1,4 +1,4 @@
-package com.coraduarte.erp.models;
+package com.coraduarte.erp.models.enums;
 
 public enum tipoItem {
      SERVICO,

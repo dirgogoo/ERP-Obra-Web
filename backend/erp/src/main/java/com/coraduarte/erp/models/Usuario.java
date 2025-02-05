@@ -14,48 +14,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
-
-@Table (name = "clients")
+@Entity
+@Table (name = Usuario.TABLE_NAME)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
-@Entity
-
-public class Cliente {
-
-    public interface CreateClient{}
-    public interface UpdateClients {}
-
-    public static final String TABLE_NAME = "cliente";
+public class Usuario {
+    
+    public static final String TABLE_NAME = "user";
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", unique = true )
     private Long id;
 
-   /*  @Column(name = "password", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     @NotNull
     @NotEmpty
-    private String password; */
-   
-    @Column(name = "name", unique = true, nullable = false)
-    @NotNull()
-    @NotEmpty()
     private String name;
 
-    @JsonProperty(access = Access.WRITE_ONLY)
-    @Column(name = "cnpj", length = 17, nullable = false, unique = true)
-    @NotNull()
-    @NotEmpty()
-    private String cnpj;
-
-
-    
-   
-    
+    @Column(name = "password", nullable = false)
+    @NotNull
+    @NotEmpty
+    private String password;
 }

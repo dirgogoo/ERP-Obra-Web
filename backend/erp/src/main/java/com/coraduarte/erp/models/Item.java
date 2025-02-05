@@ -1,5 +1,7 @@
 package com.coraduarte.erp.models;
 
+import com.coraduarte.erp.models.enums.tipoItem;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
