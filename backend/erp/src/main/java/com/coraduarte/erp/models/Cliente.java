@@ -37,6 +37,11 @@ public class Cliente {
     @Id
     @Column(name = "id", unique = true )
     private Long id;
+
+   /*  @Column(name = "password", unique = true, nullable = false)
+    @NotNull
+    @NotEmpty
+    private String password; */
    
     @Column(name = "name", unique = true, nullable = false)
     @NotNull(groups = CreateClient.class)

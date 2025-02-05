@@ -33,7 +33,7 @@ public class itemEtapa {
     private Long id;
 
      @ManyToOne
-     @JoinColumn(name = "etapa_id", nullable = false) // Nome da coluna na tabela itemEtapa
+     @JoinColumn(name = "etapa_id", nullable = false)
      @NotNull
     private EtapaObra etapa;
 
