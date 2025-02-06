@@ -29,13 +29,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table (name = Usuario.TABLE_NAME)
+@Table (name = User.TABLE_NAME)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Usuario {
+public class User {
     
     public static final String TABLE_NAME = "user";
 
@@ -44,10 +44,10 @@ public class Usuario {
     @Column(name = "id", unique = true )
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "username", nullable = false)
     @NotNull
     @NotEmpty
-    private String name;
+    private String username;
 
     @Column(name = "password", nullable = false)
     @NotNull
