@@ -4,31 +4,31 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.coraduarte.erp.models.Etapas;
-import com.coraduarte.erp.repositories.EtapasRepository;
+import com.coraduarte.erp.models.Etapa;
+import com.coraduarte.erp.repositories.EtapaRepository;
 
 public class EtapaService {
     
     @Autowired
-    private EtapasRepository etapasRepository;
+    private EtapaRepository etapasRepository;
 
-    public Etapas findById(Long id){
-       Optional<Etapas> etapa = this.etapasRepository.findById(id);
+    public Etapa findById(Long id){
+       Optional<Etapa> etapa = this.etapasRepository.findById(id);
       return etapa.orElseThrow(( )-> new RuntimeException(
-            "Etapa não encontrada! Id: " + id + ", Tipo:" + Etapas.class.getName()
+            "Etapa não encontrada! Id: " + id + ", Tipo:" + Etapa.class.getName()
         ));
     }
 
     @Transactional
-    private Etapas create(Etapas obj){
+    private Etapa create(Etapa obj){
         obj.setId(null);
         obj = this.etapasRepository.save(obj);
         return obj;
     }
 
     @Transactional
-    private Etapas update(Etapas obj){
-      Etapas newObj = this.findById(obj.getId());
+    private Etapa update(Etapa obj){
+      Etapa newObj = this.findById(obj.getId());
       newObj.setName(obj.getName());
       newObj.setPrice(obj.getPrice());
       newObj.setDeadline(obj.getDeadline());
