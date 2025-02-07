@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @Entity
-public class itemEtapa {
+public class ItemEtapa {
    
     public static final String TABLE_NAME = "itemEtapa";
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.coraduarte.erp.models.Obras;
 import com.coraduarte.erp.repositories.ObraRepository;
 
-public class ObrasService {
+public class ObraService {
     
   @Autowired
   private ObraRepository obraRepository;

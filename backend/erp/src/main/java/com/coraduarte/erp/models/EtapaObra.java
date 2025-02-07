@@ -42,8 +42,9 @@ public class EtapaObra {
     @NotNull
     private Obras obra;
 
+
    @OneToMany
-    private List<itemEtapa> itens = new ArrayList<itemEtapa>();
+    private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
 
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)
