@@ -23,7 +23,7 @@ import com.coraduarte.erp.services.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 @Validated
 public class UserController {
     
