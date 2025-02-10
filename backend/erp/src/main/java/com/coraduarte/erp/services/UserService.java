@@ -36,13 +36,13 @@ public class UserService {
     return obj;
    }
 
-   /*  @Transactional
-   public Usuario update(Usuario obj){
-     Usuario newObj = findById(obj.getId());
+   @Transactional
+   public User update(User obj){
+     User newObj = findById(obj.getId());
         newObj.setPassword(obj.getPassword());
         return this.usuarioRepository.save(newObj);
    }
-*/
+
    public void delete(Long id){
     findById(id);
       try {
