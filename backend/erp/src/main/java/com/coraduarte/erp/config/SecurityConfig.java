@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.coraduarte.erp.security.JWTAuthenticationFilter;
+import com.coraduarte.erp.security.JWTAuthorizationFilter;
 import com.coraduarte.erp.security.JWTUtil;
 
 @Configuration
@@ -63,6 +64,7 @@ public class SecurityConfig {
                 http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
                 http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
+                http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil, this.userDetailsService));
 
                 return http.build();
         }
