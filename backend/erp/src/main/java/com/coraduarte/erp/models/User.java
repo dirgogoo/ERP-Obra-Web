@@ -36,6 +36,9 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class User {
+
+    public interface CreateUser{}
+    public interface UpdateUser {}
     
     public static final String TABLE_NAME = "user";
 
