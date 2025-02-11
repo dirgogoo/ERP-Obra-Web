@@ -2,10 +2,9 @@ package com.coraduarte.erp.services;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,33 +25,46 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User findById(Long id) {
-      
-         UserSpringSecurity authenticated = UserService.authenticated();
 
-        if(Objects.nonNull(authenticated) && authenticated.hasRole(ProfileEnum.SUPERADMIN) || authenticated.getId().equals(id)){
-         Optional<User> usuario = this.usuarioRepository.findById(id);
-         return usuario.orElseThrow(() -> new RuntimeException(
-                  "Usuário não encontrado! Id: " + id + ", Tipo:" + User.class.getName()
-        ));}
+        UserSpringSecurity authenticated = UserService.authenticated();
+
+        if (Objects.nonNull(authenticated) && authenticated.hasRole(ProfileEnum.SUPERADMIN) || authenticated.getId().equals(id)) {
+            Optional<User> usuario = this.usuarioRepository.findById(id);
+            return usuario.orElseThrow(() -> new RuntimeException(
+                    "Usuário não encontrado! Id: " + id + ", Tipo:" + User.class.getName()
+            ));
+        }
         return null;
     }
 
     @Transactional
     public User create(User obj) {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.SUPERADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
         obj.setId(null);
         obj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
-        obj.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
         obj = this.usuarioRepository.save(obj);
         return obj;
     }
 
-    /*  @Transactional
-   public Usuario update(Usuario obj){
-     Usuario newObj = findById(obj.getId());
+    @Transactional
+    public User update(User obj) {
+
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.SUPERADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        User newObj = findById(obj.getId());
         newObj.setPassword(obj.getPassword());
         return this.usuarioRepository.save(newObj);
-   }
-     */
+    }
+
     public void delete(Long id) {
         findById(id);
         try {
