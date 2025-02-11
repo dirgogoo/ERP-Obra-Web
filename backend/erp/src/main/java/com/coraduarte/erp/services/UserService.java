@@ -29,14 +29,12 @@ public class UserService {
       
          UserSpringSecurity authenticated = UserService.authenticated();
 
-        if (Objects.isNull(authenticated) && ( !( authenticated.hasRole(ProfileEnum.SUPERADMIN)) || ! (authenticated.getId().equals(id))) ) 
-            return null;
-        
-        
-        Optional<User> usuario = this.usuarioRepository.findById(id);
-        return usuario.orElseThrow(() -> new RuntimeException(
-                "Usuário não encontrado! Id: " + id + ", Tipo:" + User.class.getName()
-        ));
+        if(Objects.nonNull(authenticated) && authenticated.hasRole(ProfileEnum.SUPERADMIN) || authenticated.getId().equals(id)){
+         Optional<User> usuario = this.usuarioRepository.findById(id);
+         return usuario.orElseThrow(() -> new RuntimeException(
+                  "Usuário não encontrado! Id: " + id + ", Tipo:" + User.class.getName()
+        ));}
+        return null;
     }
 
     @Transactional
@@ -48,7 +46,6 @@ public class UserService {
         return obj;
     }
 
-<<<<<<< HEAD
     /*  @Transactional
    public Usuario update(Usuario obj){
      Usuario newObj = findById(obj.getId());
@@ -73,21 +70,4 @@ public class UserService {
         }
     }
 
-=======
-   @Transactional
-   public User update(User obj){
-     User newObj = findById(obj.getId());
-        newObj.setPassword(obj.getPassword());
-        return this.usuarioRepository.save(newObj);
-   }
-
-   public void delete(Long id){
-    findById(id);
-      try {
-          this.usuarioRepository.deleteById(id);
-      } catch (Exception e) {
-         throw new RuntimeException("Não é possível excluir este usuário!" );
-      }
-   }
->>>>>>> b12e60fb04faef935b5bb5b9295f2c0ad3835b95
 }
