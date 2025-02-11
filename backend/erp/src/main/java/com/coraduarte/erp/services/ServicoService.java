@@ -5,32 +5,33 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coraduarte.erp.models.Servicos;
-import com.coraduarte.erp.repositories.ServicosRepository;
+import com.coraduarte.erp.models.Servico;
+import com.coraduarte.erp.repositories.ServicoRepository;
 
 public class ServicoService {
     
    @Autowired
-   private ServicosRepository servicosRepository;
+   private ServicoRepository servicoRepository;
 
-   public Servicos findById(Long id){
-    Optional<Servicos> cliente = this.servicosRepository.findById(id);
+   public Servico findById(Long id){
+    Optional<Servico> cliente = this.servicoRepository.findById(id);
         return cliente.orElseThrow(( )-> new RuntimeException(
-            "Serviço não encontrado! Id: " + id + ", Tipo:" + Servicos.class.getName()
+            "Serviço não encontrado! Id: " + id + ", Tipo:" + Servico.class.getName()
         ));
    } 
 
    @Transactional
-   public Servicos create(Servicos obj){
+   public Servico create(Servico obj){
     obj.setId(null);
-    obj = this.servicosRepository.save(obj);
+    obj = this.servicoRepository.save(obj);
     return obj;
    }
 
+   
    public void delete(Long id){
     findById(id);
       try {
-          this.servicosRepository.deleteById(id);
+          this.servicoRepository.deleteById(id);
       } catch (Exception e) {
          throw new RuntimeException("Não é possível excluir!" );
       }
