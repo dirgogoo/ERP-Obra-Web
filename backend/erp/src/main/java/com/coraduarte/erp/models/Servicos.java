@@ -29,7 +29,6 @@ public class Servicos {
     @Id
     @Column(name = "id", unique = true )
     private Long id;
-
     
     @Column(name = "name", nullable = false)
     @NotNull
