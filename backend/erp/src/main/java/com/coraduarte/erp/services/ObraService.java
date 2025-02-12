@@ -4,6 +4,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 
 import com.coraduarte.erp.models.Obras;
@@ -27,6 +31,21 @@ public class ObraService {
         return obra.orElseThrow(() -> new RuntimeException(
                 "Obra não encontrada! Id: " + id + ", Tipo: " + Obras.class.getName()
         ));
+    }
+
+    public Page<Obras> findAll(Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<Obras> obras = this.obraRepository.findAll(pageable);
+        return obras;
     }
 
     public Obras create(Obras obj) {

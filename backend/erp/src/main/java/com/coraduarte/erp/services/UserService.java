@@ -4,12 +4,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.coraduarte.erp.models.User;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.UserRepository;
@@ -25,7 +28,6 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User findById(Long id) {
-
         UserSpringSecurity authenticated = UserService.authenticated();
 
         if (Objects.nonNull(authenticated) && authenticated.hasRole(ProfileEnum.SUPERADMIN) || authenticated.getId().equals(id)) {
@@ -36,6 +38,22 @@ public class UserService {
         }
         return null;
     }
+
+       public Page<User> findAll(Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<User> users = this.usuarioRepository.findAll(pageable);
+        return users;
+    }
+
 
     @Transactional
     public User create(User obj) {
@@ -50,10 +68,10 @@ public class UserService {
         obj = this.usuarioRepository.save(obj);
         return obj;
     }
+    
 
     @Transactional
     public User update(User obj) {
-
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.SUPERADMIN))) {
@@ -81,5 +99,4 @@ public class UserService {
             return null;
         }
     }
-
 }
