@@ -8,22 +8,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity
 @Table (name = "item")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 
 public class Item {
 
@@ -35,23 +31,19 @@ public class Item {
     private Long id;
 
     @Column(name = "nome", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String nome;
 
     @Column(name = "valor", nullable = false)
     @NotNull
-    @NotEmpty
     private Double valor;
 
     @Column(name = "unidade", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String unidade;
 
     @Column(name = "tipo", nullable = false)
     @NotNull
-    @NotEmpty
     private tipoItem tipo;
 
 

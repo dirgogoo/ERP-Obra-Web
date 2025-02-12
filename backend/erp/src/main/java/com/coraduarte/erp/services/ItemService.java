@@ -4,6 +4,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 
 import com.coraduarte.erp.models.Item;
@@ -27,6 +31,21 @@ public class ItemService {
         return item.orElseThrow(() -> new RuntimeException(
                 "Item não encontrado!"
         ));
+    }
+
+    public Page<Item> findAll(Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<Item> items = this.itemRepository.findAll(pageable);
+        return items;
     }
 
     public Item create(Item obj) {

@@ -4,6 +4,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +46,21 @@ public class ClienteService {
         return cliente.orElseThrow(() -> new RuntimeException(
                 "Usuráio não encontrado! Id: " + id + ", Tipo:" + Cliente.class.getName()
         ));
+    }
+
+    public Page<Cliente> findAll(Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<Cliente> clientes = this.clienteRepository.findAll(pageable);
+        return clientes;
     }
 
     @Transactional

@@ -3,6 +3,8 @@ package com.coraduarte.erp.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.coraduarte.erp.models.enums.Status;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,19 +16,16 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 @Entity
 @Table (name = "etapaObra")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 
 public class EtapaObra {
 
@@ -42,11 +41,14 @@ public class EtapaObra {
     @NotNull
     private Obra obra;
 
+    
+    @Column(name = "status", nullable = false)
+    private Status status;
 
    @OneToMany
     private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
 
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)
-    private Etapas etapa;
+    private Etapa etapa;
 }
