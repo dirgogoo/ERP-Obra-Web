@@ -4,6 +4,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,21 @@ public class ItemEtapaService {
         return itemEtapa.orElseThrow(() -> new RuntimeException(
                 "Item da etapa não encontrado!"
         ));
+    }
+
+    public Page<ItemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        return items;
     }
 
     @Transactional
