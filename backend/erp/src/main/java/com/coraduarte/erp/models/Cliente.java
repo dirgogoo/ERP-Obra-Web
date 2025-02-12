@@ -1,29 +1,24 @@
 package com.coraduarte.erp.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 
 @Table (name = "clients")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Entity
 
 public class Cliente {
@@ -44,14 +39,12 @@ public class Cliente {
     private String password; */
    
     @Column(name = "name", unique = true, nullable = false)
-    @NotNull()
-    @NotEmpty()
+    @NotBlank
     private String name;
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "cnpj", length = 17, nullable = false, unique = true)
-    @NotNull()
-    @NotEmpty()
+    @NotBlank
     private String cnpj;
 
 

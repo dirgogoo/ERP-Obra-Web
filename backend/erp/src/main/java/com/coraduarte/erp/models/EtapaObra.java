@@ -14,19 +14,16 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 @Entity
 @Table (name = "etapaObra")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 
 public class EtapaObra {
 
@@ -48,5 +45,5 @@ public class EtapaObra {
 
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)
-    private Etapas etapa;
+    private Etapa etapa;
 }

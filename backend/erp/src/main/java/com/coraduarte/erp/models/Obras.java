@@ -6,28 +6,23 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 @Entity
 @Table (name = "obras")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 
 public class Obras {
 
@@ -39,28 +34,23 @@ public class Obras {
     private Long id;
 
     @Column(name = "nome", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String nome;
 
     @Column(name = "dataLancamento", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private Date dataLancamento;
 
     @Column(name = "dataInicio", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private Date dataInicio;
 
     @Column(name = "dataPrevista", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private Date dataPrevista;
 
     @Column(name = "dataTermino", nullable = false)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private Date dataTermino;
 
     @ManyToOne
