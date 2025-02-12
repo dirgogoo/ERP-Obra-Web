@@ -12,6 +12,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 
 import com.coraduarte.erp.models.Obras;
 import com.coraduarte.erp.models.enums.ProfileEnum;
+import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
@@ -33,7 +34,7 @@ public class ObraService {
         ));
     }
 
-    public Page<Obras> findAll(Pageable pageable){
+    public Page<ObraSearchProjection> findAll(Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -44,7 +45,7 @@ public class ObraService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Obras> obras = this.obraRepository.findAll(pageable);
+        Page<ObraSearchProjection> obras = this.obraRepository.findAllObraSearchProjection(pageable);
         return obras;
     }
 
