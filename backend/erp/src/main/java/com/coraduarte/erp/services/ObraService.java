@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 
-import com.coraduarte.erp.models.Obras;
+import com.coraduarte.erp.models.Obra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
@@ -16,20 +16,20 @@ public class ObraService {
     @Autowired
     private ObraRepository obraRepository;
 
-    public Obras findById(Long id) {
+    public Obra findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        Optional<Obras> obra = this.obraRepository.findById(id);
+        Optional<Obra> obra = this.obraRepository.findById(id);
         return obra.orElseThrow(() -> new RuntimeException(
-                "Obra não encontrada! Id: " + id + ", Tipo: " + Obras.class.getName()
+                "Obra não encontrada! Id: " + id + ", Tipo: " + Obra.class.getName()
         ));
     }
 
-    public Obras create(Obras obj) {
+    public Obra create(Obra obj) {
       UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
       if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN)) )
@@ -40,7 +40,7 @@ public class ObraService {
         return obj;
     }
 
-    public Obras update(Obras obj) {
+    public Obra update(Obra obj) {
 
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
@@ -48,7 +48,7 @@ public class ObraService {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        Obras newObj = this.findById(obj.getId());
+        Obra newObj = this.findById(obj.getId());
         newObj.setNome(obj.getNome());
         newObj.setDataInicio(obj.getDataInicio());
         newObj.setDataPrevista(obj.getDataPrevista());
