@@ -1,46 +1,72 @@
 package com.coraduarte.erp.services;
 
-
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 
 import com.coraduarte.erp.models.Obras;
+import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ObraRepository;
+import com.coraduarte.erp.security.UserSpringSecurity;
 
 public class ObraService {
-    
-  @Autowired
-  private ObraRepository obraRepository;
 
-  public Obras findById(Long id){
-    Optional<Obras> obra = this.obraRepository.findById(id);
-    return obra.orElseThrow(() -> new RuntimeException(
-     "Obra não encontrada! Id: " + id + ", Tipo: " + Obras.class.getName()
-    ));
-  }
+    @Autowired
+    private ObraRepository obraRepository;
 
-  public Obras create(Obras obj){
-     obj.setId(null);
-     obj = this.obraRepository.save(obj);
-     return obj;
-  }
+    public Obras findById(Long id) {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
-  public Obras update(Obras obj){
-    Obras newObj = this.findById(obj.getId());
-    newObj.setNome(obj.getNome());
-    newObj.setDataInicio(obj.getDataInicio());
-    newObj.setDataPrevista(obj.getDataPrevista());
-    return obj;
-  }
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
 
-  public void delete(Long id){
-    findById(id);
-      try {
-          this.obraRepository.deleteById(id);
-      } catch (Exception e) {
-         throw new RuntimeException("Não é possível excluir esta obra!");
-      }
-  }
+        Optional<Obras> obra = this.obraRepository.findById(id);
+        return obra.orElseThrow(() -> new RuntimeException(
+                "Obra não encontrada! Id: " + id + ", Tipo: " + Obras.class.getName()
+        ));
+    }
+
+    public Obras create(Obras obj) {
+      UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+      if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN)) )
+          throw new AuthorizationDeniedException("Acesso negado!");
+
+        obj.setId(null);
+        obj = this.obraRepository.save(obj);
+        return obj;
+    }
+
+    public Obras update(Obras obj) {
+
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        Obras newObj = this.findById(obj.getId());
+        newObj.setNome(obj.getNome());
+        newObj.setDataInicio(obj.getDataInicio());
+        newObj.setDataPrevista(obj.getDataPrevista());
+        return obj;
+    }
+
+    public void delete(Long id) {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+        findById(id);
+        try {
+            this.obraRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Não é possível excluir esta obra!");
+        }
+    }
 
 }

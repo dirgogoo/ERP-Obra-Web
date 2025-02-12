@@ -40,7 +40,7 @@ public class EtapaObra {
     @ManyToOne
     @JoinColumn(name = "obra_id", nullable = false) // Definindo chave estrangeira corretamente
     @NotNull
-    private Obras obra;
+    private Obra obra;
 
 
    @OneToMany

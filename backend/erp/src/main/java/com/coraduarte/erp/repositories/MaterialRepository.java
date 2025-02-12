@@ -2,9 +2,9 @@ package com.coraduarte.erp.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.coraduarte.erp.models.Materiais;
+import com.coraduarte.erp.models.Material;
 
-public interface MaterialRepository  extends JpaRepository<Materiais, Long> {
+public interface MaterialRepository  extends JpaRepository<Material, Long> {
     
 
 }
