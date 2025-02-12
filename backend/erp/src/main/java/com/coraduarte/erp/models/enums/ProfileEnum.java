@@ -5,7 +5,6 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,18 +18,24 @@ public enum ProfileEnum {
     private Integer code;
     private String description;
 
+    public Integer getCode() {
+        return code;
+    }
+
     public static ProfileEnum toProfileEnum(Integer code){
         if (Objects.isNull(code))
             return null;
 
         for(ProfileEnum x : ProfileEnum.values()){
-            if (x.equals(code))
+            if (x.getCode().equals(code))
             return x;
         }
 
         throw new IllegalArgumentException("Invalid Code ProfileEnum");
 
     }
+
+    
 
     
 
