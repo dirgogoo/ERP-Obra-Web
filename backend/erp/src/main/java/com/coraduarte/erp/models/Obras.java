@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.coraduarte.erp.models.enums.Status;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,6 +54,9 @@ public class Obras {
     @Column(name = "dataTermino", nullable = false)
     @NotBlank
     private Date dataTermino;
+
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)

@@ -3,6 +3,8 @@ package com.coraduarte.erp.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.coraduarte.erp.models.enums.Status;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +41,9 @@ public class EtapaObra {
     @NotNull
     private Obras obra;
 
+    
+    @Column(name = "status", nullable = false)
+    private Status status;
 
    @OneToMany
     private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
