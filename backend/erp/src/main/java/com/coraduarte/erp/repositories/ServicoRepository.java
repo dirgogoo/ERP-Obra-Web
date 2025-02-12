@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.coraduarte.erp.models.Servico;
 
 @Repository
-public interface ServicosRepository  extends JpaRepository<Servico, Long>{
+public interface ServicoRepository  extends JpaRepository<Servico, Long>{
    
     
 
