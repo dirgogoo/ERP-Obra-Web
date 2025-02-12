@@ -9,5 +9,5 @@ import com.coraduarte.erp.models.projection.ObraSearchProjection;
 
 
 public interface ObraRepository extends JpaRepository<Obras, Long>  {
-    Page<ObraSearchProjection> findAllObraSearchProjection(Pageable pageable);
+    Page<ObraSearchProjection> findAllBy(Pageable pageable);
 }

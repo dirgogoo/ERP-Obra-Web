@@ -45,7 +45,7 @@ public class ObraService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<ObraSearchProjection> obras = this.obraRepository.findAllObraSearchProjection(pageable);
+        Page<ObraSearchProjection> obras = this.obraRepository.findAllBy(pageable);
         return obras;
     }
 
