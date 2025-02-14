@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 
 import com.coraduarte.erp.models.Obra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
@@ -16,6 +17,7 @@ import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
+@Service
 public class ObraService {
 
     @Autowired
