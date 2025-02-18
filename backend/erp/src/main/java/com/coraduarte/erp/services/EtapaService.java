@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.Etapa;
@@ -12,10 +13,11 @@ import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.EtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
+@Service
 public class EtapaService {
 
     @Autowired
-    private EtapaRepository etapasRepository;
+    private EtapaRepository etapaRepository;
 
     public Etapa findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -24,7 +26,7 @@ public class EtapaService {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        Optional<Etapa> etapa = this.etapasRepository.findById(id);
+        Optional<Etapa> etapa = this.etapaRepository.findById(id);
         return etapa.orElseThrow(() -> new RuntimeException(
                 "Etapa não encontrada! Id: " + id + ", Tipo:" + Etapa.class.getName()
         ));
@@ -39,12 +41,12 @@ public class EtapaService {
         }
 
         obj.setId(null);
-        obj = this.etapasRepository.save(obj);
+        obj = this.etapaRepository.save(obj);
         return obj;
     }
 
     @Transactional
-    private Etapa update(Etapa obj) {
+    public Etapa update(Etapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -56,7 +58,7 @@ public class EtapaService {
         newObj.setPrice(obj.getPrice());
         newObj.setDeadline(obj.getDeadline());
 
-        return this.etapasRepository.save(newObj);
+        return this.etapaRepository.save(newObj);
 
     }
 
@@ -69,7 +71,7 @@ public class EtapaService {
 
         findById(id);
         try {
-            this.etapasRepository.deleteById(id);
+            this.etapaRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Não é possível excluir! ");
         }
