@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.ItemEtapa;
@@ -16,6 +17,7 @@ import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
+@Service
 public class ItemEtapaService {
 
     @Autowired
