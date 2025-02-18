@@ -9,12 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 
 import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
+@Service
 public class ItemService {
 
     @Autowired
