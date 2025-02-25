@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.Etapa;
@@ -12,6 +13,7 @@ import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.EtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
+@Service
 public class EtapaService {
 
     @Autowired
