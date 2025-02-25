@@ -20,21 +20,21 @@ import ObraInfo from '@/views/Obra/ObraInfo.vue';
 import Admin from '@/views/Admin.vue';
 
 const isAuthenticated = () => {
-  // A fazer autenticação
-  return true;
+  const token = localStorage.getItem("token");
+  return token !== null;
 };
 
 const routes = [
   {
     path: '/',
     component: PublicLayout,
-    //beforeEnter: (to, from, next) => {
-      //if (isAuthenticated()) {
-        //next('/app');
-      //} else {
-       // next();
-      //}
-    //},
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next('/app/home');
+      } else {
+        next();
+      }
+    },
     children: [
       { path: '/', name: 'Login', component: Login},
     ],
@@ -42,13 +42,13 @@ const routes = [
   {
     path: '/app',
     component: PrivateLayout,
-    //beforeEnter: (to, from, next) => {
-      //if (isAuthenticated()) {
-        //next();
-      //} else {
-        //next('/');
-      //}
-    //},
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next();
+      } else {
+        next('/');
+      }
+    },
     children: [
       { path: '/app/home', name: 'Home', component:Home },
       { path: '/app/obra', name: 'Obra', component:Obra},
