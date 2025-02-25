@@ -31,7 +31,7 @@ public class EtapaService {
     }
 
     @Transactional
-    private Etapa create(Etapa obj) {
+    public Etapa create(Etapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
