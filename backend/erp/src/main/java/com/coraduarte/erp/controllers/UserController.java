@@ -3,6 +3,8 @@ package com.coraduarte.erp.controllers;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.User;
+import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.services.UserService;
 
 import jakarta.validation.Valid;
@@ -34,9 +37,16 @@ public class UserController {
       return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<User>> findAll(Pageable pageable){
+       Page<User> users = this.userService.findAll(pageable);
+       return ResponseEntity.ok().body(users);
+    }
+
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody User obj){
         this.userService.create(obj);
+        System.out.println("User created");
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
