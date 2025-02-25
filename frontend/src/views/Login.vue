@@ -1,8 +1,37 @@
 <script setup>
-    import TopLabelTextBox from '../components/TopLabelTextBox';
-    import Button from '../components/Button';
+import TopLabelTextBox from '../components/TopLabelTextBox';
+import Button from '../components/Button';
+import api from "../services/axios";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const username = ref('');
+const password = ref('');
+const statusMessage = ref('');
+const router = useRouter();
+
+const login = async () => {
+    console.log(username.value, password.value);
+
+  try {
+    const response = await api.post("/login", {
+      username: username.value,
+      password: password.value
+    });
+    console.log(response.data);
+    console.log(response.headers);
+    const token = response.headers["authorization"];
+    console.log("Token: ",token);
+    localStorage.setItem("token", token); // Salva no localStorage
+    localStorage.setItem("username", username.value);
+    router.push("/app/home"); // Redireciona para home    
+  } catch (error) {
+    statusMessage.value = "Credenciais inválidas!";
+  }
+}
 </script>
+
+
 
 <template>
     <div id="background">
@@ -11,10 +40,11 @@
                 <img id="logo" src="../assets/img/logo.png" alt="logo cora duarte" srcset="">
             </div>
             <div id="form_container">
-                <TopLabelTextBox label="Login"/>
-                <TopLabelTextBox label="Senha"/>
+                <TopLabelTextBox label="Login" v-model="username"/>
+                <TopLabelTextBox label="Senha" v-model="password"/>
+                <h1>{{ statusMessage }}</h1>
                 <RouterLink  to="/app/home">
-                    <Button id="Button_Login" label="Entrar" />
+                    <Button id="Button_Login" label="Entrar" @click="login()" />
                 </RouterLink>
             </div>
         </div>

@@ -3,6 +3,38 @@
      import TopLabelSelect from '../components/TopLabelSelect';
     import Button from '../components/Button';
     import TabelaUsuarios from '../components/TabelaUsuarios.vue';
+    import { ref } from 'vue';
+    import api from "../services/axios";
+
+    const permisions = ["SUPERADMIN","ADMIN", "USER"];
+
+    const username = ref('');
+    const password = ref('');
+    const permission = ref('');
+
+    const cadastrar = async () => {
+        console.log(username, password, permission);
+        const profiles = [1]
+        if (permission.value === "SUPERADMIN"){
+            profiles.push(2);
+            profiles.push(3);
+        } else if (permission.value === "ADMIN"){
+            profiles.push(2);
+        }
+        try{
+            const response = await api.post("/user", {
+                username: username.value,
+                password: password.value,
+                profiles: profiles
+            });
+            console.log(response.data);
+            const event = new CustomEvent('user-registered');
+            window.dispatchEvent(event);
+        } catch (error) {
+            console.error("Erro ao cadastrar usuário:", error);
+        }
+    }
+
 </script>
 
 <template>
@@ -15,10 +47,10 @@
             </div>
             <div id="form-container">
                 <h1>Cadastro Usuarios</h1>
-                <TopLabelTextBox label="Nome"/>
-                <TopLabelTextBox label="Senha"/>
-                <TopLabelSelect label="Permissão"/>
-                <Button label="Cadastrar" class="button"/>
+                <TopLabelTextBox label="Nome" v-model="username"/>
+                <TopLabelTextBox label="Senha" v-model="password"/>
+                <TopLabelSelect label="Permissão" :content="permisions" v-model="permission"/>
+                <Button label="Cadastrar" class="button" @click="cadastrar"/>
             </div>
         </div>
     </div>

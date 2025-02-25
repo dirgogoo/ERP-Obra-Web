@@ -1,4 +1,11 @@
+<script setup>
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+    }
 
+    const username = localStorage.getItem("username");
+</script>
 
 <template >
     <div id="background">
@@ -8,7 +15,7 @@
         </div>
         
         <div id="header-container">
-            <h1 id="name-display">Olá André</h1>
+            <h1 id="name-display">Olá {{username}}</h1>
         </div>
         
         <div id="menu-container">
@@ -34,7 +41,7 @@
                         <img id="admin" src="../assets/img/admin.png" alt="Logout">
                         <h2 class="menu-element-text">Admin</h2>
                 </RouterLink>
-                <RouterLink class="menu-element" id="menu-logout" to="/">
+                <RouterLink class="menu-element" id="menu-logout" to="/" @click="logout()">
                         <img id="door" src="../assets/img/door.png" alt="Painel Administrador">
                         <h2 class="menu-element-text">Sair</h2>
                 </RouterLink>
@@ -48,11 +55,10 @@
     </div>
 </template>
 
+
+
 <script>
 export default {
-    setup() {
-        
-    },
     mounted(){
         document.getElementById("homeRouter").focus();
     }
