@@ -1,17 +1,28 @@
 <template>
     <div id="textbox_container">
         <h1 id="label">{{ label }}:</h1>
-        <select name="selectTop" id="textbox">
-
+        <select v-model="inputValue" name="selectTop" id="textbox">
+            <option v-for="permision in content" :key="permision" :value="permision">{{permision}}</option>
         </select>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'TopLabelTextBox',
-        props: ['label'],
-    };
+export default {
+    name: 'TopLabelSelect',
+    props: ['label', 'content','modelValue'],
+    emits: ['update:modelValue'],
+    computed: {
+        inputValue: {
+            get() {
+                return this.modelValue;
+            },
+            set(value) {
+                this.$emit('update:modelValue', value);
+            }
+        }
+    }
+};
 </script>
 
 <style scoped>
@@ -32,6 +43,14 @@
         background-color: #ECECEC;
         margin-top: 10px;
         font-size: 1.5em;
+    }
+
+    .option{
+        width: 100%;
+        font-size: 1.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     
     #textbox:focus{
