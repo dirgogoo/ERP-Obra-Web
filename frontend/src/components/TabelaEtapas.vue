@@ -8,70 +8,95 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="etapa in paginatedEtapas" :key="etapa.id">
+                <tr v-for="etapa in etapas" :key="etapa.id">
                     <td>{{ etapa.id }}</td>
                     <td>{{ etapa.nome }}</td>
                 </tr>
             </tbody>
         </table>
-        <pagination
-            :data="etapas"
-            :limit="5"
-            @pagination-change-page="updatePage"
-        ></pagination>
+        <div id="selectionPage-container">
+            <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
+            <h1 id="page-label">{{currentPage}}</h1>
+            <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
+        </div>
     </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import Pagination from 'laravel-vue-pagination';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import api from "../services/axios";
 
 export default {
     name: 'TabelaEtapas',
-    components: {
-        Pagination
-    },
     setup() {
-        const etapas = ref([
-            { id: 1, nome: 'Etapa 1' },
-            { id: 2, nome: 'Etapa 2' },
-            { id: 3, nome: 'Etapa 3' },
-            { id: 4, nome: 'Etapa 4' },
-            { id: 5, nome: 'Etapa 5' },
-            { id: 6, nome: 'Etapa 6' },
-            { id: 7, nome: 'Etapa 7' },
-            { id: 8, nome: 'Etapa 8' },
-            { id: 9, nome: 'Etapa 9' },
-            { id: 10, nome: 'Etapa 10' },
-            // Adicione mais etapas conforme necessário
-        ]);
+        const etapas = ref([]);
         const currentPage = ref(1);
-        const perPage = ref(5);
+        const perPage = ref(16);
 
-        const paginatedEtapas = computed(() => {
-            const start = (currentPage.value - 1) * perPage.value;
-            const end = start + perPage.value;
-            return etapas.value.slice(start, end);
-        });
+        const fetchEtapas = async (page) => {
+            try {
+                const response = await api.get('/etapa', {
+                    params: {
+                        page: page - 1,
+                        size: perPage.value
+                    }
+                });
+                
+                etapas.value = response.data.content.map(client => ({
+                    id: client.id,
+                    nome: client.name,
+                    cnpj: client.cnpj,
+                }));
 
-        const updatePage = (page) => {
-            if (page >= 1 && page <= Math.ceil(etapas.value.length / perPage.value)){
                 currentPage.value = page;
+
+            } catch (error) {
+                console.error("Erro ao buscar etapas:", error);
             }
         };
+
+        
+
+        const handleUserRegistered = () => {
+            fetchEtapas(currentPage.value);
+        };
+
+        onMounted(() => {
+            fetchEtapas(currentPage.value);
+            window.addEventListener('etapa-registered', handleUserRegistered);
+        });
+
+        onBeforeUnmount(() => {
+            window.removeEventListener('etapa-registered', handleUserRegistered);
+        });
+
+        const updatePage = (page) => { {
+            if (page > 0){
+                fetchEtapas(page);
+            }
+                
+        }};
 
         return {
             etapas,
             currentPage,
             perPage,
-            paginatedEtapas,
             updatePage
         };
     }
 };
 </script>
 
+
 <style scoped>
+#selectionPage-container{
+    display: flex;
+    margin-top: 10px;
+}
+
+#page-label{
+    margin: 0 10px;
+}
 table {
     width: 100%;
     border-collapse: collapse;
