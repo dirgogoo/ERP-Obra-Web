@@ -3,6 +3,8 @@ package com.coraduarte.erp.controllers;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.Cliente;
+import com.coraduarte.erp.models.User;
 import com.coraduarte.erp.services.ClienteService;
 
 import jakarta.validation.Valid;
@@ -29,6 +32,12 @@ public class ClienteController {
     public ResponseEntity <Cliente> findById(@PathVariable Long id){
         Cliente obj = this.clienteService.findById(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+     @GetMapping
+    public ResponseEntity<Page<Cliente>> findAll(Pageable pageable){
+       Page<Cliente> clients = this.clienteService.findAll(pageable);
+       return ResponseEntity.ok().body(clients);
     }
 
     @PostMapping
