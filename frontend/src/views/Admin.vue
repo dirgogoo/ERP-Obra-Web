@@ -13,7 +13,6 @@
     const permission = ref('');
 
     const cadastrar = async () => {
-        console.log(username, password, permission);
         const profiles = [1]
         if (permission.value === "SUPERADMIN"){
             profiles.push(2);
@@ -27,7 +26,6 @@
                 password: password.value,
                 profiles: profiles
             });
-            console.log(response.data);
             const event = new CustomEvent('user-registered');
             window.dispatchEvent(event);
         } catch (error) {
