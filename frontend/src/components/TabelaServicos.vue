@@ -14,7 +14,7 @@
                     <td>{{ servico.id }}</td>
                     <td>{{ servico.nome }}</td>
                     <td>{{ servico.unidade }}</td>
-                    <td>{{ servico.preço }}</td>
+                    <td>R${{ servico.preço }}</td>
                 </tr>
             </tbody>
         </table>
