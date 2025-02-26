@@ -43,6 +43,7 @@ export default {
         background-color: #ECECEC;
         margin-top: 10px;
         font-size: 1.5em;
+        padding-left: 10px;
     }
 
     .option{

@@ -39,11 +39,15 @@ export default {
     border-style: none;
     background-color: #ECECEC;
     margin-top: 10px;
+    padding-left: 10px;
     font-size: 1.5em;
+
 }
 
 #textbox:focus {
-    outline-color: #1f93ff;
+    border-color: none;
+    outline: none;
+    background-color: #dadada;
 }
 
 #label {
