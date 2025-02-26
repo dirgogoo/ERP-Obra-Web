@@ -10,20 +10,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="material in paginatedMateriais" :key="material.Id">
-                    <td>{{ material.Id }}</td>
-                    <td>{{ material.Nome }}</td>
-                    <td>{{ material.Unidade }}</td>
-                    <td>R${{ material.Preço }}</td>
+                <tr v-for="material in materiais" :key="material.Id">
+                    <td>{{ material.id }}</td>
+                    <td>{{ material.nome }}</td>
+                    <td>{{ material.unidade }}</td>
+                    <td>R${{ material.preço }}</td>
                 </tr>
             </tbody>
         </table>
-        <pagination
-            :data="materiais"
-            :limit="14"
-            @pagination-change-page="updatePage"
-        ></pagination>
-        <div v-if="materiais.length > perPage" id="selectionPage-container">
+        <div id="selectionPage-container">
             <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
             <h1 id="page-label">{{currentPage}}</h1>
             <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
@@ -32,48 +27,66 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import Pagination from 'laravel-vue-pagination';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import api from "../services/axios";
 
 export default {
-    name: 'TabelaMaterial',
-    components: {
-        Pagination
-    },
+    name: 'TabelaMateriais',
     setup() {
-        const materiais = ref([
-            { Id: 1, Nome: 'Material 1', Unidade: 'kg', Preço: 10.0 },
-            { Id: 2, Nome: 'Material 2', Unidade: 'm', Preço: 20.0 },
-            { Id: 3, Nome: 'Material 3', Unidade: 'l', Preço: 30.0 },
-            { Id: 4, Nome: 'Material 4', Unidade: 'kg', Preço: 40.0 },
-            { Id: 5, Nome: 'Material 5', Unidade: 'm', Preço: 50.0 },
-            { Id: 6, Nome: 'Material 6', Unidade: 'l', Preço: 60.0 },
-            { Id: 7, Nome: 'Material 7', Unidade: 'kg', Preço: 70.0 },
-            { Id: 8, Nome: 'Material 8', Unidade: 'm', Preço: 80.0 },
-            { Id: 9, Nome: 'Material 9', Unidade: 'l', Preço: 90.0 },
-            { Id: 10, Nome: 'Material 10', Unidade: 'kg', Preço: 100.0 },
-            // Adicione mais materiais conforme necessário
-        ]);
+        const materiais = ref([]);
         const currentPage = ref(1);
-        const perPage = ref(14);
+        const perPage = ref(16);
 
-        const paginatedMateriais = computed(() => {
-            const start = (currentPage.value - 1) * perPage.value;
-            const end = start + perPage.value;
-            return materiais.value.slice(start, end);
-        });
+        const fetchMateriais = async (page) => {
+            try {
+                const response = await api.get('/item', {
+                    params: {
+                        type: 2,
+                        page: page - 1,
+                        size: perPage.value
+                    }
+                });
+                
+                materiais.value = response.data.content.map(material => ({
+                    id: material.id,
+                    nome: material.name,
+                    unidade:material.unidade,
+                    preço :material.valor
+                }));
 
-        const updatePage = (page) => {
-            if (page >= 1 && page <= Math.ceil(materiais.value.length / perPage.value)){
                 currentPage.value = page;
+
+            } catch (error) {
+                console.error("Erro ao buscar materiais:", error);
             }
         };
+
+        
+
+        const handleUserRegistered = () => {
+            fetchMateriais(currentPage.value);
+        };
+
+        onMounted(() => {
+            fetchMateriais(currentPage.value);
+            window.addEventListener('material-registered', handleUserRegistered);
+        });
+
+        onBeforeUnmount(() => {
+            window.removeEventListener('material-registered', handleUserRegistered);
+        });
+
+        const updatePage = (page) => { {
+            if (page > 0){
+                fetchMateriais(page);
+            }
+                
+        }};
 
         return {
             materiais,
             currentPage,
             perPage,
-            paginatedMateriais,
             updatePage
         };
     }
