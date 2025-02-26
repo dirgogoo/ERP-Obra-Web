@@ -41,7 +41,14 @@ public class EtapaObra {
     @NotNull
     private Obra obra;
 
-    
+    @Column(name = "price", nullable = false)
+    @NotNull
+    private Long price;
+
+    @Column(name = "deadline", nullable = false)
+    @NotNull
+    private Integer deadline;
+
     @Column(name = "status", nullable = false)
     private Status status;
 

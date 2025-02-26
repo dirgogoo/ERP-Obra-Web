@@ -20,8 +20,7 @@ import com.coraduarte.erp.services.EtapaObraService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/etapaObra")
-@Validated
+@RequestMapping("/obra/etapa")
 public class EtapaObraController {
     
     @Autowired

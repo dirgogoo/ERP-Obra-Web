@@ -4,7 +4,26 @@
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
     import TabelaClientes from '../../components/TabelaClientes.vue';
-    components: { Searchbar,Button,TopLabelTextBox,FilterSelector};
+    import { ref } from 'vue';
+    import api from '../../services/axios';
+
+
+    const nome = ref('');
+    const cnpj = ref('');
+
+    const cadastrar = async () => {
+        try{
+            const response = await api.post("/cliente", {
+                name: nome.value,
+                cnpj: cnpj.value,
+            });
+            const event = new CustomEvent('client-registered');
+            window.dispatchEvent(event);
+        } catch (error) {
+            console.error("Erro ao cadastrar Cliente:", error);
+        }
+    }
+
 </script>
 
 <template>
@@ -26,9 +45,9 @@
             </div>
             <div id="form-container">
                 <h1>Cadastro Cliente</h1>
-                <TopLabelTextBox label="Nome"/>
-                <TopLabelTextBox label="CNPJ"/>
-                <Button label="Cadastrar" class="button"/>
+                <TopLabelTextBox label="Nome" v-model="nome"/>
+                <TopLabelTextBox label="CNPJ" v-model="cnpj"/>
+                <Button label="Cadastrar" class="button" @click="cadastrar()"/>
             </div>
         </div>
     </div>

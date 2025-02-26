@@ -32,7 +32,7 @@ public class Item {
 
     @Column(name = "nome", nullable = false)
     @NotBlank
-    private String nome;
+    private String name;
 
     @Column(name = "valor", nullable = false)
     @NotNull
@@ -44,7 +44,15 @@ public class Item {
 
     @Column(name = "tipo", nullable = false)
     @NotNull
-    private tipoItem tipo;
+    private Integer tipo;
+
+    public tipoItem getTipo() {
+        return tipoItem.toEnum(tipo);
+    }
+
+    public void setTipo(tipoItem tipo) {
+        this.tipo = tipo.getCode();
+    }
 
 
 }

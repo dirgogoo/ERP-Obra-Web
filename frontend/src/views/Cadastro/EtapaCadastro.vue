@@ -3,7 +3,24 @@
     import Button from '../../components/Button';
     import Searchbar from '../../components/Searchbar.vue';
     import TabelaEtapas from '../../components/TabelaEtapas.vue';
-    import ButtonRed from '../../components/ButtonRed.vue';
+    import { ref } from 'vue';
+    import api from '../../services/axios';
+
+
+    const nome = ref('');
+
+    const cadastrar = async () => {
+        try{
+            const response = await api.post("/etapa", {
+                name: nome.value,
+            });
+            const event = new CustomEvent('etapa-registered');
+            window.dispatchEvent(event);
+        } catch (error) {
+            console.error("Erro ao cadastrar etapa:", error);
+        }
+    }
+
 </script>
 
 <template>
@@ -22,10 +39,9 @@
             </div>
             <div id="form-container">
                 <h1>Cadastro Etapa</h1>
-                <TopLabelTextBox label="Nome"/>
+                <TopLabelTextBox label="Nome" v-model="nome"/>
                 <div id="button-container">
-                    <Button label="Cadastrar" class="button"/>
-                    <ButtonRed class="button" label="Excluir"/>
+                    <Button label="Cadastrar" class="button" @click="cadastrar()"/>
                 </div>
             </div>
         </div>

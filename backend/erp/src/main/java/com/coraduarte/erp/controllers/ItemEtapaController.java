@@ -18,10 +18,8 @@ import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.services.ItemEtapaService;
 
 import jakarta.validation.Valid;
-
 @RestController
-@RequestMapping("/itemEtapa")
-@Validated
+@RequestMapping("/obra/etapa/item")
 public class ItemEtapaController {
     
     @Autowired

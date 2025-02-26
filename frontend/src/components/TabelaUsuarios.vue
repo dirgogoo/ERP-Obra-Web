@@ -1,27 +1,23 @@
-
-
 <template>
     <div>
         <table>
             <thead>
                 <tr>
+                    <th id="id-coluna">ID</th>
                     <th id="nome-coluna">Nome</th>
                     <th>Senha</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="usuario in paginatedUsuarios" :key="usuario.id">
+                <tr v-for="usuario in usuarios" :key="usuario.id">
+                    <td>{{ usuario.id }}</td>
                     <td>{{ usuario.nome }}</td>
                     <td>{{ usuario.senha }}</td>
                 </tr>
             </tbody>
         </table>
-        <pagination
-            :data="usuarios"
-            :limit="16"
-            @pagination-change-page="updatePage"
-        ></pagination>
-        <div v-if="usuarios.length > perPage" id="selectionPage-container">
+
+        <div id="selectionPage-container">
             <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
             <h1 id="page-label">{{currentPage}}</h1>
             <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
@@ -30,56 +26,67 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import Pagination from 'laravel-vue-pagination';
+import api from "../services/axios";
 
 export default {
     name: 'TabelaUsuarios',
-    components: {
-        Pagination
-    },
     setup() {
-        const usuarios = ref([
-            { id: 1, nome: 'Usuario 1', senha: 'senha1' },
-            { id: 2, nome: 'Usuario 2', senha: 'senha2' },
-            { id: 3, nome: 'Usuario 3', senha: 'senha3' },
-            { id: 4, nome: 'Usuario 4', senha: 'senha4' },
-            { id: 5, nome: 'Usuario 5', senha: 'senha5' },
-            { id: 6, nome: 'Usuario 6', senha: 'senha6' },
-            { id: 7, nome: 'Usuario 7', senha: 'senha7' },
-            { id: 8, nome: 'Usuario 8', senha: 'senha8' },
-            { id: 9, nome: 'Usuario 9', senha: 'senha9' },
-            { id: 10, nome: 'Usuario 10', senha: 'senha10' },
-            { id: 11, nome: 'Usuario 11', senha: 'senha11' },
-            { id: 12, nome: 'Usuario 12', senha: 'senha12' },
-            { id: 13, nome: 'Usuario 13', senha: 'senha13' },
-            { id: 14, nome: 'Usuario 14', senha: 'senha14' },
-            { id: 15, nome: 'Usuario 15', senha: 'senha15' },
-            { id: 16, nome: 'Usuario 16', senha: 'senha16' },
-            { id: 17, nome: 'Usuario 17', senha: 'senha17' },
-            { id: 18, nome: 'Usuario 18', senha: 'senha18' },
-            { id: 19, nome: 'Usuario 19', senha: 'senha19' },
-            { id: 20, nome: 'Usuario 20', senha: 'senha20' },
-        ]);
+        const usuarios = ref([]);
         const currentPage = ref(1);
         const perPage = ref(16);
+        const usuariosMorePerPage = ref(false);
 
-        const paginatedUsuarios = computed(() => {
-            const start = (currentPage.value - 1) * perPage.value;
-            const end = start + perPage.value;
-            return usuarios.value.slice(start, end);
+        const fetchUsuarios = async (page) => {
+            try {
+                const response = await api.get('/user', {
+                    params: {
+                        page: page - 1,
+                        size: perPage.value
+                    }
+                });
+                
+                usuarios.value = response.data.content.map(user => ({
+                    id: user.id,
+                    nome: user.username,
+                    senha: '******' // Placeholder for password
+                }));
+
+                currentPage.value = page;
+
+            } catch (error) {
+                console.error("Erro ao buscar usuários:", error);
+            }
+        };
+
+        
+
+        const handleUserRegistered = () => {
+            fetchUsuarios(currentPage.value);
+        };
+
+        onMounted(() => {
+            fetchUsuarios(currentPage.value);
+            window.addEventListener('user-registered', handleUserRegistered);
         });
 
-        const updatePage = (page) => {
-            if (page >= 1 && page <= Math.ceil(usuarios.value.length / perPage.value))
-            currentPage.value = page;
-        };
+        onBeforeUnmount(() => {
+            window.removeEventListener('user-registered', handleUserRegistered);
+        });
+
+
+
+        const updatePage = (page) => { {
+            if (page > 0){          
+                fetchUsuarios(page);
+            }
+        }};
 
         return {
             usuarios,
             currentPage,
             perPage,
-            paginatedUsuarios,
             updatePage
         };
     }
@@ -102,7 +109,7 @@ th {
     color: white;
 }
 
-tr{
+tr {
     background-color: #EDEDED;
 }
 
@@ -110,16 +117,19 @@ tr:nth-child(even) {
     background-color: #E3E3E3;
 }
 
-#selectionPage-container{
+#selectionPage-container {
     display: flex;
     margin-top: 10px;
 }
 
-#page-label{
+#page-label {
     margin: 0 10px;
 }
 
-#nome-coluna{
+#nome-coluna {
     width: 65%;
+}
+#id-coluna {
+    width: 6%;
 }
 </style>

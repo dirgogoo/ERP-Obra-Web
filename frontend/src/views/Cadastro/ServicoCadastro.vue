@@ -4,7 +4,28 @@
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
     import TabelaServicos from '../../components/TabelaServicos.vue';
-    import ButtonRed from '../../components/ButtonRed.vue';
+    import { ref } from 'vue';
+    import api from '../../services/axios';
+
+
+    const nome = ref('');
+    const unidade = ref('');
+    const valor = ref('');
+
+    const cadastrar = async () => {
+        try{
+            const response = await api.post("/item", {
+                name: nome.value,
+                unidade: unidade.value,
+                valor: valor.value,
+                tipo : 0,
+            });
+            const event = new CustomEvent('servico-registered');
+            window.dispatchEvent(event);
+        } catch (error) {
+            console.error("Erro ao cadastrar item:", error);
+        }
+    }
 </script>
 
 <template>
@@ -26,11 +47,10 @@
             </div>
             <div id="form-container">
                 <h1>Cadastro Serviços</h1>
-                <TopLabelTextBox label="Nome"/>
-                <TopLabelTextBox label="Unidade"/>
-                <TopLabelTextBox label="Preço"/>
-                <Button class="button" label="Cadastrar"/>
-                <ButtonRed class="button" label="Excluir"/>
+                <TopLabelTextBox label="Nome" v-model="nome"/>
+                <TopLabelTextBox label="Unidade" v-model="unidade"/>
+                <TopLabelTextBox label="Preço" v-model="valor"/>
+                <Button class="button" label="Cadastrar" @click="cadastrar()"/>
             </div>
         </div>
     </div>

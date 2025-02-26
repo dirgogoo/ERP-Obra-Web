@@ -1,8 +1,5 @@
 package com.coraduarte.erp.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,7 +39,6 @@ public class Cliente {
     @NotBlank
     private String name;
 
-    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "cnpj", length = 17, nullable = false, unique = true)
     @NotBlank
     private String cnpj;

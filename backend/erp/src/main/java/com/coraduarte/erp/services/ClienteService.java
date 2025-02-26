@@ -16,20 +16,7 @@ import com.coraduarte.erp.models.Cliente;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ClienteRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-
 public class ClienteService {
 
     @Autowired

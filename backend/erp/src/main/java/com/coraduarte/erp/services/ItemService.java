@@ -35,6 +35,21 @@ public class ItemService {
         ));
     }
 
+    public Page<Item> findAllByTipo(Pageable pageable, Integer Tipo){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<Item> items = this.itemRepository.findAllByTipo(Tipo, pageable);
+        return items;
+    }
+
     public Page<Item> findAll(Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
@@ -57,11 +72,13 @@ public class ItemService {
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
-
+        System.out.println(obj.getTipo());
         obj.setId(null);
         obj = this.itemRepository.save(obj);
         return obj;
     }
+
+
 
     public void delete(Long id) {
 

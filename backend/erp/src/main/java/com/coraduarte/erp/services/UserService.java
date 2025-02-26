@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.coraduarte.erp.models.User;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.UserRepository;
@@ -60,7 +61,7 @@ public class UserService {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.SUPERADMIN))) {
-            throw new AuthorizationDeniedException("Acesso negado!");
+           throw new AuthorizationDeniedException("Acesso negado!");
         }
 
         obj.setId(null);

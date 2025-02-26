@@ -47,7 +47,7 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-                http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
+                http.cors().and().csrf().disable();
 
                 AuthenticationManagerBuilder authenticationManagerBuilder = http
                                 .getSharedObject(AuthenticationManagerBuilder.class);
@@ -61,8 +61,10 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                                 .authenticationManager(authenticationManager);
 
+
                 http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+                System.out.println("FilterChain Calling JWT");
                 http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
                 http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil, this.userDetailsService));
 
@@ -71,8 +73,11 @@ public class SecurityConfig {
 
         @Bean
         CorsConfigurationSource corsConfigurationSource() {
-                CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-                configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE"));
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // Substitua pelo seu domínio
+                configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+                configuration.setAllowCredentials(true);
                 final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
                 return source;

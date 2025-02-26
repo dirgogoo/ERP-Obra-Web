@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,12 +31,5 @@ public class Etapa {
     private String name;
 
 
-    @Column(name = "price", nullable = false)
-    @NotNull
-    private Long price;
-
-    @Column(name = "deadline", nullable = false)
-    @NotNull
-    private Integer deadline;
 
 }
