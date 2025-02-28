@@ -21,7 +21,7 @@ import com.coraduarte.erp.security.UserSpringSecurity;
 public class EtapaService {
 
     @Autowired
-    private EtapaRepository etapasRepository;
+    private EtapaRepository etapaRepository;
 
     public Etapa findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -30,7 +30,7 @@ public class EtapaService {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        Optional<Etapa> etapa = this.etapasRepository.findById(id);
+        Optional<Etapa> etapa = this.etapaRepository.findById(id);
         return etapa.orElseThrow(() -> new RuntimeException(
                 "Etapa não encontrada! Id: " + id + ", Tipo:" + Etapa.class.getName()
         ));
@@ -60,12 +60,12 @@ public class EtapaService {
         }
 
         obj.setId(null);
-        obj = this.etapasRepository.save(obj);
+        obj = this.etapaRepository.save(obj);
         return obj;
     }
 
     @Transactional
-    private Etapa update(Etapa obj) {
+    public Etapa update(Etapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -75,7 +75,7 @@ public class EtapaService {
         Etapa newObj = this.findById(obj.getId());
         newObj.setName(obj.getName());
 
-        return this.etapasRepository.save(newObj);
+        return this.etapaRepository.save(newObj);
 
     }
 
@@ -88,7 +88,7 @@ public class EtapaService {
 
         findById(id);
         try {
-            this.etapasRepository.deleteById(id);
+            this.etapaRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Não é possível excluir! ");
         }
