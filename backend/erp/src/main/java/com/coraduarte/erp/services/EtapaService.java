@@ -47,7 +47,7 @@ public class EtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Etapa> etapas = this.etapasRepository.findAll(pageable);
+        Page<Etapa> etapas = this.etapaRepository.findAll(pageable);
         return etapas;
     }
 
