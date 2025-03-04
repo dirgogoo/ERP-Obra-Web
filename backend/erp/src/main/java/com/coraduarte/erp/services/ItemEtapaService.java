@@ -12,6 +12,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
@@ -20,17 +21,21 @@ import com.coraduarte.erp.security.UserSpringSecurity;
 @Service
 public class ItemEtapaService {
 
+
     @Autowired
+    private EtapaObraService etapaObraService;
+    
     private ItemEtapaRepository itemEtapaRepository;
-
-    public ItemEtapa findById(Long id) {
-        UserSpringSecurity userSpringSecurity = UserService.authenticated();
-
-        if (Objects.isNull(userSpringSecurity)) {
-            throw new AuthorizationDeniedException("Acesso negado!");
-        }
-
-        Optional<ItemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
+    
+    
+        public ItemEtapa findById(Long id) {
+            UserSpringSecurity userSpringSecurity = UserService.authenticated();
+    
+            if (Objects.isNull(userSpringSecurity)) {
+                throw new AuthorizationDeniedException("Acesso negado!");
+            }
+    
+            Optional<ItemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
         return itemEtapa.orElseThrow(() -> new RuntimeException(
                 "Item da etapa não encontrado!"
         ));
@@ -59,10 +64,16 @@ public class ItemEtapaService {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
+        EtapaObra etapa = this.etapaObraService.findById(obj.getEtapa().getId());
+        obj.setEtapa(etapa);
+
         obj.setId(null);
         obj = this.itemEtapaRepository.save(obj);
         return obj;
+
     }
+
+    
 
     public void delete(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
