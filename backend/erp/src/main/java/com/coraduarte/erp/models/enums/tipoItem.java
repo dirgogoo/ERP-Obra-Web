@@ -22,7 +22,6 @@ public enum tipoItem {
               return null;
      
           for(tipoItem x : tipoItem.values()){
-            System.out.println(x.getCode());
               if (x.getCode().equals(code))
               return x;
           }
