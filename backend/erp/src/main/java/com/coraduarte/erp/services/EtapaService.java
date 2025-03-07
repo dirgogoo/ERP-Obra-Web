@@ -1,5 +1,6 @@
 package com.coraduarte.erp.services;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -47,8 +48,12 @@ public class EtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Etapa> etapas = this.etapasRepository.findAll(pageable);
+        Page<Etapa> etapas = this.etapaRepository.findAll(pageable);
         return etapas;
+    }
+
+    public List<Etapa> findAll() {
+        return etapaRepository.findAll();
     }
 
     @Transactional
