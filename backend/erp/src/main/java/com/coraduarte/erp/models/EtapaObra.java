@@ -2,6 +2,7 @@ package com.coraduarte.erp.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.coraduarte.erp.models.enums.Status;
 
@@ -47,10 +48,10 @@ public class EtapaObra {
 
     @Column(name = "deadline", nullable = false)
     @NotNull
-    private Integer deadline;
+    private String deadline;
 
     @Column(name = "status", nullable = false)
-    private Status status;
+    private Integer status;
 
    @OneToMany
     private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
@@ -58,4 +59,29 @@ public class EtapaObra {
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)
     private Etapa etapa;
+
+    public Status getStatus(){
+        return Status.toEnum(status);
+    }
+
+    public Status setStatus(Status status){
+        this.status = status.getCode();
+        return status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, price, deadline, status);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        EtapaObra etapaObra = (EtapaObra) obj;
+        return Objects.equals(id, etapaObra.id) &&
+               Objects.equals(price, etapaObra.price) &&
+               Objects.equals(deadline, etapaObra.deadline) &&
+               Objects.equals(status, etapaObra.status);
+    }
 }
