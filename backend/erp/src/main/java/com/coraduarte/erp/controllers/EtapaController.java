@@ -1,6 +1,7 @@
 package com.coraduarte.erp.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,10 +36,16 @@ public class EtapaController {
      return ResponseEntity.ok().body(obj);
    }
 
-      @GetMapping
+    @GetMapping
     public ResponseEntity<Page<Etapa>> findAll(Pageable pageable){
        Page<Etapa> etapas = this.etapaService.findAll(pageable);
        return ResponseEntity.ok().body(etapas);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Etapa>> findAll(){
+        List<Etapa> etapas = this.etapaService.findAll();
+        return ResponseEntity.ok().body(etapas);
     }
 
    @PostMapping

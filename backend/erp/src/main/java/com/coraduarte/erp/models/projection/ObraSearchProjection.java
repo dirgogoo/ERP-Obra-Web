@@ -1,7 +1,5 @@
 package com.coraduarte.erp.models.projection;
 
-import java.sql.Date;
-
 import com.coraduarte.erp.models.enums.Status;
 
 public interface ObraSearchProjection {
@@ -10,7 +8,7 @@ public interface ObraSearchProjection {
 
     public String getNome();
 
-    public Date getDataLancamento();
+    public String getDataLancamento();
 
     public Status getStatus();
 

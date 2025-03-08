@@ -1,6 +1,5 @@
 package com.coraduarte.erp.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -10,10 +9,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coraduarte.erp.models.Etapa;
 import com.coraduarte.erp.models.EtapaObra;
-import com.coraduarte.erp.models.ItemEtapa;
-import com.coraduarte.erp.models.Obra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.EtapaObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
@@ -25,13 +21,8 @@ public class EtapaObraService {
     private EtapaObraRepository etapaObraRepository;
 
     @Autowired
-    private ItemEtapaService itemEtapaService;
-
-    @Autowired
     private EtapaService etapaService;
    
-    @Autowired
-    private ObraService obraService;
 
     
 
@@ -70,25 +61,6 @@ public class EtapaObraService {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        List<ItemEtapa> itemEtapas = new ArrayList<>();
-
-        try{
-        Obra obra = this.obraService.findById(obj.getObra().getId());
-        obj.setObra(obra);
-
-        Etapa etapa = this.etapaService.findById(obj.getEtapa().getId());
-        obj.setEtapa(etapa);
-
-
-        for(ItemEtapa item : obj.getItens()){
-           itemEtapas.add(this.itemEtapaService.findById(item.getId()));
-        }
-    }
-        catch(Exception e){
-           throw new RuntimeException("Falha ao criar etapa obra");
-        }
-    
-        obj.setItens(itemEtapas);
         obj.setId(null);
         obj = this.etapaObraRepository.save(obj);
         return obj;

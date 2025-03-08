@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="obra in obras" :key="obra.Id" @click="toRouteId(obra.Id)">
+                <tr v-for="obra in obras" :key="obra.Id" @click="toRouteId(obra.id)">
                     <td>{{ obra.id }}</td>
                     <td>{{ obra.nome }}</td>
                     <td>{{ obra.cliente }}</td>
@@ -30,6 +30,7 @@
 
 <script>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 import api from "../services/axios";
 
 export default {
@@ -41,7 +42,7 @@ export default {
 
         const fetchObras = async (page) => {
             try {
-                const response = await api.get('/item', {
+                const response = await api.get('/obra', {
                     params: {
                         type: 2,
                         page: page - 1,
@@ -79,6 +80,12 @@ export default {
             window.removeEventListener('obra-registered', handleUserRegistered);
         });
 
+        const router = useRouter();
+
+        const toRouteId = (id) => {
+            router.push(`/app/obra/${id}`);
+        };
+
         const updatePage = (page) => { {
             if (page > 0){
                 fetchObras(page);
@@ -90,7 +97,8 @@ export default {
             obras,
             currentPage,
             perPage,
-            updatePage
+            updatePage,
+            toRouteId
         };
     }
 };

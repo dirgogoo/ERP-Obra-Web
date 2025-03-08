@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.User;
-//import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.services.UserService;
 
 import jakarta.validation.Valid;
