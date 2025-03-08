@@ -83,7 +83,7 @@ export default {
         const router = useRouter();
 
         const toRouteId = (id) => {
-            router.push(`/app/obra/1`);
+            router.push(`/app/obra/${id}`);
         };
 
         const updatePage = (page) => { {

@@ -54,6 +54,7 @@ const cadastrar = async () => {
     const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
     if (founded) {
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
+        etapasSelecionadas.value.splice(etapasSelecionadas.value.indexOf(etapasSelecionadas.value.find((etapa) => etapa.name === etapaSelecionada.value)), 1);
     }
     const selected = etapas.value.find(etapa => etapa.name === etapaSelecionada.value);
 
