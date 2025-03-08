@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.coraduarte.erp.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,6 +67,7 @@ public class Obra {
     //private Cliente cliente;
 
     @OneToMany(mappedBy = "obra")
+    @JsonManagedReference
     private List<EtapaObra> etapa = new ArrayList<EtapaObra>();
 
     public Status getStatus(){

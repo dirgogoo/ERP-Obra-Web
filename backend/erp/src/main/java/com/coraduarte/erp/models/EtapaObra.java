@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.coraduarte.erp.models.enums.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +41,7 @@ public class EtapaObra {
     @ManyToOne
     @JoinColumn(name = "obra_id", nullable = false) // Definindo chave estrangeira corretamente
     @NotNull
+    @JsonBackReference
     private Obra obra;
 
     @Column(name = "price", nullable = false)
