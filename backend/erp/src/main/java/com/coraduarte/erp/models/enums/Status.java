@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 
 public enum Status {
-    CONCLUIDO( 1),
-    NAOINICIADO(2),
-    ANDAMENTO( 3);
+    NAOINICIADO(1),
+    ANDAMENTO( 2),
+    CONCLUIDO( 3);
 
     private Integer code;
 
