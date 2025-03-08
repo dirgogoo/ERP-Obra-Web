@@ -1,11 +1,17 @@
 <script setup>
     import TabelaEtapaObra from '@/components/TabelaEtapaObra.vue';
+    const props = defineProps({
+        obra: Object
+    });
+
+    const obra = props.obra;
+    console.log(obra);
 </script>
 
 <template>
     <div id="main-container">
         <div id="table-container">
-            <TabelaEtapaObra/>
+            <TabelaEtapaObra :etapas="obra.etapa"/>
         </div>
     </div>
 </template>

@@ -6,10 +6,27 @@
 
   const menuOptions = ["Geral", "Etapas", "Itens" ,"Info"];
   const selected = ref("Geral");
-  
+  const obrainfo = ref([]);
+  const nome = ref("");
+  const status = ref("");
+
   const currentPath = route.currentRoute.value.params.id;
 
+  import { onMounted } from "vue";
+import api from "@/services/axios";
 
+
+  onMounted(async () => {
+    try {
+      const response = api.get("/obra/"+currentPath);
+      const obra = (await response).data;
+      nome.value = obra.nome;
+      status.value = obra.status;
+      obrainfo.value = obra;
+    } catch (error) {
+      console.error("Error fetching obra data:", error);
+    }
+  });
 
   function selectItem(item) {
     selected.value = item; 
@@ -29,14 +46,8 @@
     <div id="info-container">
      
       <div id="info-grid">
-        <h1>Restauração Condominio Nova Vila</h1>
-        <!--<div id="grid-wrapper">
-          <h2>Cliente: Diego</h2>
-          <h2>Código: {{ $route.params.id }}</h2>
-          <h2>Criação: 22/01/2025</h2>
-          <h2>Inicio: 22/01/2025</h2>
-        </div>-->
-        <h2 id="info-status">Status: Não Iniciado</h2>
+        <h1>{{nome}}</h1>
+        <h2 id="info-status">Status: {{status}}</h2>
       </div>
     </div>
     <ul>
@@ -49,7 +60,7 @@
       </li>
     </ul>
     <div id="content-container">
-        <router-view />
+        <router-view :obra="obrainfo"/>
     </div>
     
   </div>

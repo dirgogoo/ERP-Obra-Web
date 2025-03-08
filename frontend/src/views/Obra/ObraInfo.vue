@@ -2,32 +2,24 @@
     <div class="obra-info">
         <h1>Informações da Obra</h1>
         <ul>
-            <li><strong>Cliente:</strong> {{ obra.cliente }}</li>
-            <li><strong>Código:</strong> {{ obra.codigo }}</li>
-            <li><strong>Data de Criação:</strong> {{ obra.dataCriacao }}</li>
+            <li><strong>Cliente:</strong> </li>
+            <li><strong>Código:</strong> {{ obra.id }}</li>
+            <li><strong>Data de Criação:</strong> {{ obra.dataLancamento }}</li>
             <li><strong>Data de Início:</strong> {{ obra.dataInicio }}</li>
-            <li><strong>Data Prevista:</strong> {{ obra.dataPrevista }}</li>
-            <li><strong>Data de Término:</strong> {{ obra.dataTermino }}</li>
+            <li><strong>Data Prevista:</strong> </li>
+            <li><strong>Data de Término:</strong> </li>
         </ul>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'ObraInfo',
-    data() {
-        return {
-            obra: {
-                cliente: 'Nome do Cliente',
-                codigo: '12345',
-                dataCriacao: '2023-01-01',
-                dataInicio: '2023-02-01',
-                dataPrevista: '2023-06-01',
-                dataTermino: '2023-05-30'
-            }
-        };
+<script setup>
+import { ref} from 'vue';
+const props = defineProps({
+    obra: {
+      type: Object,
     }
-};
+  });
+const obra = ref(props.obra);
 </script>
 
 <style scoped>
