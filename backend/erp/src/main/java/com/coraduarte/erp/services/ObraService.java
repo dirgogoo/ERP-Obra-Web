@@ -76,8 +76,8 @@ public class ObraService {
 
         for (EtapaObra etapaObra : obj.getEtapa()) {
             try {
-                System.out.println(etapaObra.getEtapa().getId());
-                etapas.add(this.EtapaObraService.create(etapaObra, obj));
+                etapaObra.setObra(obj);
+                etapas.add(this.EtapaObraService.create(etapaObra));
             } catch (Exception e) {
                 throw new RuntimeException("Não foi possível criar a etapa da obra!");
             }
