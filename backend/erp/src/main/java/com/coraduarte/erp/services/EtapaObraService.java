@@ -12,15 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.Etapa;
 import com.coraduarte.erp.models.EtapaObra;
-import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.models.Obra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.EtapaObraRepository;
-import com.coraduarte.erp.repositories.EtapaRepository;
-import com.coraduarte.erp.repositories.ItemEtapaRepository;
-import com.coraduarte.erp.repositories.ItemRepository;
-import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
 @Service
@@ -28,15 +23,6 @@ public class EtapaObraService {
 
     @Autowired
     private EtapaObraRepository etapaObraRepository;
-
-    @Autowired
-    private ObraRepository ObraRepository;
-
-    @Autowired
-    private EtapaRepository EtapaRepository;
-
-    @Autowired
-    private ItemEtapaRepository ItemEtapaRepository;
 
     @Autowired
     private ItemEtapaService itemEtapaService;
