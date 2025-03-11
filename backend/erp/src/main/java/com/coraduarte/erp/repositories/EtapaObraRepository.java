@@ -10,4 +10,5 @@ import com.coraduarte.erp.models.EtapaObra;
 @Repository
 public interface EtapaObraRepository extends JpaRepository<EtapaObra, Long>{
     List<EtapaObra> findAllByObra_Id(Long id);
+    
 }
