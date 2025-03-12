@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 
 public class Obra {
+    
 
     public static final String TABLE_NAME = "obras";
 

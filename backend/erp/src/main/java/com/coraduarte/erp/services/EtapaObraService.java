@@ -20,12 +20,6 @@ public class EtapaObraService {
     @Autowired
     private EtapaObraRepository etapaObraRepository;
 
-    @Autowired
-    private EtapaService etapaService;
-   
-
-    
-
 
     public EtapaObra findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -39,6 +33,7 @@ public class EtapaObraService {
                 "Etapa não encontrada!"
         ));
     }
+    
 
     public List<EtapaObra> findAllByObraId(Long id){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
