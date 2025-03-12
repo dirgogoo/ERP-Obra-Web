@@ -1,5 +1,7 @@
 package com.coraduarte.erp.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class ItemEtapa {
      @ManyToOne
      @JoinColumn(name = "etapa_id", nullable = false)
      @NotNull
+     @JsonBackReference
     private EtapaObra etapa;
 
     @Column(name = "quantidade", nullable = false)
