@@ -6,7 +6,18 @@ import Button from '@/components/Button.vue';
 import TopLabelTextBox from '@/components/TopLabelTextBox.vue';
 import ButtonRed from '@/components/ButtonRed.vue';
 import TabelaItensEtapa from '@/components/TabelaItensEtapa.vue';
+import { useRouter } from 'vue-router';
 
+import { ref, onMounted, watch } from 'vue';
+import api from '@/services/axios';
+
+const itens = ref([]);
+const itemSelected = ref();
+const itemQtd = ref();
+
+const route = useRouter();
+
+const EtapaObraID = route.currentRoute.value.query.etapaobra
 </script>
 
 <template>
@@ -18,12 +29,12 @@ import TabelaItensEtapa from '@/components/TabelaItensEtapa.vue';
                     <FilterSelector label="Tipo:"/>
                 </div>
                 <div id="table-container">
-                    <TabelaItens/>
+                    <TabelaItens v-model="itemSelected"/>
                 </div>
                 <div id="form-container">
                     <div id="input-container">
-                        <TopLabelTextBox label="Item" id="input-item"/>
-                        <TopLabelTextBox label="Quantidade" id="input-qtd"/>
+                        <TopLabelTextBox label="Item" id="input-item" v-model="itemSelected"/>
+                        <TopLabelTextBox label="Quantidade" id="input-qtd" v-model="itemQtd"/>
                     </div>
                     <div id="button-container">
                         <Button label="Adicionar" class="button"/>
