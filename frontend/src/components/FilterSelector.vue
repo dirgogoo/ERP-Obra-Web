@@ -4,8 +4,8 @@
             <h2>{{ label }}</h2>
         </div>
         
-        <select name="Filtro">
-
+        <select name="Filtro" v-model="inputValue">
+            <option v-for="permision in content" :key="permision" :value="permision">{{permision}}</option>
         </select>
     </div>
 </template>
@@ -13,7 +13,18 @@
 <script>
     export default {
         name: 'Button',
-        props: ['label'],
+        props: ['label', 'content','modelValue'],
+    emits: ['update:modelValue'],
+    computed: {
+        inputValue: {
+            get() {
+                return this.modelValue;
+            },
+            set(value) {
+                this.$emit('update:modelValue', value);
+            }
+        }
+    }
     };
 </script>
 

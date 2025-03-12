@@ -24,7 +24,8 @@ import lombok.NoArgsConstructor;
 public class Item {
 
     public static final String TABLE_NAME = "item";
-
+ 
+    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", unique = true )

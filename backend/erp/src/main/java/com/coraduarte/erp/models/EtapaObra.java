@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.coraduarte.erp.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +57,7 @@ public class EtapaObra {
     private Integer status;
 
    @OneToMany
+   @JsonManagedReference
     private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
 
     @ManyToOne

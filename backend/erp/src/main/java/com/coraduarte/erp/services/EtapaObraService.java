@@ -33,6 +33,7 @@ public class EtapaObraService {
                 "Etapa não encontrada!"
         ));
     }
+    
 
     public List<EtapaObra> findAllByObraId(Long id){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();

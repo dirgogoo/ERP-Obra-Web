@@ -8,4 +8,5 @@ import com.coraduarte.erp.models.Etapa;
 @Repository
 public interface EtapaRepository extends JpaRepository<Etapa, Long> {
     
+    
 }

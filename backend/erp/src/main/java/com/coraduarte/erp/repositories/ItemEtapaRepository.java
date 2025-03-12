@@ -10,4 +10,5 @@ import com.coraduarte.erp.models.ItemEtapa;
 @Repository
 public interface ItemEtapaRepository extends JpaRepository<ItemEtapa, Long> {
     Page<ItemEtapa> findAllByEtapaObra_Id(Long id,Pageable pageable);
+    
 }

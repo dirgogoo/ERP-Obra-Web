@@ -19,7 +19,6 @@ const props = defineProps({
       type: Object,
     }
   });
-const obra = ref(props.obra);
 </script>
 
 <style scoped>

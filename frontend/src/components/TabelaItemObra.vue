@@ -39,47 +39,33 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from 'vue';
 import Pagination from 'laravel-vue-pagination';
 import { useRouter } from 'vue-router';
 
-export default {
-  name: 'TabelaItem',
-  components: {
-    Pagination
-  },
-  setup() {
-    const router = useRouter();
-    const items = ref([
-      { Id: 1, Nome: 'Item 1', Tipo: 'Material', DataLancamento: '01/01/23', Unidade: 'kg', ValorUnitario: 10, Qtd: 100, ValorTotal: 1000 },
-      { Id: 2, Nome: 'Item 2', Tipo: 'Serviço', DataLancamento: '02/01/23', Unidade: 'h', ValorUnitario: 50, Qtd: 20, ValorTotal: 1000 },
-      { Id: 3, Nome: 'Item 3', Tipo: 'Material', DataLancamento: '03/01/23', Unidade: 'm', ValorUnitario: 5, Qtd: 200, ValorTotal: 1000 },
-      // Adicione mais itens conforme necessário
-    ]);
-    const currentPage = ref(1);
-    const itemsPerPage = 15;
-
-    const paginatedItems = computed(() => {
-      const start = (currentPage.value - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      return items.value.slice(start, end);
-    });
-
-    function updatePage(page) {
-      if (page >= 1 && page <= Math.ceil(items.value.length / perPage.value))
-      currentPage.value = page;
-    }
-
-    return {
-      items,
-      currentPage,
-      itemsPerPage,
-      paginatedItems,
-      updatePage,
-    };
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true
   }
-};
+});
+
+const router = useRouter();
+const currentPage = ref(1);
+const itemsPerPage = 15;
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return props.items.slice(start, end);
+});
+
+function updatePage(page) {
+  if (page >= 1 && page <= Math.ceil(props.items.length / itemsPerPage)) {
+    currentPage.value = page;
+  }
+}
 </script>
 
 <style scoped>
