@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <table>
@@ -11,105 +10,89 @@
                     <th id="coluna-preco">Preço</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-for="item in paginatedItens" :key="item.Id">
-                    <td>{{ item.Id }}</td>
-                    <td>{{ item.Nome }}</td>
-                    <td>{{ item.Tipo }}</td>
-                    <td>{{ item.Und }}</td>
-                    <td>R${{ item.Preço }}</td>
+            <tbody >
+                <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item.nome)">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.tipo }}</td>
+                    <td>{{ item.und }}</td>
+                    <td>R${{ item.preço }}</td>
                 </tr>
             </tbody>
         </table>
-        <pagination
-            :data="itens"
-            :limit="10"
-            @pagination-change-page="updatePage"
-        ></pagination>
-        <div v-if="itens.length > perPage" id="selectionPage-container">
+        <div id="selectionPage-container">
             <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
-            <h1 id="page-label">{{currentPage}}</h1>
-            <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
+            <h1 id="page-label">{{ currentPage }}</h1>
+            <div @click="updatePage(currentPage + 1)">
+                <h1>&gt;</h1>
+            </div>
         </div>
     </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
-import Pagination from 'laravel-vue-pagination';
+<script setup>
+import { ref, onMounted } from 'vue';
+import api from "../services/axios";
 
-export default {
-    name: 'TabelaItens',
-    components: {
-        Pagination
-    },
-    setup() {
-        const itens = ref([
-            { Id: 1, Nome: 'Item 1', Tipo: 'Tipo A', Und: 'kg', Preço: 10.0 },
-            { Id: 2, Nome: 'Item 2', Tipo: 'Tipo B', Und: 'm', Preço: 20.0 },
-            { Id: 3, Nome: 'Item 3', Tipo: 'Tipo C', Und: 'l', Preço: 30.0 },
-            { Id: 4, Nome: 'Item 4', Tipo: 'Tipo A', Und: 'kg', Preço: 40.0 },
-            { Id: 5, Nome: 'Item 5', Tipo: 'Tipo B', Und: 'm', Preço: 50.0 },
-            { Id: 6, Nome: 'Item 6', Tipo: 'Tipo C', Und: 'l', Preço: 60.0 },
-            { Id: 7, Nome: 'Item 7', Tipo: 'Tipo A', Und: 'kg', Preço: 70.0 },
-            { Id: 8, Nome: 'Item 8', Tipo: 'Tipo B', Und: 'm', Preço: 80.0 },
-            { Id: 9, Nome: 'Item 9', Tipo: 'Tipo C', Und: 'l', Preço: 90.0 },
-            { Id: 10, Nome: 'Item 10', Tipo: 'Tipo A', Und: 'kg', Preço: 100.0 },
-            { Id: 11, Nome: 'Item 11', Tipo: 'Tipo B', Und: 'm', Preço: 110.0 },
-            { Id: 12, Nome: 'Item 12', Tipo: 'Tipo C', Und: 'l', Preço: 120.0 },
-            { Id: 13, Nome: 'Item 13', Tipo: 'Tipo A', Und: 'kg', Preço: 130.0 },
-            { Id: 14, Nome: 'Item 14', Tipo: 'Tipo B', Und: 'm', Preço: 140.0 },
-            { Id: 15, Nome: 'Item 15', Tipo: 'Tipo C', Und: 'l', Preço: 150.0 },
-            { Id: 16, Nome: 'Item 16', Tipo: 'Tipo A', Und: 'kg', Preço: 160.0 },
-            { Id: 17, Nome: 'Item 17', Tipo: 'Tipo B', Und: 'm', Preço: 170.0 },
-            { Id: 18, Nome: 'Item 18', Tipo: 'Tipo C', Und: 'l', Preço: 180.0 },
-            { Id: 19, Nome: 'Item 19', Tipo: 'Tipo A', Und: 'kg', Preço: 190.0 },
-            { Id: 20, Nome: 'Item 20', Tipo: 'Tipo B', Und: 'm', Preço: 200.0 },
-            { Id: 21, Nome: 'Item 21', Tipo: 'Tipo C', Und: 'l', Preço: 210.0 },
-            { Id: 22, Nome: 'Item 22', Tipo: 'Tipo A', Und: 'kg', Preço: 220.0 },
-            { Id: 23, Nome: 'Item 23', Tipo: 'Tipo B', Und: 'm', Preço: 230.0 },
-            { Id: 24, Nome: 'Item 24', Tipo: 'Tipo C', Und: 'l', Preço: 240.0 },
-            { Id: 25, Nome: 'Item 25', Tipo: 'Tipo A', Und: 'kg', Preço: 250.0 },
-            { Id: 26, Nome: 'Item 26', Tipo: 'Tipo B', Und: 'm', Preço: 260.0 },
-            { Id: 27, Nome: 'Item 27', Tipo: 'Tipo C', Und: 'l', Preço: 270.0 },
-            { Id: 28, Nome: 'Item 28', Tipo: 'Tipo A', Und: 'kg', Preço: 280.0 },
-            { Id: 29, Nome: 'Item 29', Tipo: 'Tipo B', Und: 'm', Preço: 290.0 },
-            { Id: 30, Nome: 'Item 30', Tipo: 'Tipo C', Und: 'l', Preço: 300.0 },
-            { Id: 31, Nome: 'Item 31', Tipo: 'Tipo A', Und: 'kg', Preço: 310.0 },
-            { Id: 32, Nome: 'Item 32', Tipo: 'Tipo B', Und: 'm', Preço: 320.0 },
-            { Id: 33, Nome: 'Item 33', Tipo: 'Tipo C', Und: 'l', Preço: 330.0 },
-            { Id: 34, Nome: 'Item 34', Tipo: 'Tipo A', Und: 'kg', Preço: 340.0 },
-            { Id: 35, Nome: 'Item 35', Tipo: 'Tipo B', Und: 'm', Preço: 350.0 },
-            { Id: 36, Nome: 'Item 36', Tipo: 'Tipo C', Und: 'l', Preço: 360.0 },
-            { Id: 37, Nome: 'Item 37', Tipo: 'Tipo A', Und: 'kg', Preço: 370.0 },
-            { Id: 38, Nome: 'Item 38', Tipo: 'Tipo B', Und: 'm', Preço: 380.0 },
-            { Id: 39, Nome: 'Item 39', Tipo: 'Tipo C', Und: 'l', Preço: 390.0 },
-            { Id: 40, Nome: 'Item 40', Tipo: 'Tipo A', Und: 'kg', Preço: 400.0 },
-        ]);
-        const currentPage = ref(1);
-        const perPage = ref(10);
+const props = defineProps({
+    modelValue: {
+        type: String,
+        required: true
+    }
+});
 
-        const paginatedItens = computed(() => {
-            const start = (currentPage.value - 1) * perPage.value;
-            const end = start + perPage.value;
-            return itens.value.slice(start, end);
+const emit = defineEmits(['update:modelValue']);
+
+const itemSelected = ref(props.modelValue);
+
+
+const items = ref([]);
+const currentPage = ref(1);
+const perPage = ref(10);
+
+const fetchItens = async (page) => {
+    try {
+        const response = await api.get('/item', {
+            params: {
+                page: page - 1,
+                size: perPage.value
+            }
         });
+        console.log(response.data.content);
+        items.value = response.data.content.map(item => ({
+            id: item.id,
+            nome: item.name,
+            tipo: item.tipo,
+            und: item.unidade,
+            preço: item.valor,
+        }));
 
-        const updatePage = (page) => {
-            if (page >= 1 && page <= Math.ceil(items.value.length / perPage.value))
-            currentPage.value = page;
-        };
+        currentPage.value = page;
 
-        return {
-            itens,
-            currentPage,
-            perPage,
-            paginatedItens,
-            updatePage
-        };
+    } catch (error) {
+        console.error("Erro ao buscar items:", error);
     }
 };
+
+const updatePage = (page) => {
+    {
+        if (page > 0) {
+            fetchItens(page);
+        }
+    }
+};
+
+const handleItemSelected = (item) => {
+    itemSelected.value = item;
+    emit('update:modelValue', item);
+};
+
+onMounted(() => {
+    fetchItens(currentPage.value);
+});
+
 </script>
+
 
 <style scoped>
 table {
@@ -117,7 +100,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
 }
@@ -127,7 +111,7 @@ th {
     color: white;
 }
 
-tr{
+tr {
     background-color: #EDEDED;
 }
 
@@ -135,32 +119,33 @@ tr:nth-child(even) {
     background-color: #E3E3E3;
 }
 
-tr:hover{
+tr:hover {
     background-color: #b8d9ff;
     cursor: pointer;
 }
 
-#selectionPage-container{
+#selectionPage-container {
     display: flex;
     margin-top: 10px;
 }
 
-#page-label{
+#page-label {
     margin: 0 10px;
 }
 
-#coluna-tipo{
+#coluna-tipo {
     width: 15%;
 }
 
-#coluna-id{
+#coluna-id {
     width: 7%;
 }
 
-#coluna-unidade{
+#coluna-unidade {
     width: 8%;
 }
-#coluna-preco{
+
+#coluna-preco {
     width: 15%;
 }
 </style>
