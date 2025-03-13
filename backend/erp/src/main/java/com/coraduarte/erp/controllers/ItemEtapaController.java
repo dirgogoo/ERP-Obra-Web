@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.coraduarte.erp.models.ItemEtapa;
+import com.coraduarte.erp.models.itemEtapa;
 import com.coraduarte.erp.services.ItemEtapaService;
 
 import jakarta.validation.Valid;
@@ -25,13 +25,13 @@ public class ItemEtapaController {
     private ItemEtapaService itemEtapaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity <ItemEtapa> findById(@PathVariable Long id){
-       ItemEtapa obj = this.itemEtapaService.findById(id);
+    public ResponseEntity <itemEtapa> findById(@PathVariable Long id){
+       itemEtapa obj = this.itemEtapaService.findById(id);
        return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping
-    public ResponseEntity<Void> create (@Valid @RequestBody ItemEtapa obj){
+    public ResponseEntity<Void> create (@Valid @RequestBody itemEtapa obj){
         this.itemEtapaService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();

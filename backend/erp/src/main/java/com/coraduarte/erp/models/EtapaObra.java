@@ -58,7 +58,7 @@ public class EtapaObra {
 
    @OneToMany
    @JsonManagedReference
-    private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
+    private List<itemEtapa> itens = new ArrayList<itemEtapa>();
 
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)

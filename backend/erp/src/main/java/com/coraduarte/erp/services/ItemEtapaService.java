@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.EtapaObra;
-import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.models.enums.ProfileEnum;
+import com.coraduarte.erp.models.itemEtapa;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 
@@ -28,20 +28,20 @@ public class ItemEtapaService {
     private ItemEtapaRepository itemEtapaRepository;
     
     
-        public ItemEtapa findById(Long id) {
+        public itemEtapa findById(Long id) {
             UserSpringSecurity userSpringSecurity = UserService.authenticated();
     
             if (Objects.isNull(userSpringSecurity)) {
                 throw new AuthorizationDeniedException("Acesso negado!");
             }
     
-            Optional<ItemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
+            Optional<itemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
         return itemEtapa.orElseThrow(() -> new RuntimeException(
                 "Item da etapa não encontrado!"
         ));
     }
 
-    public Page<ItemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
+    public Page<itemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -52,12 +52,12 @@ public class ItemEtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        Page<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
         return items;
     }
 
     @Transactional
-    public ItemEtapa create(ItemEtapa obj) {
+    public itemEtapa create(itemEtapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-public class ItemEtapa {
+public class itemEtapa {
    
     public static final String TABLE_NAME = "itemEtapa";
  
