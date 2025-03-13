@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.EtapaObra;
+import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.models.itemEtapa;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
@@ -25,7 +26,14 @@ public class ItemEtapaService {
     @Autowired
     private EtapaObraService etapaObraService;
     
+    @Autowired
     private ItemEtapaRepository itemEtapaRepository;
+
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private UtilService utilService;
     
     
         public itemEtapa findById(Long id) {
@@ -63,11 +71,16 @@ public class ItemEtapaService {
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
+        obj.setId(null);
+
+        Item item = this.itemService.findById(obj.getItem().getId());
+        obj.setItem(item);
 
         EtapaObra etapa = this.etapaObraService.findById(obj.getEtapa().getId());
         obj.setEtapa(etapa);
 
-        obj.setId(null);
+        obj.setDataLancamento(this.utilService.getTodayDate());
+        
         obj = this.itemEtapaRepository.save(obj);
         return obj;
 
