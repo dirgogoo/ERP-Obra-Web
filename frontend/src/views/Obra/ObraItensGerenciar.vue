@@ -11,13 +11,41 @@ import { useRouter } from 'vue-router';
 import { ref, onMounted, watch } from 'vue';
 import api from '@/services/axios';
 
-const itens = ref([]);
-const itemSelected = ref();
+const toSaveItens = ref([]);
+const itemSelected = ref([]);
+const itemSelectedName = ref("")
 const itemQtd = ref();
 
 const route = useRouter();
 
 const EtapaObraID = route.currentRoute.value.query.etapaobra
+
+const saveItems = async () => {
+    for (const item of toSaveItens.value) {
+        try {
+            const response = await api.post("/obra/etapa/item", item);
+            console.log(`Item ${item.item.nome} saved successfully`);
+        } catch (error) {
+            console.error(`Error saving item ${item.item.nome}:`, error);
+        }
+    }
+    route.push(`/app/obra/${route.currentRoute.value.params.id}/itens`);
+};
+
+watch(itemSelected, (newVal) => {
+    itemSelectedName.value = newVal.nome;
+});
+
+const addItem = () => {
+    toSaveItens.value.push({
+        item: itemSelected.value,
+        quantidade: itemQtd.value,
+        valorTotal : 0,
+        etapa : {id : EtapaObraID }
+    });
+    console.log(toSaveItens.value);
+};
+
 </script>
 
 <template>
@@ -33,20 +61,20 @@ const EtapaObraID = route.currentRoute.value.query.etapaobra
                 </div>
                 <div id="form-container">
                     <div id="input-container">
-                        <TopLabelTextBox label="Item" id="input-item" v-model="itemSelected"/>
+                        <TopLabelTextBox label="Item" id="input-item" v-model="itemSelectedName"/>
                         <TopLabelTextBox label="Quantidade" id="input-qtd" v-model="itemQtd"/>
                     </div>
                     <div id="button-container">
-                        <Button label="Adicionar" class="button"/>
+                        <Button label="Adicionar" class="button" @click="addItem"/>
                     </div>
                 </div>
             </div>
             <div id="right-container">
                 <div id="table-container2">
-                    <TabelaItensEtapa/>
+                    <TabelaItensEtapa :etapa-id="EtapaObraID" v-model="toSaveItens"/>
                 </div>
                 <div id="button-container2">
-                    <Button label="Salvar Mudanças"/>
+                    <Button label="Salvar Mudanças" @click="saveItems" />
                 </div>
             </div>
         </div>

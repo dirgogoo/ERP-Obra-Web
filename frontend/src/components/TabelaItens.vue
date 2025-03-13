@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody >
-                <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item.nome)">
+                <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.nome }}</td>
                     <td>{{ item.tipo }}</td>
@@ -36,7 +36,7 @@ import api from "../services/axios";
 
 const props = defineProps({
     modelValue: {
-        type: String,
+        type: Array,
         required: true
     }
 });

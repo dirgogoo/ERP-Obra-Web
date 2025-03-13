@@ -13,12 +13,12 @@
             </thead>
             <tbody>
                 <tr v-for="item in paginatedItens" :key="item.Id">
-                    <td>{{ item.Id }}</td>
-                    <td>{{ item.Nome }}</td>
-                    <td>{{ item.Tipo }}</td>
-                    <td>{{ item.Und }}</td>
-                    <td>{{ item.Qtd }}</td>
-                    <td>R${{ item.Preço * item.Qtd }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.tipo }}</td>
+                    <td>{{ item.unidade }}</td>
+                    <td>{{ item.qtd }}</td>
+                    <td>R${{ item.valorUnitario * item.qtd }}</td>
                 </tr>
             </tbody>
         </table>
@@ -34,12 +34,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import Pagination from 'laravel-vue-pagination';
+import api from "../services/axios";
 
 const props = defineProps({
     modelValue: {
         type: Array,
+        required: true
+    },
+    etapaId: {
+        type: Number,
         required: true
     }
 });
@@ -47,12 +52,66 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const itens = ref([]);
+const toSaveItens = ref([]);
 const currentPage = ref(1);
 const perPage = ref(15);
+
+const fetchItens = async (page) => {
+    try {
+        const response = await api.get(`/obra/etapa/item/EtapaObra/${props.etapaId}`, {
+            params: {
+                page: page - 1,
+                size: perPage.value
+            }
+        });
+
+        itens.value = response.data.content.map(item => ({
+            id: item.id,
+            qtd: item.quantidade,
+            unidade: item.item.unidade,
+            nome: item.item.name,
+            tipo: item.item.tipo,
+            valorUnitario: item.item.valor,
+        }));
+
+        currentPage.value = page;
+    } catch (error) {
+        console.error("Erro ao buscar itens:", error);
+    }
+};
+
+watch(props.modelValue, (newVal, oldVal) => {
+    console.log(newVal, oldVal)
+    const addedItem = newVal[newVal.length - 1];
+    const item = itens.value.find((item) => item == addedItem.item);
+    //if (item) {
+      //  itens.value.push({
+      //      id: item.id,
+      //      qtd: addedItem.quantidade,
+      //      unidade: addedItem.item.und,
+      //      nome: addedItem.item.nome,
+      //      tipo: addedItem.item.tipo,
+       //     valorUnitario: addedItem.item.preço,
+       // });
+       // newVal[newVal.length - 1].id = item.id;
+       // itens.value.slice(itens.value.indexOf(item), 1);
+   // } else { */
+        console.log(addedItem)
+        itens.value.push({
+            id: "-",
+            qtd: addedItem.quantidade,
+            unidade: addedItem.item.und,
+            nome: addedItem.item.nome,
+            tipo: addedItem.item.tipo,
+            valorUnitario: addedItem.item.preço,
+        });
+   // };
+});
 
 const paginatedItens = computed(() => {
     const start = (currentPage.value - 1) * perPage.value;
     const end = start + perPage.value;
+    console.log("Pagination Updated")
     return itens.value.slice(start, end);
 });
 
@@ -60,6 +119,10 @@ const updatePage = (page) => {
     if (page >= 1 && page <= Math.ceil(itens.value.length / perPage.value))
         currentPage.value = page;
 };
+
+onMounted(() => {
+    fetchItens(currentPage.value);
+});
 
 </script>
 
