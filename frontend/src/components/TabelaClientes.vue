@@ -25,8 +25,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import Pagination from 'laravel-vue-pagination';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import api from "../services/axios";
 
 export default {
