@@ -21,6 +21,8 @@ const route = useRouter();
 
 const currentPath = route.currentRoute.value.params.id;
 
+
+
 onBeforeMount(() => {
     
     for (let i = 0; i < props.obra.etapa.length; i++) {
@@ -38,8 +40,8 @@ watch(etapa, (newVal) => {
     const foundedEtapaObra = props.obra.etapa.find((etapa) => etapa.etapa.name === newVal);
     if (foundedEtapaObra) {
         etapaObj.value = foundedEtapaObra.id;
-        console.log(etapaObj.value);
-        itens.value = foundedEtapaObra.itens;
+        const event = new CustomEvent('etapa-updated',{ detail: { etapaId: etapaObj.value } });
+        window.dispatchEvent(event);
     }
 });
 
@@ -53,7 +55,7 @@ watch(etapa, (newVal) => {
             <Button id="button" label="Gerenciar Itens" @click="toRouteId(`gerenciar?etapaObra=${etapaObj}`)" />
         </div>
         <div id="table-container">
-            <TabelaItemObra :items="itens" />
+            <TabelaItemObra />
         </div>
     </div>
 </template>
