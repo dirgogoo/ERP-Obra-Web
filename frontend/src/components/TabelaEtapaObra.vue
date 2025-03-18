@@ -19,12 +19,20 @@
             <td>{{ etapa.id }}</td>
             <td>{{ etapa.etapa.name }}</td>
             <td>R${{ etapa.price }}</td>
-            <td>R$0</td>
-            <td>R${{ etapa.price }}</td>
+            <td>R${{ etapa.price - etapa.saldo }}</td>
+            <td>
+              <a style="color: red;" v-if="etapa.saldo<0">-R$ {{ Math.abs(etapa.saldo) }}</a>
+              <a style="color: green;" v-else>R$ {{ etapa.saldo }}</a>
+              </td>
             <td>-</td>
             <td>{{ etapa.deadline }}</td>
             <td>-</td>
-            <td>{{ etapa.status }}</td>
+            <td><a :class="{
+              blue : etapa.status == 'NAOINICIADO',
+              green : etapa.status == 'CONCLUIDO',
+              red : etapa.status == 'ATRASADO',
+              yellow : etapa.status == 'ANDAMENTO'
+            }">{{ etapa.status }}</a></td>
           </tr>
         </tbody>
       </table>
@@ -75,6 +83,22 @@
   </script>
 
 <style scoped>
+.blue{
+    color: #2888E4;
+}
+
+.green{
+    color: green;
+}
+
+.red{
+    color: red;
+}
+
+.yellow{
+    color: yellow;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

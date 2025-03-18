@@ -1,40 +1,68 @@
 <script setup>
 import BoxInfo from '@/components/BoxInfo.vue';
 import ObraChart from '@/components/ObraChart.vue';
+import { ref, onMounted } from 'vue';
 
-const redColor = '#CF6567';
-const blueColor = '#2888E4';
-const greenColor = '#6DCF65';
-/* 
 import { defineProps } from 'vue';
-import { ref } from 'vue';
-
-
-
+import api from '../../services/axios';
 
 const props = defineProps({
     obra: {
         type: Object,
     }
 });
-const obra = ref(props.obra);
-var data = [0,0,0]
-console.log(obra.value);
 
-for (let i = 0; i < obra.value.etapa.length; i++) {
-    switch (obra.value.etapa[i].status) {
-        case 1:
-            data[1] += 1;
-            break;
-        case 2:
-            data[2] += 1;
-            break;
-        case 3:
-            data[3] += 1;
-            break;
+const blueColor = '#2888E4';
+
+const saldoObraV = ref(0);
+const obraTotalV = ref(0);
+
+
+
+console.log(props.obra);
+
+const dataPie = ref([0,0,0,0])
+
+
+onMounted(async () => {
+    var obra = props.obra;
+    var saldoObra = 0;
+    var obraTotal = 0
+    for (let i = 0; i < props.obra.etapa.length; i++) {
+        try {
+            const response = await api.get(`/obra/etapa/${obra.etapa[i].id}/saldo`);
+            saldoObra += response.data;
+            obraTotal += obra.etapa[i].price;
+
+            switch(obra.etapa[i].status){
+                case "ANDAMENTO":
+                    dataPie.value[0]++;
+                    break;
+                case "ATRASADO":
+                    dataPie.value[1]++;
+                    break;
+                case "CONCLUIDO":
+                    dataPie.value[2]++;
+                    break;
+                case "NAOINICIADO":
+                    dataPie.value[3]++;
+                    break;
+            }
+
+            console.log(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar itens:", error);
+        }
+        
     }
-}
-*/
+    console.log(dataPie.value);
+    saldoObraV.value = saldoObra;
+    obraTotalV.value = obraTotal;
+});
+
+
+
+
 </script>
 
 <template>
@@ -46,26 +74,26 @@ for (let i = 0; i < obra.value.etapa.length; i++) {
                     <BoxInfo :color=blueColor label="Data Planejada" info="10/12/2025" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Gastos Planejados" info="R$100.000" />
+                    <BoxInfo :color=blueColor label="Gastos Planejados" :info="obraTotalV" />
                 </div>
                 <div class="box-container">
                     <BoxInfo :color=blueColor label="Dias Passados" info="166" />
 
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Gastos Realizados" info="R$105.000" />
+                    <BoxInfo :color=blueColor label="Gastos Realizados" :info="obraTotalV-saldoObraV" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color="greenColor" label="Dias Restantes" info="+10" />
+                    <BoxInfo label="Dias Restantes" :info="+10" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=redColor label="Saldo" info="-R$5.000" />
+                    <BoxInfo  label="Saldo" :info="saldoObraV" />
                 </div>
             </div>
         </div>
         <div id="right-container">
             <h2>Progresso das Etapas:</h2>
-            <ObraChart />
+            <ObraChart :dataPie = "dataPie" />
         </div>
     </div>
 
