@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 public enum Status {
     NAOINICIADO(1),
     ANDAMENTO( 2),
-    CONCLUIDO( 3);
+    CONCLUIDO( 3),
+    ATRASADO( 4);
 
     private Integer code;
 
