@@ -1,5 +1,6 @@
 package com.coraduarte.erp.services;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -61,6 +62,19 @@ public class ItemEtapaService {
         }
 
         Page<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        return items;
+    }
+
+
+
+    public List<itemEtapa> findAllbyEtapaObraIdAll(Long id){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        List<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id);
         return items;
     }
 
