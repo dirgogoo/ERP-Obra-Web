@@ -37,7 +37,7 @@ public class EtapaService {
         ));
     }
 
-    public Page<Etapa> findAll(Pageable pageable){
+    public Page<Etapa> findAll(String nome,Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -48,12 +48,20 @@ public class EtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Etapa> etapas = this.etapaRepository.findAll(pageable);
+        Page<Etapa> etapas = this.etapaRepository.findByNameContainingIgnoreCase(nome,pageable);
         return etapas;
     }
 
     public List<Etapa> findAll() {
-        return etapaRepository.findAll();
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        List<Etapa> etapas = this.etapaRepository.findAll();
+
+        return etapas;
     }
 
     @Transactional

@@ -10,6 +10,8 @@
 
     const nome = ref('');
 
+    const search = ref('');
+
     const cadastrar = async () => {
         try{
             const response = await api.post("/etapa", {
@@ -30,13 +32,13 @@
 
         <div id="top-container">
             <div id="searchbar-container">
-                <searchbar/>
+                <searchbar v-model="search"/>
             </div>
         </div>
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaEtapas/>
+                <TabelaEtapas :search="search"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Etapa</h1>
