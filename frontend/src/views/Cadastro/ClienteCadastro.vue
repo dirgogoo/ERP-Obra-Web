@@ -1,6 +1,7 @@
 <script setup>
      import TopLabelTextBox from '../../components/TopLabelTextBox';
     import Button from '../../components/Button';
+    import ButtonRed from '../../components/ButtonRed';
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
     import TabelaClientes from '../../components/TabelaClientes.vue';
@@ -47,13 +48,23 @@
                 <h1>Cadastro Cliente</h1>
                 <TopLabelTextBox label="Nome" v-model="nome"/>
                 <TopLabelTextBox label="CNPJ" v-model="cnpj"/>
-                <Button label="Cadastrar" class="button" @click="cadastrar()"/>
+                <div id="button-container">
+                    <Button label="Cadastrar" class="button" @click="cadastrar()"/>
+                    <ButtonRed class="button" label="Excluir"/>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+    #button-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
     #top-container{
         display: flex;
         align-items: center;

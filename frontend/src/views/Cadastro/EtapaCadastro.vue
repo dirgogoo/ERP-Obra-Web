@@ -1,6 +1,7 @@
 <script setup>
      import TopLabelTextBox from '../../components/TopLabelTextBox';
     import Button from '../../components/Button';
+    import ButtonRed from '../../components/ButtonRed';
     import Searchbar from '../../components/Searchbar.vue';
     import TabelaEtapas from '../../components/TabelaEtapas.vue';
     import { ref } from 'vue';
@@ -42,6 +43,7 @@
                 <TopLabelTextBox label="Nome" v-model="nome"/>
                 <div id="button-container">
                     <Button label="Cadastrar" class="button" @click="cadastrar()"/>
+                    <ButtonRed class="button" label="Excluir"/>
                 </div>
             </div>
         </div>
@@ -57,6 +59,7 @@
         max-width: 1800px;
         margin-left: 20px;
     }
+    
 
     #bottom-container{
         display: flex;

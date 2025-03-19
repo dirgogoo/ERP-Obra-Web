@@ -37,6 +37,7 @@ watch(itemSelected, (newVal) => {
 });
 
 const addItem = () => {
+    if (itemSelected.value || itemQtd.value) {
     toSaveItens.value.push({
         item: itemSelected.value,
         quantidade: itemQtd.value,
@@ -44,6 +45,7 @@ const addItem = () => {
         etapa : {id : EtapaObraID }
     });
     console.log(toSaveItens.value);
+}
 };
 
 </script>
@@ -66,6 +68,7 @@ const addItem = () => {
                     </div>
                     <div id="button-container">
                         <Button label="Adicionar" class="button" @click="addItem"/>
+                        <ButtonRed class="button" label="Excluir"/>
                     </div>
                 </div>
             </div>
