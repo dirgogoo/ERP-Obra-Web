@@ -26,13 +26,20 @@
     </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import api from "../services/axios";
 
-export default {
-    name: 'TabelaMateriais',
-    setup() {
+const props = defineProps({
+    search: {
+        type: String,
+    }
+});
+
+watch(() => props.search, () => {
+    fetchMateriais(currentPage.value);
+});
+
         const materiais = ref([]);
         const currentPage = ref(1);
         const perPage = ref(16);
@@ -43,7 +50,9 @@ export default {
                     params: {
                         type: 2,
                         page: page - 1,
-                        size: perPage.value
+                        size: perPage.value,
+                        sort: 'id,desc',
+                        search : props.search
                     }
                 });
                 
@@ -83,14 +92,8 @@ export default {
                 
         }};
 
-        return {
-            materiais,
-            currentPage,
-            perPage,
-            updatePage
-        };
-    }
-};
+
+
 </script>
 
 <style scoped>

@@ -13,6 +13,8 @@
     const unidade = ref('');
     const valor = ref('');
 
+    const search = ref('');
+
     const cadastrar = async () => {
         try{
             const response = await api.post("/item", {
@@ -36,7 +38,7 @@
 
         <div id="top-container">
             <div id="searchbar-container">
-                <searchbar/>
+                <searchbar v-model="search"/>
             </div>
             <div id="filter-container">
                 <FilterSelector label="Ordenar por:"/>
@@ -45,7 +47,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaMateriais/>
+                <TabelaMateriais :search="search"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Material</h1>
