@@ -12,6 +12,8 @@
     const nome = ref('');
     const cnpj = ref('');
 
+    const search = ref('');
+
     const cadastrar = async () => {
         try{
             const response = await api.post("/cliente", {
@@ -33,7 +35,7 @@
 
         <div id="top-container">
             <div id="searchbar-container">
-                <searchbar/>
+                <searchbar v-model="search"/>
             </div>
             <div id="filter-container">
                 <FilterSelector label="Ordenar por:"/>
@@ -42,7 +44,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaClientes/>
+                <TabelaClientes :search="search"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Cliente</h1>
