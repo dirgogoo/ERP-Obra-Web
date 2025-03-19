@@ -18,77 +18,82 @@
                 </tr>
             </tbody>
         </table>
-        <div  id="selectionPage-container">
+        <div id="selectionPage-container">
             <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
-            <h1 id="page-label">{{currentPage}}</h1>
-            <div @click="updatePage(currentPage + 1)"><h1>&gt;</h1> </div>
+            <h1 id="page-label">{{ currentPage }}</h1>
+            <div @click="updatePage(currentPage + 1)">
+                <h1>&gt;</h1>
+            </div>
         </div>
     </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import api from "../services/axios";
 
-export default {
-    name: 'TabelaServicos',
-    setup() {
-        const servicos = ref([]);
-        const currentPage = ref(1);
-        const perPage = ref(16);
+const servicos = ref([]);
+const currentPage = ref(1);
+const perPage = ref(16);
 
-        const fetchServicos = async (page) => {
-            try {
-                const response = await api.get('/item', {
-                    params: {
-                        type: 1,
-                        page: page - 1,
-                        size: perPage.value
-                    }
-                });
-                
-                servicos.value = response.data.content.map(servico => ({
-                    id: servico.id,
-                    nome: servico.name,
-                    unidade:servico.unidade,
-                    preço :servico.valor
-                }));
 
-                currentPage.value = page;
+const props = defineProps({
+    search: {
+        type: String,
+    }
+});
 
-            } catch (error) {
-                console.error("Erro ao buscar servicos:", error);
+watch(() => props.search, () => {
+    fetchServicos(currentPage.value);
+});
+
+const fetchServicos = async (page) => {
+    try {
+        const response = await api.get('/item', {
+            params: {
+                type: 1,
+                page: page - 1,
+                size: perPage.value,
+                search: props.search,
+                sort: 'id,desc',
             }
-        };
-
-        
-
-        const handleUserRegistered = () => {
-            fetchServicos(currentPage.value);
-        };
-
-        onMounted(() => {
-            fetchServicos(currentPage.value);
-            window.addEventListener('servico-registered', handleUserRegistered);
         });
 
-        onBeforeUnmount(() => {
-            window.removeEventListener('servico-registered', handleUserRegistered);
-        });
+        servicos.value = response.data.content.map(servico => ({
+            id: servico.id,
+            nome: servico.name,
+            unidade: servico.unidade,
+            preço: servico.valor
+        }));
 
-        const updatePage = (page) => { {
-            if (page > 0){
-                fetchServicos(page);
-            }
-                
-        }};
+        currentPage.value = page;
 
-        return {
-            servicos,
-            currentPage,
-            perPage,
-            updatePage
-        };
+    } catch (error) {
+        console.error("Erro ao buscar servicos:", error);
+    }
+};
+
+
+
+const handleUserRegistered = () => {
+    fetchServicos(currentPage.value);
+};
+
+onMounted(() => {
+    fetchServicos(currentPage.value);
+    window.addEventListener('servico-registered', handleUserRegistered);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('servico-registered', handleUserRegistered);
+});
+
+const updatePage = (page) => {
+    {
+        if (page > 0) {
+            fetchServicos(page);
+        }
+
     }
 };
 </script>
@@ -99,7 +104,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
 }
@@ -109,7 +115,7 @@ th {
     color: white;
 }
 
-tr{
+tr {
     background-color: #EDEDED;
 }
 
@@ -117,23 +123,24 @@ tr:nth-child(even) {
     background-color: #E3E3E3;
 }
 
-#selectionPage-container{
+#selectionPage-container {
     display: flex;
     margin-top: 10px;
 }
 
-#page-label{
+#page-label {
     margin: 0 10px;
 }
 
-#coluna-id{
+#coluna-id {
     width: 7%;
 }
 
-#coluna-unidade{
+#coluna-unidade {
     width: 8%;
 }
-#coluna-preco{
+
+#coluna-preco {
     width: 15%;
 }
 </style>
