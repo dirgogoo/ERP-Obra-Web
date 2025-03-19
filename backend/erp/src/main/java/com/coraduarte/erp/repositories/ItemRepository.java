@@ -9,5 +9,7 @@ import com.coraduarte.erp.models.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long>{
-    Page<Item> findAllByTipo(Integer tipo,Pageable pageable);
+    Page<Item> findByNameContainingIgnoreCaseAndTipo(String nome, Integer tipo, Pageable pageable);
+
+    Page<Item> findByNameContainingIgnoreCase(String nome, Pageable pageable);
 }

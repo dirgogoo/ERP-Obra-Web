@@ -16,6 +16,8 @@ const itemSelected = ref([]);
 const itemSelectedName = ref("")
 const itemQtd = ref();
 
+const search = ref('');
+
 const route = useRouter();
 
 const EtapaObraID = route.currentRoute.value.query.etapaobra
@@ -55,11 +57,11 @@ const addItem = () => {
         <div id="sides-container">
             <div id="left-container">
                 <div id="search-container">
-                    <SearchBar/>
+                    <SearchBar v-model="search"/>
                     <FilterSelector label="Tipo:"/>
                 </div>
                 <div id="table-container">
-                    <TabelaItens v-model="itemSelected"/>
+                    <TabelaItens v-model="itemSelected" :search="search"/>
                 </div>
                 <div id="form-container">
                     <div id="input-container">
