@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,8 +38,9 @@ public class ObraController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ObraSearchProjection>> findAll(Pageable pageable){
-       Page<ObraSearchProjection> obras = this.obraService.findAll(pageable);
+    public ResponseEntity<Page<ObraSearchProjection>> findAll(@RequestParam(required = false, defaultValue = "") String search ,Pageable pageable){
+      System.out.println("search: " + search);
+       Page<ObraSearchProjection> obras = this.obraService.findAll(search,pageable);
        return ResponseEntity.ok().body(obras);
     }
     

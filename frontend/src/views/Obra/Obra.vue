@@ -3,6 +3,9 @@
     import Button from '../../components/Button';
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
+    import { ref, watch } from 'vue';
+
+    const search = ref('');
 </script>
 
 <template>
@@ -11,7 +14,7 @@
 
         <div id="top-container">
             <div id="searchbar-container">
-                 <searchbar/>
+                 <searchbar v-model="search"/>
             </div>
             <div class="filter-container">
                 <FilterSelector label="Ordenar por:"/>
@@ -26,7 +29,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaObra/>
+                <TabelaObra :search="search"/>
             </div>
         </div>
     </div>
