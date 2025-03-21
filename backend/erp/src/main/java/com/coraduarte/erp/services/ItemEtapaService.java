@@ -63,6 +63,7 @@ public class ItemEtapaService {
 
         Page<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
         return items;
+        
     }
 
 
