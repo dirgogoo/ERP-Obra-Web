@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="servico in servicos" :key="servico.Id">
+                <tr v-for="servico in servicos" :key="servico.Id" :class="{selected: servico.id === selectedId}" @click="selectRow(servico.id)">
                     <td>{{ servico.id }}</td>
                     <td>{{ servico.nome }}</td>
                     <td>{{ servico.unidade }}</td>
@@ -35,13 +35,20 @@ import api from "../services/axios";
 const servicos = ref([]);
 const currentPage = ref(1);
 const perPage = ref(16);
+const selectedId = ref(null);
 
 
 const props = defineProps({
     search: {
         type: String,
-    }
+    },
+    modelValue: {
+        type: Number,
+        required: true
+    },
 });
+
+const emit = defineEmits(['update:modelValue']);
 
 watch(() => props.search, () => {
     fetchServicos(currentPage.value);
@@ -83,6 +90,11 @@ onMounted(() => {
     fetchServicos(currentPage.value);
     window.addEventListener('servico-registered', handleUserRegistered);
 });
+
+const selectRow = (id) => {
+    selectedId.value = id;
+    emit('update:modelValue', id);
+};
 
 onBeforeUnmount(() => {
     window.removeEventListener('servico-registered', handleUserRegistered);
@@ -143,4 +155,14 @@ tr:nth-child(even) {
 #coluna-preco {
     width: 15%;
 }
+
+tr:hover {
+    background-color: #2889e44f;
+}
+
+
+tr.selected {
+    background-color: #2889e477;
+}
+
 </style>

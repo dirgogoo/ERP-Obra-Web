@@ -13,6 +13,8 @@
     const unidade = ref('');
     const valor = ref('');
 
+    const selectedId = ref(null);
+
     const search = ref('');
 
     const cadastrar = async () => {
@@ -29,6 +31,18 @@
             console.error("Erro ao cadastrar item:", error);
         }
     }
+
+    const deleteE = async () => {
+    try {
+
+        const response = await api.delete(`/item/${selectedId.value}`);
+        const event = new CustomEvent('servico-registered');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error("Erro ao deletar etapa:", error);
+    }
+}
+
 </script>
 
 <template>
@@ -46,7 +60,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaServicos :search="search"/>
+                <TabelaServicos :search="search" v-model="selectedId"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Serviços</h1>
@@ -55,7 +69,7 @@
                 <TopLabelTextBox label="Preço" v-model="valor"/>
                 <div id="button-container">
                     <Button label="Cadastrar" class="button" @click="cadastrar()"/>
-                    <ButtonRed class="button" label="Excluir"/>
+                    <ButtonRed class="button" label="Excluir" @click="deleteE()"/>
                 </div>
             </div>
         </div>
