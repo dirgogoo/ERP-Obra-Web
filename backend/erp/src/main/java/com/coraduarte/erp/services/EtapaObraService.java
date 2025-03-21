@@ -69,6 +69,7 @@ public class EtapaObraService {
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
+        
 
         List<EtapaObra> etapas = this.etapaObraRepository.findAllByObra_Id(id);
         return etapas;
