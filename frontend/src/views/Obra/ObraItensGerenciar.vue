@@ -16,6 +16,8 @@ const itemSelected = ref([]);
 const itemSelectedName = ref("")
 const itemQtd = ref();
 
+const selectedId = ref(null);
+
 const search = ref('');
 
 const route = useRouter();
@@ -38,6 +40,10 @@ watch(itemSelected, (newVal) => {
     itemSelectedName.value = newVal.nome;
 });
 
+const changeSelectId = (id) => {
+    selectedId.value = id;
+}
+
 const addItem = () => {
     if (itemSelected.value || itemQtd.value) {
     toSaveItens.value.push({
@@ -50,6 +56,21 @@ const addItem = () => {
 }
 };
 
+watch(toSaveItens, (newVal) => {
+    console.log(newVal);
+});
+
+const deleteE = async () => {
+    try {
+        const response = await api.delete(`/obra/etapa/item/${selectedId.value}`);
+        const event = new CustomEvent('itemetapa-registered');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error("Erro ao deletar etapa:", error);
+    }
+}
+
+
 </script>
 
 <template>
@@ -61,7 +82,7 @@ const addItem = () => {
                     <FilterSelector label="Tipo:"/>
                 </div>
                 <div id="table-container">
-                    <TabelaItens v-model="itemSelected" :search="search"/>
+                    <TabelaItens v-model="itemSelected"  :search="search"/>
                 </div>
                 <div id="form-container">
                     <div id="input-container">
@@ -70,13 +91,13 @@ const addItem = () => {
                     </div>
                     <div id="button-container">
                         <Button label="Adicionar" class="button" @click="addItem"/>
-                        <ButtonRed class="button" label="Excluir"/>
+                        <ButtonRed class="button" label="Excluir" @click="deleteE"/>
                     </div>
                 </div>
             </div>
             <div id="right-container">
                 <div id="table-container2">
-                    <TabelaItensEtapa :etapa-id="EtapaObraID" v-model="toSaveItens"/>
+                    <TabelaItensEtapa :etapa-id="EtapaObraID" v-model="toSaveItens"  @update:selectedID="changeSelectId"/>
                 </div>
                 <div id="button-container2">
                     <Button label="Salvar Mudanças" @click="saveItems" />

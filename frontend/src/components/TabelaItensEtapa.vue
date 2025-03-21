@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in paginatedItens" :key="item.Id">
+                <tr v-for="item in paginatedItens" :key="item.Id"  :class="{selected: item.id === selectedId}" @click="selectRow(item.id)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.nome }}</td>
                     <td>{{ item.tipo }}</td>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onBeforeUnmount} from 'vue';
 import Pagination from 'laravel-vue-pagination';
 import api from "../services/axios";
 
@@ -49,12 +49,13 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:selectedID']);
 
 const itens = ref([]);
 const toSaveItens = ref([]);
 const currentPage = ref(1);
 const perPage = ref(15);
+const selectedId = ref(null);
 
 const fetchItens = async (page) => {
     try {
@@ -78,6 +79,11 @@ const fetchItens = async (page) => {
     } catch (error) {
         console.error("Erro ao buscar itens:", error);
     }
+};
+
+const selectRow = (id) => {
+    selectedId.value = id;
+    emit('update:selectedID', id);
 };
 
 watch(props.modelValue, (newVal, oldVal) => {
@@ -120,8 +126,17 @@ const updatePage = (page) => {
         currentPage.value = page;
 };
 
+const handleUserRegistered = () => {
+    fetchItens(currentPage.value);
+};
+
 onMounted(() => {
     fetchItens(currentPage.value);
+    window.addEventListener('itemetapa-registered', handleUserRegistered);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('itemetapa-registered', handleUserRegistered);
 });
 
 </script>
@@ -184,4 +199,14 @@ tr:hover {
 #coluna-preco {
     width: 15%;
 }
+
+tr:hover {
+    background-color: #2889e44f;
+}
+
+
+tr.selected {
+    background-color: #2889e477;
+}
+
 </style>
