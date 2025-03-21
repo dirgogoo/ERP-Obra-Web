@@ -42,6 +42,7 @@ public class ItemController {
         items = this.itemService.findAll(nome,pageable);
     }
        return ResponseEntity.ok().body(items);
+       
     }
 
     @PostMapping
