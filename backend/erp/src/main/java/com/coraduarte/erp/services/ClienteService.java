@@ -41,6 +41,7 @@ public class ClienteService {
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
+        
 
         if (pageable == null || pageable.isUnpaged()) {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
