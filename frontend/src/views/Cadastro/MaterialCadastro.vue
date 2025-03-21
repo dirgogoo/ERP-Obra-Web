@@ -8,6 +8,7 @@
     import { ref } from 'vue';
     import api from '../../services/axios';
 
+    const selectedId = ref(null);
 
     const nome = ref('');
     const unidade = ref('');
@@ -30,6 +31,18 @@
         }
     }
 
+    const deleteE = async () => {
+    try {
+
+        const response = await api.delete(`/item/${selectedId.value}`);
+        const event = new CustomEvent('material-registered');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error("Erro ao deletar material:", error);
+    }
+}
+
+
 </script>
 
 <template>
@@ -47,7 +60,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaMateriais :search="search"/>
+                <TabelaMateriais :search="search" v-model="selectedId"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Material</h1>
@@ -56,7 +69,7 @@
                 <TopLabelTextBox label="Preço"  v-model="valor"/>
                 <div id="button-container">
                     <Button label="Cadastrar" class="button" @click="cadastrar()"/>
-                    <ButtonRed class="button" label="Excluir"/>
+                    <ButtonRed class="button" label="Excluir" @click="deleteE()"/>
                 </div>
             </div>
         </div>

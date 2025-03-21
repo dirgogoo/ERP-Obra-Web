@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="material in materiais" :key="material.Id">
+                <tr v-for="material in materiais" :key="material.Id" :class="{selected: material.id === selectedId}" @click="selectRow(material.id)">
                     <td>{{ material.id }}</td>
                     <td>{{ material.nome }}</td>
                     <td>{{ material.unidade }}</td>
@@ -33,13 +33,21 @@ import api from "../services/axios";
 const props = defineProps({
     search: {
         type: String,
-    }
+    },
+    modelValue: {
+        type: Number,
+        required: true
+    },
 });
+
+const emit = defineEmits(['update:modelValue']);
 
 watch(() => props.search, () => {
     fetchMateriais(currentPage.value);
 });
 
+
+const selectedId = ref(null);
         const materiais = ref([]);
         const currentPage = ref(1);
         const perPage = ref(16);
@@ -75,6 +83,11 @@ watch(() => props.search, () => {
         const handleUserRegistered = () => {
             fetchMateriais(currentPage.value);
         };
+
+        const selectRow = (id) => {
+    selectedId.value = id;
+    emit('update:modelValue', id);
+};
 
         onMounted(() => {
             fetchMateriais(currentPage.value);
@@ -139,4 +152,16 @@ tr:nth-child(even) {
 #coluna-preco{
     width: 15%;
 }
+
+tr:hover {
+    background-color: #2889e44f;
+}
+
+
+tr.selected {
+    background-color: #2889e477;
+}
+
+
+
 </style>
