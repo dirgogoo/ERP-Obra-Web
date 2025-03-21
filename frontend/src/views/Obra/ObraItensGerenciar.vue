@@ -61,7 +61,8 @@ watch(toSaveItens, (newVal) => {
 });
 
 const deleteE = async () => {
-    try {
+    try { 
+        
         const response = await api.delete(`/obra/etapa/item/${selectedId.value}`);
         const event = new CustomEvent('itemetapa-registered');
         window.dispatchEvent(event);
