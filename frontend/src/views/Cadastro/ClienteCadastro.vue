@@ -8,6 +8,7 @@
     import { ref } from 'vue';
     import api from '../../services/axios';
 
+    const selectedId = ref(null);
 
     const nome = ref('');
     const cnpj = ref('');
@@ -27,6 +28,18 @@
         }
     }
 
+    const deleteE = async () => {
+    try {
+
+        const response = await api.delete(`/cliente/${selectedId.value}`);
+        const event = new CustomEvent('client-registered');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error("Erro ao deletar etapa:", error);
+    }
+}
+
+
 </script>
 
 <template>
@@ -44,7 +57,7 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaClientes :search="search"/>
+                <TabelaClientes :search="search" v-model="selectedId"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Cliente</h1>
@@ -52,7 +65,7 @@
                 <TopLabelTextBox label="CNPJ" v-model="cnpj"/>
                 <div id="button-container">
                     <Button label="Cadastrar" class="button" @click="cadastrar()"/>
-                    <ButtonRed class="button" label="Excluir"/>
+                    <ButtonRed class="button" label="Excluir" @click="deleteE()"/>
                 </div>
             </div>
         </div>

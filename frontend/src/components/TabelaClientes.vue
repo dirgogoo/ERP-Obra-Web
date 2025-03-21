@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="cliente in clientes" :key="cliente.id">
+                <tr v-for="cliente in clientes" :key="cliente.id" :class="{selected: cliente.id === selectedId}" @click="selectRow(cliente.id)">
                     <td>{{ cliente.id }}</td>
                     <td>{{ cliente.nome }}</td>
                     <td>{{ cliente.cnpj }}</td>
@@ -38,8 +38,15 @@ const perPage = ref(16);
 const props = defineProps({
     search: {
         type: String,
-    }
+    },
+    modelValue: {
+        type: Number,
+        required: true
+    },
 });
+
+const emit = defineEmits(['update:modelValue']);
+const selectedId = ref(null);
 
 watch(() => props.search, () => {
     fetchClientes(currentPage.value);
@@ -76,6 +83,11 @@ const fetchClientes = async (page) => {
 
 const handleUserRegistered = () => {
     fetchClientes(currentPage.value);
+};
+
+const selectRow = (id) => {
+    selectedId.value = id;
+    emit('update:modelValue', id);
 };
 
 onMounted(() => {
@@ -140,4 +152,15 @@ tr:nth-child(even) {
 #id-coluna {
     width: 7%;
 }
+
+tr:hover {
+    background-color: #2889e44f;
+}
+
+
+tr.selected {
+    background-color: #2889e477;
+}
+
+
 </style>
