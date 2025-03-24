@@ -13,6 +13,7 @@ import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.EtapaObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class EtapaObraService {
@@ -29,7 +30,7 @@ public class EtapaObraService {
         }
 
         Optional<EtapaObra> etapa = this.etapaObraRepository.findById(id);
-        return etapa.orElseThrow(() -> new RuntimeException(
+        return etapa.orElseThrow(() -> new ObjectNotFoundException(
                 "Etapa não encontrada!"
         ));
     }

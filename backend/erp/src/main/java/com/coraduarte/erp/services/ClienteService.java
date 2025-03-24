@@ -16,6 +16,7 @@ import com.coraduarte.erp.models.Cliente;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ClienteRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 @Service
 public class ClienteService {
 
@@ -30,7 +31,7 @@ public class ClienteService {
         }
 
         Optional<Cliente> cliente = this.clienteRepository.findById(id);
-        return cliente.orElseThrow(() -> new RuntimeException(
+        return cliente.orElseThrow(() -> new ObjectNotFoundException(
                 "Usuráio não encontrado! Id: " + id + ", Tipo:" + Cliente.class.getName()
         ));
     }

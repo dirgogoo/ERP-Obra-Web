@@ -17,6 +17,7 @@ import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ItemEtapaService {
@@ -36,7 +37,7 @@ public class ItemEtapaService {
             }
     
             Optional<ItemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
-        return itemEtapa.orElseThrow(() -> new RuntimeException(
+        return itemEtapa.orElseThrow(() -> new ObjectNotFoundException(
                 "Item da etapa não encontrado!"
         ));
     }
