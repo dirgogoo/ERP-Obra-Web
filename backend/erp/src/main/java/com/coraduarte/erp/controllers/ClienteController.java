@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -36,8 +37,8 @@ public class ClienteController {
     }
 
      @GetMapping
-    public ResponseEntity<Page<Cliente>> findAll(Pageable pageable){
-       Page<Cliente> clients = this.clienteService.findAll(pageable);
+    public ResponseEntity<Page<Cliente>> findAll(@RequestParam(value="search",required = false, defaultValue = "") String nome,Pageable pageable){
+       Page<Cliente> clients = this.clienteService.findAll(nome,pageable);
        return ResponseEntity.ok().body(clients);
     }
 

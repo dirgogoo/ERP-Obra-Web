@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="material in materiais" :key="material.Id">
+                <tr v-for="material in materiais" :key="material.Id" :class="{selected: material.id === selectedId}" @click="selectRow(material.id)">
                     <td>{{ material.id }}</td>
                     <td>{{ material.nome }}</td>
                     <td>{{ material.unidade }}</td>
@@ -26,13 +26,28 @@
     </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import api from "../services/axios";
 
-export default {
-    name: 'TabelaMateriais',
-    setup() {
+const props = defineProps({
+    search: {
+        type: String,
+    },
+    modelValue: {
+        type: Number,
+        required: true
+    },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+watch(() => props.search, () => {
+    fetchMateriais(currentPage.value);
+});
+
+
+const selectedId = ref(null);
         const materiais = ref([]);
         const currentPage = ref(1);
         const perPage = ref(16);
@@ -43,7 +58,9 @@ export default {
                     params: {
                         type: 2,
                         page: page - 1,
-                        size: perPage.value
+                        size: perPage.value,
+                        sort: 'id,desc',
+                        search : props.search
                     }
                 });
                 
@@ -67,6 +84,11 @@ export default {
             fetchMateriais(currentPage.value);
         };
 
+        const selectRow = (id) => {
+    selectedId.value = id;
+    emit('update:modelValue', id);
+};
+
         onMounted(() => {
             fetchMateriais(currentPage.value);
             window.addEventListener('material-registered', handleUserRegistered);
@@ -83,14 +105,8 @@ export default {
                 
         }};
 
-        return {
-            materiais,
-            currentPage,
-            perPage,
-            updatePage
-        };
-    }
-};
+
+
 </script>
 
 <style scoped>
@@ -136,4 +152,16 @@ tr:nth-child(even) {
 #coluna-preco{
     width: 15%;
 }
+
+tr:hover {
+    background-color: #2889e44f;
+}
+
+
+tr.selected {
+    background-color: #2889e477;
+}
+
+
+
 </style>

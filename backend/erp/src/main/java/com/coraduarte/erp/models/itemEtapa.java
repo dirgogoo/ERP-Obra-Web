@@ -1,6 +1,7 @@
 package com.coraduarte.erp.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-public class ItemEtapa {
+public class itemEtapa {
    
     public static final String TABLE_NAME = "itemEtapa";
  
@@ -31,6 +31,11 @@ public class ItemEtapa {
     @Column(name = "id", unique = true )
     private Long id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(name = "dataLancamento", nullable = false)
+    //@NotBlank
+    private String dataLancamento;
+
      @ManyToOne
      @JoinColumn(name = "etapa_id", nullable = false)
      @NotNull
@@ -38,7 +43,7 @@ public class ItemEtapa {
     private EtapaObra etapa;
 
     @Column(name = "quantidade", nullable = false)
-    @NotBlank
+    @NotNull
     private Double quantidade;
 
     @ManyToOne
@@ -47,7 +52,6 @@ public class ItemEtapa {
     private Item item;
 
     @Column(name = "valorTotal", nullable = false)
-    @NotNull
     private Double valorTotal;
 
 

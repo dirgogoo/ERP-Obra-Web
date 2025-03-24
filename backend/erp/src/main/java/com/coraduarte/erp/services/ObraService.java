@@ -46,7 +46,7 @@ public class ObraService {
         ));
     }
 
-    public Page<ObraSearchProjection> findAll(Pageable pageable) {
+    public Page<ObraSearchProjection> findAll(String search,Pageable pageable) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -54,10 +54,10 @@ public class ObraService {
         }
 
         if (pageable == null || pageable.isUnpaged()) {
-            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+            pageable = PageRequest.of(0, 10, Sort.by("id").descending());
         }
-
-        Page<ObraSearchProjection> obras = this.obraRepository.findAllBy(pageable);
+        System.out.println("search: " + search);
+        Page<ObraSearchProjection> obras = this.obraRepository.findByNomeContainingIgnoreCase(search, pageable);
         return obras;
     }
 

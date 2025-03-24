@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody >
-                <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item.nome)">
+                <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.nome }}</td>
                     <td>{{ item.tipo }}</td>
@@ -31,14 +31,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import api from "../services/axios";
 
 const props = defineProps({
     modelValue: {
-        type: String,
+        type: Array,
         required: true
+    },
+    search: {
+        type: String,
     }
+});
+
+watch(() => props.search, () => {
+    fetchItens(currentPage.value);
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -55,7 +62,9 @@ const fetchItens = async (page) => {
         const response = await api.get('/item', {
             params: {
                 page: page - 1,
-                size: perPage.value
+                size: perPage.value,
+                search: props.search,
+                sort: 'id,desc',
             }
         });
         console.log(response.data.content);

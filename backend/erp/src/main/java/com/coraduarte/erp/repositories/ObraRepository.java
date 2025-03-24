@@ -11,4 +11,5 @@ import com.coraduarte.erp.models.projection.ObraSearchProjection;
 @Repository
 public interface ObraRepository extends JpaRepository<Obra, Long>  {
     Page<ObraSearchProjection> findAllBy(Pageable pageable);
+    Page<ObraSearchProjection> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

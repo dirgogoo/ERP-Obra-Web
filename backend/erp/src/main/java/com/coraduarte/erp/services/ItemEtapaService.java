@@ -1,5 +1,6 @@
 package com.coraduarte.erp.services;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.EtapaObra;
-import com.coraduarte.erp.models.ItemEtapa;
+import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.enums.ProfileEnum;
+import com.coraduarte.erp.models.itemEtapa;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
@@ -26,10 +28,17 @@ public class ItemEtapaService {
     @Autowired
     private EtapaObraService etapaObraService;
     
+    @Autowired
     private ItemEtapaRepository itemEtapaRepository;
+
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private UtilService utilService;
     
     
-        public ItemEtapa findById(Long id) {
+        public itemEtapa findById(Long id) {
             UserSpringSecurity userSpringSecurity = UserService.authenticated();
     
             if (Objects.isNull(userSpringSecurity)) {
@@ -42,7 +51,7 @@ public class ItemEtapaService {
         ));
     }
 
-    public Page<ItemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
+    public Page<itemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -53,22 +62,41 @@ public class ItemEtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        Page<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        return items;
+        
+    }
+
+
+
+    public List<itemEtapa> findAllbyEtapaObraIdAll(Long id){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        List<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id);
         return items;
     }
 
     @Transactional
-    public ItemEtapa create(ItemEtapa obj) {
+    public itemEtapa create(itemEtapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
+        obj.setId(null);
+
+        Item item = this.itemService.findById(obj.getItem().getId());
+        obj.setItem(item);
 
         EtapaObra etapa = this.etapaObraService.findById(obj.getEtapa().getId());
         obj.setEtapa(etapa);
 
-        obj.setId(null);
+        obj.setDataLancamento(this.utilService.getTodayDate());
+        
         obj = this.itemEtapaRepository.save(obj);
         return obj;
 

@@ -1,7 +1,7 @@
 <template>
     <div id="main-container">
         <h3>{{label}}:</h3>
-        <div id="background" :style="{backgroundColor: color}" >
+        <div id="background" :class="{ red : info < 0, green : info > 0 }" :style="{backgroundColor: color}" >
             <h1>{{info}}</h1>
         </div>
     </div>
@@ -13,7 +13,7 @@ export default {
     props: {
         color: {
             type: String,
-            required: true
+            required: false
         },
         label: {
             type: String,
@@ -49,5 +49,13 @@ export default {
     h3{
         font-size: 1.5em;
         margin-right: 10px;
+    }
+
+    .red{
+        background-color: #CF6567;
+    }
+
+    .green{
+        background-color: #6DCF65;
     }
 </style>

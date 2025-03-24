@@ -1,9 +1,9 @@
 <template>
-    <Pie :data="chartData" :options="chartOptions" />
+  <Pie v-bind:data="chartData" v-bind:options="chartOptions" />
   </template>
-  
-  <script>
-  import { defineComponent } from 'vue';
+
+  <script setup>
+  import { defineProps, onMounted, ref, watch} from 'vue';
   import { Pie } from 'vue-chartjs';
   import {
     Chart as ChartJS,
@@ -15,35 +15,40 @@
     LinearScale
   } from 'chart.js';
   
-  ChartJS.register(CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend);
   
-  export default defineComponent({
-    name: 'ObraChart',
-    components: {
-      Pie
-    },
-    data() {
-      return {
-        chartData: {
-          labels: ['Em andamento', 'Atrasado', 'Concluído', 'Não Iniciado'],
-          datasets: [
-            {
-              label: 'Etapas',
-              backgroundColor: ['#F2B800', '#F0462E', '#6CCF65', '#2888E4'],
-              data: [40, 20, 12, 28]
-            }
-          ]
-        },
-        chartOptions: {
-          responsive: true,
-          plugins: {
-            legend: {
-                display: true,
-                position: 'right',
-            },
-          }
-        }
-      };
+  const isLoading = ref(true);
+  const props = defineProps({
+    dataPie: {
+      type: Array,
+      required: true
     }
   });
+  
+  console.log(props.data);
+
+
+  const chartData = ref({
+    labels: ['Em andamento', 'Atrasado', 'Concluído', 'Não Iniciado'],
+    datasets: [
+      {
+        label: 'Etapas',
+        backgroundColor: ['#F2B800', '#F0462E', '#6CCF65', '#2888E4'],
+        data: [props.dataPie[0], props.dataPie[1], props.dataPie[2], props.dataPie[3]]
+      }
+    ]
+  });
+  
+  const chartOptions = ref({
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'right',
+      },
+    }
+  });
+    ChartJS.register(CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend);
+    console.log('ChartJS', ChartJS);
+
+
   </script>

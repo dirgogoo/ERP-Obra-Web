@@ -1,16 +1,20 @@
 <script setup>
      import TopLabelTextBox from '../../components/TopLabelTextBox';
     import Button from '../../components/Button';
+    import ButtonRed from '../../components/ButtonRed';
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
     import TabelaMateriais from '../../components/TabelaMateriais.vue';
     import { ref } from 'vue';
     import api from '../../services/axios';
 
+    const selectedId = ref(null);
 
     const nome = ref('');
     const unidade = ref('');
     const valor = ref('');
+
+    const search = ref('');
 
     const cadastrar = async () => {
         try{
@@ -27,6 +31,18 @@
         }
     }
 
+    const deleteE = async () => {
+    try {
+
+        const response = await api.delete(`/item/${selectedId.value}`);
+        const event = new CustomEvent('material-registered');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error("Erro ao deletar material:", error);
+    }
+}
+
+
 </script>
 
 <template>
@@ -35,7 +51,7 @@
 
         <div id="top-container">
             <div id="searchbar-container">
-                <searchbar/>
+                <searchbar v-model="search"/>
             </div>
             <div id="filter-container">
                 <FilterSelector label="Ordenar por:"/>
@@ -44,14 +60,17 @@
 
         <div id="bottom-container">
             <div id="table-container">
-                <TabelaMateriais/>
+                <TabelaMateriais :search="search" v-model="selectedId"/>
             </div>
             <div id="form-container">
                 <h1>Cadastro Material</h1>
                 <TopLabelTextBox label="Nome" v-model="nome"/>
                 <TopLabelTextBox label="Unidade"  v-model="unidade"/>
                 <TopLabelTextBox label="Preço"  v-model="valor"/>
-                <Button class="button" label="Cadastrar" @click="cadastrar()"/>
+                <div id="button-container">
+                    <Button label="Cadastrar" class="button" @click="cadastrar()"/>
+                    <ButtonRed class="button" label="Excluir" @click="deleteE()"/>
+                </div>
             </div>
         </div>
     </div>
@@ -66,6 +85,14 @@
         max-width: 1800px;
         margin-left: 20px;
     }
+
+    #button-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
 
     #bottom-container{
         display: flex;

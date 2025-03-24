@@ -36,18 +36,19 @@ public class ClienteService {
         ));
     }
 
-    public Page<Cliente> findAll(Pageable pageable){
+    public Page<Cliente> findAll(String nome ,Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
+        
 
         if (pageable == null || pageable.isUnpaged()) {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Cliente> clientes = this.clienteRepository.findAll(pageable);
+        Page<Cliente> clientes = this.clienteRepository.findByNameContainingIgnoreCase(nome, pageable);
         return clientes;
     }
 

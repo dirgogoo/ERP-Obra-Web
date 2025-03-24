@@ -24,6 +24,13 @@ public class EtapaObraController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/{id}/saldo")
+    public ResponseEntity<Double> findSaldoById(@PathVariable Long id){
+        Double obj = this.etapaObraService.findSaldoById(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         this.etapaObraService.delete(id);

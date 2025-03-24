@@ -9,6 +9,7 @@
   const obrainfo = ref([]);
   const nome = ref("");
   const status = ref("");
+  const isLoading = ref(true);
 
   const currentPath = route.currentRoute.value.params.id;
 
@@ -23,9 +24,13 @@ import api from "@/services/axios";
       nome.value = obra.nome;
       status.value = obra.status;
       obrainfo.value = obra;
+      console.log(obra);
+    console.log("loaded obra")
+      isLoading.value = false;
     } catch (error) {
       console.error("Error fetching obra data:", error);
     }
+    toRouteId(selected.value);
   });
 
   function selectItem(item) {
@@ -36,12 +41,12 @@ import api from "@/services/axios";
     route.replace("/app/obra/"+currentPath+ '/' +item.toLowerCase());
   };
 
-  toRouteId(selected.value);
+  
 </script>
 
 
 <template>
-  <div id="main-container">
+  <div  id="main-container">
     <h2>Obra/{{ $route.fullPath.split("obra/")[1] }}</h2>
     <div id="info-container">
      

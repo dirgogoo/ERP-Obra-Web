@@ -34,14 +34,15 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Item>> findAll(Pageable pageable, @RequestParam(required = false) Integer type){
+    public ResponseEntity<Page<Item>> findAll(@RequestParam(value="search",required = false, defaultValue = "") String nome,Pageable pageable, @RequestParam(required = false) Integer type){
        Page<Item> items;
        if (type != null) {
-        items = this.itemService.findAllByTipo(pageable, type);
+        items = this.itemService.findAllByTipo(nome,pageable, type);
     } else {
-        items = this.itemService.findAll(pageable);
+        items = this.itemService.findAll(nome,pageable);
     }
        return ResponseEntity.ok().body(items);
+       
     }
 
     @PostMapping

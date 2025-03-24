@@ -36,7 +36,7 @@ public class ItemService {
         ));
     }
 
-    public Page<Item> findAllByTipo(Pageable pageable, Integer Tipo){
+    public Page<Item> findAllByTipo(String nome,Pageable pageable, Integer Tipo){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -47,11 +47,11 @@ public class ItemService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Item> items = this.itemRepository.findAllByTipo(Tipo, pageable);
+        Page<Item> items = this.itemRepository.findByNameContainingIgnoreCaseAndTipo(nome, Tipo, pageable);
         return items;
     }
 
-    public Page<Item> findAll(Pageable pageable){
+    public Page<Item> findAll(String nome, Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -62,7 +62,7 @@ public class ItemService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<Item> items = this.itemRepository.findAll(pageable);
+        Page<Item> items = this.itemRepository.findByNameContainingIgnoreCase(nome, pageable);
         return items;
     }
 
