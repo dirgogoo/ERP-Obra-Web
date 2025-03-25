@@ -48,6 +48,7 @@ import api from "@/services/axios";
 <template>
   <div  id="main-container">
     <h2>Obra/{{ $route.fullPath.split("obra/")[1] }}</h2>
+    <div></div>
     <div id="info-container">
      
       <div id="info-grid">
