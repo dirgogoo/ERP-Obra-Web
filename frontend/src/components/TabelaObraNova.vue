@@ -7,6 +7,7 @@
                     <th>Etapa</th>
                     <th id="valor-collumn">Valor</th>
                     <th id="prazo-collumn">Prazo</th>
+                    <th id="prazo-collumn">Inicio</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,6 +16,7 @@
                     <td>{{ etapa.etapa }}</td>
                     <td>R${{ etapa.valor }}</td>
                     <td>{{ etapa.prazo }}</td>
+                    <td>{{ etapa.inicio }}</td>
                 </tr>
             </tbody>
         </table>
