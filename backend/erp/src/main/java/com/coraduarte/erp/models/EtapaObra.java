@@ -58,7 +58,7 @@ public class EtapaObra {
 
    @OneToMany
    @JsonManagedReference
-    private List<itemEtapa> itens = new ArrayList<itemEtapa>();
+    private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
 
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     //@Column(name = "dataInicio", nullable = false)

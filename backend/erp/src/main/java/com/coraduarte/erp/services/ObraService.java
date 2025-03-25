@@ -19,6 +19,7 @@ import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ObraService {
@@ -40,7 +41,7 @@ public class ObraService {
         }
 
         Optional<Obra> obra = this.obraRepository.findById(id);
-        return obra.orElseThrow(() -> new RuntimeException(
+        return obra.orElseThrow(() -> new ObjectNotFoundException(
                 "Obra não encontrada! Id: " + id + ", Tipo: " + Obra.class.getName()
         ));
     }

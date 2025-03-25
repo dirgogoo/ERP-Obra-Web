@@ -15,6 +15,7 @@ import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ItemService {
@@ -30,7 +31,7 @@ public class ItemService {
         }
 
         Optional<Item> item = this.itemRepository.findById(id);
-        return item.orElseThrow(() -> new RuntimeException(
+        return item.orElseThrow(() -> new ObjectNotFoundException(
                 "Item não encontrado!"
         ));
     }

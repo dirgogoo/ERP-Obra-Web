@@ -12,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
-import com.coraduarte.erp.models.itemEtapa;
+import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.repositories.EtapaObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class EtapaObraService {
@@ -35,7 +36,7 @@ public class EtapaObraService {
         }
 
         Optional<EtapaObra> etapa = this.etapaObraRepository.findById(id);
-        return etapa.orElseThrow(() -> new RuntimeException(
+        return etapa.orElseThrow(() -> new ObjectNotFoundException(
                 "Etapa não encontrada!"
         ));
     }
@@ -48,10 +49,10 @@ public class EtapaObraService {
         }
 
         Optional<EtapaObra> etapa = this.etapaObraRepository.findById(id);
-        List<itemEtapa> items = this.itemEtapaService.findAllbyEtapaObraIdAll(id);
+        List<ItemEtapa> items = this.itemEtapaService.findAllbyEtapaObraIdAll(id);
 
         Double saldo = 0.0;
-        for (itemEtapa item : items) {
+        for (ItemEtapa item : items) {
             if (Objects.nonNull(item)) {
                 saldo += item.getQuantidade()*item.getItem().getValor();
             }

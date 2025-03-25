@@ -13,12 +13,14 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coraduarte.erp.services.EtapaObraService;
 import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.Item;
 import com.coraduarte.erp.models.enums.ProfileEnum;
-import com.coraduarte.erp.models.itemEtapa;
+import com.coraduarte.erp.models.ItemEtapa;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
+import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ItemEtapaService {
@@ -37,20 +39,20 @@ public class ItemEtapaService {
     private UtilService utilService;
     
     
-        public itemEtapa findById(Long id) {
+        public ItemEtapa findById(Long id) {
             UserSpringSecurity userSpringSecurity = UserService.authenticated();
     
             if (Objects.isNull(userSpringSecurity)) {
                 throw new AuthorizationDeniedException("Acesso negado!");
             }
     
-            Optional<itemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
-        return itemEtapa.orElseThrow(() -> new RuntimeException(
+            Optional<ItemEtapa> itemEtapa = this.itemEtapaRepository.findById(id);
+        return itemEtapa.orElseThrow(() -> new ObjectNotFoundException(
                 "Item da etapa não encontrado!"
         ));
     }
 
-    public Page<itemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
+    public Page<ItemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -61,26 +63,26 @@ public class ItemEtapaService {
             pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         }
 
-        Page<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
+        Page<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
         return items;
         
     }
 
 
 
-    public List<itemEtapa> findAllbyEtapaObraIdAll(Long id){
+    public List<ItemEtapa> findAllbyEtapaObraIdAll(Long id){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
-        List<itemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id);
+        List<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id);
         return items;
     }
 
     @Transactional
-    public itemEtapa create(itemEtapa obj) {
+    public ItemEtapa create(ItemEtapa obj) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
