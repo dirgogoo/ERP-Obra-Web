@@ -60,6 +60,12 @@ public class EtapaObra {
    @JsonManagedReference
     private List<itemEtapa> itens = new ArrayList<itemEtapa>();
 
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    //@Column(name = "dataInicio", nullable = false)
+    //@NotBlank
+    //private String dataInicio;
+
+
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)
     private Etapa etapa;
