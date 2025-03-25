@@ -12,14 +12,18 @@ const nome = ref('');
 const endereco = ref('');
 const cliente = ref('');
 const dataInicio = ref('');
+const dataPrevista = ref('');
 
 const etapas = ref([]);
 const etapaSelecionada = ref([]);
 const etapasSelecao = ref([]);
 const etapaValue = ref();
 const etapaPrazo = ref('');
+const etapaInicio = ref('');
 const etapasTabela = ref([]);
 const etapasSelecionadas = ref([]);
+
+const showTopContainer = ref(true);
 
 
 
@@ -36,6 +40,7 @@ const cadastrar = async () => {
             const response = await api.post("/obra", {
                 nome: nome.value,
                 dataInicio: dataInicio.value,
+                dataPrevista: dataPrevista.value,
                 status : 0,
                 etapa : etapasSelecionadas.value,
             });
@@ -62,7 +67,8 @@ const cadastrar = async () => {
         id: selected.id,
         etapa: selected.name,
         valor: etapaValue.value,
-        prazo: etapaPrazo.value
+        prazo: etapaPrazo.value,
+        inicio: etapaInicio.value
     });
 
     etapasSelecionadas.value.push({
@@ -71,7 +77,8 @@ const cadastrar = async () => {
         name: selected.name,
         price: etapaValue.value,
         deadline: etapaPrazo.value, 
-        status:0
+        status:0,
+        dataInicio: etapaInicio.value
     });
     console.log(etapasSelecionadas.value);
 }
@@ -90,7 +97,9 @@ function removeEtapa() {
     console.log(etapasSelecionadas.value);
 }
 
-
+function toggleContainers() {
+    showTopContainer.value = !showTopContainer.value;
+}
 </script>
 
 <template>
@@ -98,28 +107,34 @@ function removeEtapa() {
         <h2>Obra/Nova</h2>
         <div id="sides-container">
             <div id="left-container">
-                <div id="top-container">
+                <div id="top-container" v-show="showTopContainer">
                     <h1>Informações Gerais</h1>
                     <div id="form1-container">
                         <TopLabelTextBox label="Nome" v-model="nome" />
                         <TopLabelTextBox label="Endereço" v-model="endereco" />
                         <TopLabelTextBox label="Cliente" v-model="cliente" />
                         <TopLabelTextBox label="Data Inicio" v-model="dataInicio" />
+                        <TopLabelTextBox label="Data Prevista" v-model="dataPrevista" />
                     </div>
                 </div>
-                <div id="bottom-container">
+                <div id="bottom-container" v-show="!showTopContainer">
                     <h1>Etapas</h1>
                     <div id="form1-container">
                         <div id="textbox-container">
                             <TopLabelSelect label="Nome" :content="etapasSelecao" v-model="etapaSelecionada" />
                             <TopLabelTextBox label="Valor" v-model="etapaValue"/>
-                            <TopLabelTextBox label="Prazo" v-model="etapaPrazo"/>
+                            <TopLabelTextBox label="Data Prevista" v-model="etapaPrazo"/>
+                            <TopLabelTextBox label="Data Inicio" v-model="etapaInicio" />
                         </div>
                         <div id="form-button-container">
                             <Button class="button-form" label="Adicionar" @click="addEtapa()" />
                             <ButtonRed class="button-form" label="Remover" @click="removeEtapa()" />
                         </div>
                     </div>
+                </div>
+                <div id="page-selector">
+                    <h1 id="page-selector-options"><a href="javascript:void(0)" @click="toggleContainers">&lt;</a> <a href="javascript:void(0)" @click="toggleContainers">&gt;</a></h1>
+
                 </div>
             </div>
             <div id="right-container">
@@ -144,6 +159,17 @@ function removeEtapa() {
 #main-container {
     height: 89vh;
 
+}
+
+#page-selector-options{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 6em;
+}
+a {
+    text-decoration: none;
+    color: black;
 }
 
 #sides-container {
@@ -180,7 +206,6 @@ function removeEtapa() {
 #top-container {
     display: flex;
     flex-direction: column;
-    height: 40%;
     width: 90%;
 
 }
@@ -192,15 +217,16 @@ h1 {
 #form1-container {
     display: flex;
     flex-direction: column;
-
+    flex: space-between;
     width: 100%;
     margin-left: 20px;
+    gap: 20px;
 }
 
 #bottom-container {
     display: flex;
     flex-direction: column;
-    height: 50%;
+
 }
 
 #button-container {
