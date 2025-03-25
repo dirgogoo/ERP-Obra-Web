@@ -15,6 +15,7 @@
         <div id="top-container">
             <div id="searchbar-container">
                  <searchbar v-model="search"/>
+                 
             </div>
             <div class="filter-container">
                 <FilterSelector label="Ordenar por:"/>
