@@ -62,10 +62,12 @@ const fetchObras = async (page) => {
                     }
         });
 
+
+
         obras.value = response.data.content.map(obra => ({
             id: obra.id,
             nome: obra.nome,
-            cliente: obra.cliente,
+            cliente: obra.cliente.name,
             dataCriacao: obra.dataLancamento,
             status: obra.status
         }));
