@@ -1,5 +1,6 @@
 package com.coraduarte.erp.services;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,6 +50,18 @@ public class ClienteService {
         }
 
         Page<Cliente> clientes = this.clienteRepository.findByNameContainingIgnoreCase(nome, pageable);
+        return clientes;
+    }
+
+    public List<Cliente> findAll(){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+        
+
+        List<Cliente> clientes = this.clienteRepository.findAll();
         return clientes;
     }
 
