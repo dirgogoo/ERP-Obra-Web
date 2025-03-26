@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.coraduarte.erp.models.Cliente;
 import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.Obra;
 import com.coraduarte.erp.models.enums.ProfileEnum;
@@ -33,6 +34,9 @@ public class ObraService {
     @Autowired
     private UtilService UtilService;
 
+    @Autowired
+    private ClienteService clienteService;
+
     public Obra findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
@@ -46,7 +50,7 @@ public class ObraService {
         ));
     }
 
-    public Page<ObraSearchProjection> findAll(String search,Pageable pageable) {
+    public Page<ObraSearchProjection> findAll(String search, Pageable pageable) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity)) {
@@ -62,12 +66,12 @@ public class ObraService {
     }
 
     public Obra create(Obra obj) {
+        
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
-
         obj.setDataLancamento(this.UtilService.getTodayDate());
 
         List<EtapaObra> etapas = new ArrayList<>();
@@ -75,20 +79,18 @@ public class ObraService {
         obj.setId(null);
         obj = this.obraRepository.save(obj);
 
+            Cliente client = this.clienteService.findById(obj.getCliente().getId());
+            obj.setCliente(client);
+
         for (EtapaObra etapaObra : obj.getEtapa()) {
-            try {
                 etapaObra.setObra(obj);
                 etapas.add(this.EtapaObraService.create(etapaObra));
-            } catch (Exception e) {
-                throw new RuntimeException("Não foi possível criar a etapa da obra!");
-            }
         }
 
         obj.setEtapa(etapas);
 
         obj = this.obraRepository.save(obj);
 
-        
         return obj;
     }
 
@@ -103,7 +105,7 @@ public class ObraService {
         Obra newObj = this.findById(obj.getId());
         newObj.setNome(obj.getNome());
         //newObj.setDataInicio(obj.getDataInicio());
-       // newObj.setDataPrevista(obj.getDataPrevista());
+        // newObj.setDataPrevista(obj.getDataPrevista());
         return obj;
     }
 
