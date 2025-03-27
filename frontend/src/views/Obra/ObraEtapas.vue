@@ -19,6 +19,7 @@
                 console.log(response.data);
             } catch (error) {
                 console.error("Erro ao buscar itens:", error);
+                
             }
         }
     });
