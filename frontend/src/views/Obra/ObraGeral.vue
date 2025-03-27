@@ -19,6 +19,7 @@ const obraTotalV = ref(0);
 
 
 
+
 console.log(props.obra);
 
 const dataPie = ref([0,0,0,0])
