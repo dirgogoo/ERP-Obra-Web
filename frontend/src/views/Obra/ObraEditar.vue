@@ -104,7 +104,7 @@ function toggleContainers() {
 
 <template>
     <div id="main-container">
-        <h2>Obra/Nova</h2>
+        <h2>Obra/Editar</h2>
         <div id="sides-container">
             <div id="left-container">
                 <div id="top-container" v-show="showTopContainer">
@@ -143,8 +143,8 @@ function toggleContainers() {
                 </div>
                 <RouterLink to="/app/obra" id="RouterLink">
                 <div id="button-container">
-                    <ButtonRed class="button-form" label="Cancelar" />
-                    <Button class="button-form" label="Criar Nova Obra" @click="cadastrar()"/>
+                    <ButtonRed class="button-form" label="Voltar" />
+                    <Button class="button-form" label="Editar Obra" @click="cadastrar()"/>
 
                 </div>
             </RouterLink>
