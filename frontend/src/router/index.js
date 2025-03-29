@@ -53,7 +53,7 @@ const routes = [
     children: [
       { path: '/app/home', name: 'Home', component:Home },
       { path: '/app/obra', name: 'Obra', component:Obra},
-      { path: '/app/obra/editar', name: 'ObraEditar', component:ObraEditar},
+      { path: '/app/obra/editar/:id', name: 'ObraEditar', component:ObraEditar},
       { path: '/app/obra/:id', name: 'ObraId', component:ObraId, children: [
         { path: '/app/obra/:id/geral', name: 'ObraGeral', component:ObraGeral},
         { path: '/app/obra/:id/etapas', name: 'ObraEtapas', component:ObraEtapas},
