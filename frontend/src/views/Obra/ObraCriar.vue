@@ -75,6 +75,7 @@ const cadastrar = async () => {
 }
 
 
+
 function addEtapa() {
     if (!etapaSelecionada.value || !etapaValue.value || !etapaPrazo.value) {
         alert("Preencha todos os campos");
