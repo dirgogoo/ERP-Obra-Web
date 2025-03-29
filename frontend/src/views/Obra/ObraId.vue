@@ -39,7 +39,7 @@ import api from "@/services/axios";
   }
   const toRouteId = (item) => {
     if (item.toLowerCase() == "editar"){
-      route.replace("/app/obra/"+item.toLowerCase());
+      route.replace("/app/obra/"+item.toLowerCase()+ '/' + currentPath);
     }else {
     route.replace("/app/obra/"+currentPath+ '/' +item.toLowerCase());
   };
