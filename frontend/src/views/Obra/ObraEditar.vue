@@ -4,8 +4,12 @@ import TopLabelTextBox from '../../components/TopLabelTextBox';
 import Button from '../../components/Button';
 import TopLabelSelect from '../../components/TopLabelSelect';
 import TabelaObraNova from '@/components/TabelaObraNova.vue';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import api from '@/services/axios';
+import { useRouter } from 'vue-router';
+import TabelaObraEdit from '@/components/TabelaObraEdit.vue';
+
+const route = useRouter();
 
 
 const nome = ref('');
@@ -13,6 +17,10 @@ const endereco = ref('');
 const cliente = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
+
+
+const clientes = ref([]);
+const clienteSelecao = ref([]);
 
 const etapas = ref([]);
 const etapaSelecionada = ref([]);
@@ -25,6 +33,8 @@ const etapasSelecionadas = ref([]);
 
 const showTopContainer = ref(true);
 
+const currentPath = route.currentRoute.value.params.id;
+
 
 
 api.get('/etapa/all').then(response => {
@@ -34,28 +44,58 @@ api.get('/etapa/all').then(response => {
     }
 });
 
+api.get('/cliente/all').then(response => {
+    clientes.value = response.data;
+    for (let i = 0; i < clientes.value.length; i++) {
+        clienteSelecao.value.push(clientes.value[i].name);
+    }
+});
+
+
+const getClientId = () => {
+    const client = clientes.value.find(client => client.name === cliente.value);
+    console.log(client.id);
+    return client.id;
+}
+
+onMounted(async () => {
+    try {
+        const response = api.get("/obra/" + currentPath);
+        const obra = (await response).data;
+        nome.value = obra.nome;
+        cliente.value = obra.cliente.name;
+        dataInicio.value = obra.dataInicio;
+        dataPrevista.value = obra.dataPrevista;
+        etapasTabela.value = obra.etapa
+        etapasSelecionadas.value = obra.etapa;
+        console.log(obra, "obra loaded");
+    } catch (error) {
+        console.error("Error fetching obra data:", error);
+    }
+});
+
 const cadastrar = async () => {
 
-        try{
-            const response = await api.post("/obra", {
-                nome: nome.value,
-                dataInicio: dataInicio.value,
-                dataPrevista: dataPrevista.value,
-                status : 0,
-                etapa : etapasSelecionadas.value,
-            });
-        } catch (error) {
-            console.error("Erro ao cadastrar obra:", error);
-        }
+    try {
+        const response = await api.post("/obra", {
+            nome: nome.value,
+            dataInicio: dataInicio.value,
+            dataPrevista: dataPrevista.value,
+            status: 0,
+            etapa: etapasSelecionadas.value,
+        });
+    } catch (error) {
+        console.error("Erro ao cadastrar obra:", error);
     }
+}
 
 
-    function addEtapa() {
+function addEtapa() {
     if (!etapaSelecionada.value || !etapaValue.value || !etapaPrazo.value) {
         alert("Preencha todos os campos");
         return;
     }
-    
+
     const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
     if (founded) {
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
@@ -73,11 +113,11 @@ const cadastrar = async () => {
 
     etapasSelecionadas.value.push({
         id: selected.id,
-        etapa : { id: selected.id},
+        etapa: { id: selected.id },
         name: selected.name,
         price: etapaValue.value,
-        deadline: etapaPrazo.value, 
-        status:0,
+        deadline: etapaPrazo.value,
+        status: 0,
         dataInicio: etapaInicio.value
     });
     console.log(etapasSelecionadas.value);
@@ -100,6 +140,7 @@ function removeEtapa() {
 function toggleContainers() {
     showTopContainer.value = !showTopContainer.value;
 }
+
 </script>
 
 <template>
@@ -112,7 +153,7 @@ function toggleContainers() {
                     <div id="form1-container">
                         <TopLabelTextBox label="Nome" v-model="nome" />
                         <TopLabelTextBox label="Endereço" v-model="endereco" />
-                        <TopLabelTextBox label="Cliente" v-model="cliente" />
+                        <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" />
                         <TopLabelTextBox label="Data Inicio" v-model="dataInicio" />
                         <TopLabelTextBox label="Data Prevista" v-model="dataPrevista" />
                     </div>
@@ -122,8 +163,8 @@ function toggleContainers() {
                     <div id="form1-container">
                         <div id="textbox-container">
                             <TopLabelSelect label="Nome" :content="etapasSelecao" v-model="etapaSelecionada" />
-                            <TopLabelTextBox label="Valor" v-model="etapaValue"/>
-                            <TopLabelTextBox label="Data Prevista" v-model="etapaPrazo"/>
+                            <TopLabelTextBox label="Valor" v-model="etapaValue" />
+                            <TopLabelTextBox label="Data Prevista" v-model="etapaPrazo" />
                             <TopLabelTextBox label="Data Inicio" v-model="etapaInicio" />
                         </div>
                         <div id="form-button-container">
@@ -133,21 +174,22 @@ function toggleContainers() {
                     </div>
                 </div>
                 <div id="page-selector">
-                    <h1 id="page-selector-options"><a href="javascript:void(0)" @click="toggleContainers">&lt;</a> <a href="javascript:void(0)" @click="toggleContainers">&gt;</a></h1>
+                    <h1 id="page-selector-options"><a href="javascript:void(0)" @click="toggleContainers">&lt;</a> <a
+                            href="javascript:void(0)" @click="toggleContainers">&gt;</a></h1>
 
                 </div>
             </div>
             <div id="right-container">
                 <div id="table-container">
-                    <TabelaObraNova v-bind:values="etapasTabela" />
+                    <TabelaObraEdit :values="etapasTabela" />
                 </div>
                 <RouterLink to="/app/obra" id="RouterLink">
-                <div id="button-container">
-                    <ButtonRed class="button-form" label="Voltar" />
-                    <Button class="button-form" label="Editar Obra" @click="cadastrar()"/>
+                    <div id="button-container">
+                        <ButtonRed class="button-form" label="Voltar" />
+                        <Button class="button-form" label="Editar Obra" @click="cadastrar()" />
 
-                </div>
-            </RouterLink>
+                    </div>
+                </RouterLink>
             </div>
 
         </div>
@@ -161,12 +203,13 @@ function toggleContainers() {
 
 }
 
-#page-selector-options{
+#page-selector-options {
     display: flex;
     justify-content: space-between;
     width: 100%;
     font-size: 6em;
 }
+
 a {
     text-decoration: none;
     color: black;
