@@ -50,6 +50,7 @@ export default {
         const perPage = ref(15);
 
         etapas.value = props.values;
+        
 
         const paginatedEtapas = computed(() => {
             const start = (currentPage.value - 1) * perPage.value;
