@@ -65,6 +65,7 @@ public class EtapaObra {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "dataInicio", nullable = false)
     @NotBlank
+    
     private String dataInicio;
 
     @ManyToOne
