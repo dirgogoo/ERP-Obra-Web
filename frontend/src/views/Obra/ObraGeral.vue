@@ -17,7 +17,35 @@ const blueColor = '#2888E4';
 const saldoObraV = ref(0);
 const obraTotalV = ref(0);
 
+const prazo = ref(props.obra.dataPrevista);
+const dataInicio = props.obra.dataInicio;
 
+const dataHoje = new Date();
+
+const subtrairDatas = (data1, data2) => {
+  console.log(data1, data2)
+    //11/03/2024 para 2024-03-11
+  const [day1, month1, year1] = data1.split('/');
+  const [day2, month2, year2] = data2.split('/');
+  const data1N = `${year1}-${month1}-${day1}`;
+  const data2N = `${year2}-${month2}-${day2}`;
+
+// Converte as strings de data para objetos Date
+  const data1Date = new Date(data1N);
+  const data2Date = new Date(data2N);
+  
+  const diffTime = data1Date - data2Date;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
+
+
+const diasPassados = ref(Math.abs(subtrairDatas(dataInicio ,dataHoje.toLocaleDateString('pt-BR'))));
+
+console.log(dataHoje.toLocaleDateString('pt-BR'))
+const diasRestantes = ref(subtrairDatas( prazo.value,dataHoje.toLocaleDateString('pt-BR')));
 
 
 console.log(props.obra);
@@ -63,7 +91,6 @@ onMounted(async () => {
 
 
 
-
 </script>
 
 <template>
@@ -72,20 +99,20 @@ onMounted(async () => {
         <div id="left-container">
             <div id="box-grid">
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Data Planejada" info="10/12/2025" />
+                    <BoxInfo :color=blueColor label="Data Planejada" :info="prazo" />
                 </div>
                 <div class="box-container">
                     <BoxInfo :color=blueColor label="Gastos Planejados" :info="obraTotalV" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Dias Passados" info="166" />
+                    <BoxInfo :color=blueColor label="Dias Passados" :info="diasPassados" />
 
                 </div>
                 <div class="box-container">
                     <BoxInfo :color=blueColor label="Gastos Realizados" :info="obraTotalV-saldoObraV" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo label="Dias Restantes" :info="+10" />
+                    <BoxInfo label="Dias Restantes" :info="diasRestantes" />
                 </div>
                 <div class="box-container">
                     <BoxInfo  label="Saldo" :info="saldoObraV" />
