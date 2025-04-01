@@ -24,9 +24,10 @@
               <a style="color: red;" v-if="etapa.saldo<0">-R$ {{ Math.abs(etapa.saldo) }}</a>
               <a style="color: green;" v-else>R$ {{ etapa.saldo }}</a>
               </td>
-            <td>-</td>
+            <td>{{ etapa.dataInicio }}</td>
             <td>{{ etapa.deadline }}</td>
-            <td>-</td>
+            <td><a style="color: red;" v-if="subtrairDatas(etapa.dataInicio, etapa.deadline )<0">{{ subtrairDatas(etapa.dataInicio, etapa.deadline )}}</a>
+              <a style="color: green;" v-else>{{ subtrairDatas(etapa.dataInicio, etapa.deadline ) }}</a></td>
             <td><a :class="{
               blue : etapa.status == 'NAOINICIADO',
               green : etapa.status == 'CONCLUIDO',
@@ -53,7 +54,8 @@
   import { ref, computed } from 'vue';
   import Pagination from 'laravel-vue-pagination';
   import { useRouter } from 'vue-router';
-  
+
+
   const props = defineProps({
     etapas: {
       type: Array,
@@ -64,6 +66,8 @@
   const router = useRouter();
   const currentPage = ref(1);
   const itemsPerPage = 15;
+
+
   
   const paginatedEtapas = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
@@ -80,7 +84,29 @@
   const toRouteId = (id) => {
    // router.push(`/etapa/${id}`);
   };
+
+const subtrairDatas = (data1, data2) => {
+  console.log(data1, data2)
+    //11/03/2024 para 2024-03-11
+  const [day1, month1, year1] = data1.split('/');
+  const [day2, month2, year2] = data2.split('/');
+  const data1N = `${year1}-${month1}-${day1}`;
+  const data2N = `${year2}-${month2}-${day2}`;
+
+// Converte as strings de data para objetos Date
+  const data1Date = new Date(data1N);
+  const data2Date = new Date(data2N);
+  
+  const diffTime = data1Date - data2Date;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
+
   </script>
+
+  
 
 <style scoped>
 .blue{
