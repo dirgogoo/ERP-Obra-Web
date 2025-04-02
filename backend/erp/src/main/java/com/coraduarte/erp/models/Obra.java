@@ -47,7 +47,7 @@ public class Obra {
     private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @Column(name = "dataLancamento", nullable = false)
+    @Column(name = "dataLancamento", nullable = true)
     //@NotBlank
     private String dataLancamento;
 
