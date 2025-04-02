@@ -67,7 +67,8 @@ const cadastrar = async () => {
             dataPrevista: dataPrevista.value,
             status: 0,
             etapa: etapasSelecionadas.value,
-            cliente: { id: getClientId() }
+            cliente: { id: getClientId() },
+            description: endereco.value
         });
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
