@@ -3,8 +3,7 @@ import ButtonRed from '../../components/ButtonRed.vue';
 import TopLabelTextBox from '../../components/TopLabelTextBox';
 import Button from '../../components/Button';
 import TopLabelSelect from '../../components/TopLabelSelect';
-import TabelaObraNova from '@/components/TabelaObraNova.vue';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import {  onMounted, ref, warn } from 'vue';
 import api from '@/services/axios';
 import { useRouter } from 'vue-router';
 import TabelaObraEdit from '@/components/TabelaObraEdit.vue';
@@ -29,7 +28,7 @@ const etapaValue = ref();
 const etapaPrazo = ref('');
 const etapaInicio = ref('');
 const etapasTabela = ref([]);
-const etapasSelecionadas = ref([]);
+const etapasRemover = []
 
 const showTopContainer = ref(true);
 
@@ -68,7 +67,6 @@ onMounted(async () => {
         endereco.value = obra.description;
         dataPrevista.value = obra.dataPrevista;
         etapasTabela.value = obra.etapa
-        etapasSelecionadas.value = obra.etapa;
         console.log(obra, "obra loaded");
     } catch (error) {
         console.error("Error fetching obra data:", error);
@@ -78,12 +76,24 @@ onMounted(async () => {
 const cadastrar = async () => {
 
     try {
-        const response = await api.post("/obra", {
+        for (const etapaId of etapasRemover) {
+            await api.delete(`/obra/etapa/${etapaId}`);
+        }
+        etapasRemover.length = 0; // Clear the array after deletion
+    } catch (error) {
+        console.error("Erro ao deletar etapas:", error);
+    }
+
+    try {
+        const response = await api.put("/obra", {
+            id: currentPath,
             nome: nome.value,
             dataInicio: dataInicio.value,
             dataPrevista: dataPrevista.value,
             status: 0,
-            etapa: etapasSelecionadas.value,
+            cliente: { id: getClientId() },
+            description: endereco.value,
+            etapa: etapasTabela.value,
         });
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
@@ -97,31 +107,24 @@ function addEtapa() {
         return;
     }
 
-    const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
+    var founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
-        etapasSelecionadas.value.splice(etapasSelecionadas.value.indexOf(etapasSelecionadas.value.find((etapa) => etapa.name === etapaSelecionada.value)), 1);
+    
+    }else{
+        
     }
     const selected = etapas.value.find(etapa => etapa.name === etapaSelecionada.value);
 
     etapasTabela.value.push({
-        id: selected.id,
-        etapa: selected.name,
-        valor: etapaValue.value,
-        prazo: etapaPrazo.value,
-        inicio: etapaInicio.value
-    });
-
-    etapasSelecionadas.value.push({
-        id: selected.id,
-        etapa: { id: selected.id },
-        name: selected.name,
+        id: founded ? founded.id : 0,
+        etapa: { id: selected.id, name : selected.name },
         price: etapaValue.value,
         deadline: etapaPrazo.value,
         status: 0,
         dataInicio: etapaInicio.value
     });
-    console.log(etapasSelecionadas.value);
+    console.log(etapasTabela.value);
 }
 
 function removeEtapa() {
@@ -130,12 +133,12 @@ function removeEtapa() {
         return;
     }
 
-    const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
+    const founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
+        etapasRemover.push(founded.id)
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
-        etapasSelecionadas.value.splice(etapasSelecionadas.value.indexOf(etapasSelecionadas.value.find((etapa) => etapa.name === etapaSelecionada.value)), 1);
     }
-    console.log(etapasSelecionadas.value);
+    console.log(etapasTabela.value, etapaSelecionada.value);
 }
 
 function toggleContainers() {
