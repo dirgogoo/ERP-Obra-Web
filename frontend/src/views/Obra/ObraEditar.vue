@@ -65,6 +65,7 @@ onMounted(async () => {
         nome.value = obra.nome;
         cliente.value = obra.cliente.name;
         dataInicio.value = obra.dataInicio;
+        endereco.value = obra.description;
         dataPrevista.value = obra.dataPrevista;
         etapasTabela.value = obra.etapa
         etapasSelecionadas.value = obra.etapa;
