@@ -42,6 +42,10 @@ public class Obra {
     @NotBlank
     private String nome;
 
+    @Column(name = "description", nullable = false)
+    @NotBlank
+    private String description;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "dataLancamento", nullable = false)
     //@NotBlank
@@ -58,14 +62,14 @@ public class Obra {
     private String dataPrevista;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @Column(name = "dataTermino", nullable = false)
+    @Column(name = "dataTermino", nullable = true)
     private String dataTermino;
 
     @Column(name = "status", nullable = false)
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @JoinColumn(name = "cliente_id", nullable = true)
     private Cliente cliente;
 
     @OneToMany(mappedBy = "obra")
