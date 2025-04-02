@@ -2,12 +2,13 @@
     <div class="obra-info">
         <h1>Informações da Obra</h1>
         <ul>
-            <li><strong>Cliente:</strong> </li>
+            <li><strong>Cliente:</strong>{{ obra.cliente.name }} </li>
             <li><strong>Código:</strong> {{ obra.id }}</li>
+            <li><strong>Endereço:</strong> {{ obra.description }}</li>
             <li><strong>Data de Criação:</strong> {{ obra.dataLancamento }}</li>
             <li><strong>Data de Início:</strong> {{ obra.dataInicio }}</li>
-            <li><strong>Data Prevista:</strong> </li>
-            <li><strong>Data de Término:</strong> </li>
+            <li><strong>Data Prevista:</strong>{{ obra.dataPrevista }} </li>
+            <li><strong>Data de Término:</strong> {{ obra.dataTermino }} </li>
         </ul>
     </div>
 </template>
