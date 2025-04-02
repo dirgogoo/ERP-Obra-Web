@@ -22,6 +22,8 @@ import com.coraduarte.erp.repositories.ObraRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ObraService {
 
@@ -65,6 +67,7 @@ public class ObraService {
         return obras;
     }
 
+    @Transactional
     public Obra create(Obra obj) {
         
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -94,21 +97,40 @@ public class ObraService {
         return obj;
     }
 
+    @Transactional
     public Obra update(Obra obj) {
 
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
-        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.SUPERADMIN))) {
             throw new AuthorizationDeniedException("Acesso negado!");
         }
 
+        List<EtapaObra> etapas = new ArrayList<>(); 
         Obra newObj = this.findById(obj.getId());
         newObj.setNome(obj.getNome());
-        //newObj.setDataInicio(obj.getDataInicio());
-        // newObj.setDataPrevista(obj.getDataPrevista());
-        return obj;
+        newObj.setDescription(obj.getDescription());
+        newObj.setDataInicio(obj.getDataInicio());
+        newObj.setDataPrevista(obj.getDataPrevista());
+        newObj.setDataTermino(obj.getDataTermino());
+        newObj.setCliente(obj.getCliente());
+
+        for (EtapaObra etapaObra : obj.getEtapa()) {
+            etapaObra.setObra(newObj);
+            if (etapaObra.getId() == 0) {
+                etapas.add(this.EtapaObraService.create(etapaObra));
+            } else {
+                etapas.add(this.EtapaObraService.update(etapaObra));
+            }
+        } 
+
+        newObj.setEtapa(etapas);
+
+        
+        return this.obraRepository.save(newObj);
     }
 
+    @Transactional
     public void delete(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
