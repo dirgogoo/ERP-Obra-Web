@@ -26,8 +26,8 @@
               </td>
             <td>{{ etapa.dataInicio }}</td>
             <td>{{ etapa.deadline }}</td>
-            <td><a style="color: red;" v-if="subtrairDatas(etapa.dataInicio, etapa.deadline )<0">{{ subtrairDatas(etapa.dataInicio, etapa.deadline )}}</a>
-              <a style="color: green;" v-else>{{ subtrairDatas(etapa.dataInicio, etapa.deadline ) }}</a></td>
+            <td><a style="color: red;" v-if="subtrairDatas( etapa.deadline ,etapa.dataInicio )<0">{{ subtrairDatas(etapa.deadline ,etapa.dataInicio )}}</a>
+              <a style="color: green;" v-else>{{ subtrairDatas(etapa.deadline ,etapa.dataInicio ) }}</a></td>
             <td><a :class="{
               blue : etapa.status == 'NAOINICIADO',
               green : etapa.status == 'CONCLUIDO',
