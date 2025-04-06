@@ -4,7 +4,7 @@
 
   const route = useRouter();
 
-  const menuOptions = ["Geral", "Etapas", "Itens" ,"Info"];
+  const menuOptions = ["Geral", "Etapas", "Itens" ,"Info","Editar"];
   const selected = ref("Geral");
   const obrainfo = ref([]);
   const nome = ref("");
@@ -38,16 +38,20 @@ import api from "@/services/axios";
     toRouteId(item);
   }
   const toRouteId = (item) => {
+    if (item.toLowerCase() == "editar"){
+      route.replace("/app/obra/"+item.toLowerCase()+ '/' + currentPath);
+    }else {
     route.replace("/app/obra/"+currentPath+ '/' +item.toLowerCase());
   };
 
-  
+}
 </script>
 
 
 <template>
   <div  id="main-container">
     <h2>Obra/{{ $route.fullPath.split("obra/")[1] }}</h2>
+    <div></div>
     <div id="info-container">
      
       <div id="info-grid">

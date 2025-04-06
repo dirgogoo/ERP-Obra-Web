@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.services.ObraService;
 
 import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/obra")
@@ -45,6 +47,13 @@ public class ObraController {
     }
     
 
+    @PutMapping
+    public ResponseEntity<Void> update( @RequestBody Obra obra) {
+      System.out.println(obra.getId());
+        this.obraService.update(obra);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obra.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
 
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody Obra obj){

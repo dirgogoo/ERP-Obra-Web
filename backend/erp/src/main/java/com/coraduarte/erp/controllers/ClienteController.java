@@ -1,6 +1,7 @@
 package com.coraduarte.erp.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.Cliente;
+import com.coraduarte.erp.models.Etapa;
 import com.coraduarte.erp.services.ClienteService;
 
 import jakarta.validation.Valid;
@@ -40,6 +42,12 @@ public class ClienteController {
     public ResponseEntity<Page<Cliente>> findAll(@RequestParam(value="search",required = false, defaultValue = "") String nome,Pageable pageable){
        Page<Cliente> clients = this.clienteService.findAll(nome,pageable);
        return ResponseEntity.ok().body(clients);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Cliente>> findAll(){
+        List<Cliente> clientes = this.clienteService.findAll();
+        return ResponseEntity.ok().body(clientes);
     }
 
     @PostMapping

@@ -13,10 +13,10 @@
             <tbody>
                 <tr v-for="etapa in paginatedEtapas" :key="etapa.Id">
                     <td>{{ etapa.id }}</td>
-                    <td>{{ etapa.etapa }}</td>
-                    <td>R${{ etapa.valor }}</td>
-                    <td>{{ etapa.prazo }}</td>
-                    <td>{{ etapa.inicio }}</td>
+                    <td>{{ etapa.etapa.name }}</td>
+                    <td>R${{ etapa.price }}</td>
+                    <td>{{ etapa.deadline }}</td>
+                    <td>{{ etapa.dataInicio}}</td>
                 </tr>
             </tbody>
         </table>
@@ -33,24 +33,26 @@
     </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
 import Pagination from 'laravel-vue-pagination';
 
-export default {
-    name: 'TabelaEtapaNova',
-    
-    components: {
-        Pagination
+
+const props = defineProps({
+    values: {
+        type: Array,
+        required: true
     },
-    props: ['values'],
-    setup(props) {
+});
+
         const etapas = ref([]);
         const currentPage = ref(1);
         const perPage = ref(15);
 
-        etapas.value = props.values;
-        
+        watch(() => props.values, (newValues) => {
+            etapas.value = newValues;
+            console.log(newValues, "ETAPAS CHASNGED")
+        }, { immediate: true });
 
         const paginatedEtapas = computed(() => {
             const start = (currentPage.value - 1) * perPage.value;
@@ -58,20 +60,12 @@ export default {
             return etapas.value.slice(start, end);
         });
 
+        console.log(etapas.value,"ETAPAS")
+
         const updatePage = (page) => {
             if (page >= 1 && page <= Math.ceil(etapas.value.length / perPage.value))
             currentPage.value = page;
         };
-
-        return {
-            etapas,
-            currentPage,
-            perPage,
-            paginatedEtapas,
-            updatePage
-        };
-    }
-};
 </script>
 
 <style scoped>

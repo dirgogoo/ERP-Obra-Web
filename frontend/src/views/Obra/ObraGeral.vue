@@ -17,14 +17,50 @@ const blueColor = '#2888E4';
 const saldoObraV = ref(0);
 const obraTotalV = ref(0);
 
+const prazo = ref(props.obra.dataPrevista);
+const dataInicio = props.obra.dataInicio;
+
+const dataHoje = new Date();
+
+const getDataAtual = (data1) => {
+    console.log(data1)
+    const [day1, month1, year1] = data1.split('/');
+    const data1N = `${year1}-${month1}-${day1}`;
+    const data1Date = new Date(data1N);
+    return data1Date;
+}
+
+const subtrairDatas = (data1, data2) => {
+    console.log(data1, data2)
+
+    // Converte as strings de data para objetos Date
+    const data1Date = getDataAtual(data1);
+    const data2Date = getDataAtual(data2);
+
+    const diffTime = data1Date - data2Date;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+}
+
+
+
+const diasPassados = ref(0);
+
+
+const diasRestantes = ref(0);
+const diaHoje = dataHoje.toLocaleDateString('pt-BR');
 
 
 console.log(props.obra);
 
-const dataPie = ref([0,0,0,0])
+const dataPie = ref([0, 0, 0, 0])
 
 
 onMounted(async () => {
+    diasPassados.value = Math.max(0, subtrairDatas(diaHoje, dataInicio));
+
+    diasRestantes.value = subtrairDatas(prazo.value, diaHoje);
     var obra = props.obra;
     var saldoObra = 0;
     var obraTotal = 0
@@ -34,7 +70,7 @@ onMounted(async () => {
             saldoObra += response.data;
             obraTotal += obra.etapa[i].price;
 
-            switch(obra.etapa[i].status){
+            switch (obra.etapa[i].status) {
                 case "ANDAMENTO":
                     dataPie.value[0]++;
                     break;
@@ -53,13 +89,12 @@ onMounted(async () => {
         } catch (error) {
             console.error("Erro ao buscar itens:", error);
         }
-        
+
     }
     console.log(dataPie.value);
     saldoObraV.value = saldoObra;
     obraTotalV.value = obraTotal;
 });
-
 
 
 
@@ -71,29 +106,29 @@ onMounted(async () => {
         <div id="left-container">
             <div id="box-grid">
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Data Planejada" info="10/12/2025" />
+                    <BoxInfo :color=blueColor label="Data Planejada" :info="prazo" />
                 </div>
                 <div class="box-container">
                     <BoxInfo :color=blueColor label="Gastos Planejados" :info="obraTotalV" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Dias Passados" info="166" />
+                    <BoxInfo :color=blueColor label="Dias Passados" :info="diasPassados" />
 
                 </div>
                 <div class="box-container">
-                    <BoxInfo :color=blueColor label="Gastos Realizados" :info="obraTotalV-saldoObraV" />
+                    <BoxInfo :color=blueColor label="Gastos Realizados" :info="obraTotalV - saldoObraV" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo label="Dias Restantes" :info="+10" />
+                    <BoxInfo label="Dias Restantes" :info="diasRestantes" />
                 </div>
                 <div class="box-container">
-                    <BoxInfo  label="Saldo" :info="saldoObraV" />
+                    <BoxInfo label="Saldo" :info="saldoObraV" />
                 </div>
             </div>
         </div>
         <div id="right-container">
             <h2>Progresso das Etapas:</h2>
-            <ObraChart :dataPie = "dataPie" />
+            <ObraChart :dataPie="dataPie" />
         </div>
     </div>
 

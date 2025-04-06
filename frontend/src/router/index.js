@@ -18,6 +18,7 @@ import ObraItens from '@/views/Obra/ObraItens.vue';
 import ObraItensGerenciar from '@/views/Obra/ObraItensGerenciar.vue';
 import ObraInfo from '@/views/Obra/ObraInfo.vue';
 import Admin from '@/views/Admin.vue';
+import ObraEditar from '@/views/Obra/ObraEditar.vue';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("token");
@@ -52,6 +53,7 @@ const routes = [
     children: [
       { path: '/app/home', name: 'Home', component:Home },
       { path: '/app/obra', name: 'Obra', component:Obra},
+      { path: '/app/obra/editar/:id', name: 'ObraEditar', component:ObraEditar},
       { path: '/app/obra/:id', name: 'ObraId', component:ObraId, children: [
         { path: '/app/obra/:id/geral', name: 'ObraGeral', component:ObraGeral},
         { path: '/app/obra/:id/etapas', name: 'ObraEtapas', component:ObraEtapas},

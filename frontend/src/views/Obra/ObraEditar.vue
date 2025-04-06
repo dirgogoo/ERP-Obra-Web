@@ -3,9 +3,12 @@ import ButtonRed from '../../components/ButtonRed.vue';
 import TopLabelTextBox from '../../components/TopLabelTextBox';
 import Button from '../../components/Button';
 import TopLabelSelect from '../../components/TopLabelSelect';
-import TabelaObraNova from '@/components/TabelaObraNova.vue';
-import { onMounted, ref, watch } from 'vue';
+import {  onMounted, ref, warn } from 'vue';
 import api from '@/services/axios';
+import { useRouter } from 'vue-router';
+import TabelaObraEdit from '@/components/TabelaObraEdit.vue';
+
+const route = useRouter();
 
 
 const nome = ref('');
@@ -13,6 +16,7 @@ const endereco = ref('');
 const cliente = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
+
 
 const clientes = ref([]);
 const clienteSelecao = ref([]);
@@ -24,33 +28,28 @@ const etapaValue = ref();
 const etapaPrazo = ref('');
 const etapaInicio = ref('');
 const etapasTabela = ref([]);
-const etapasSelecionadas = ref([]);
+const etapasRemover = []
 
 const showTopContainer = ref(true);
 
-
-
-watch(cliente, (newVal, oldVal) => {
-    console.log(newVal, oldVal);
-})
+const currentPath = route.currentRoute.value.params.id;
 
 
 
-onMounted(() => {
-    api.get('/cliente/all').then(response => {
-        clientes.value = response.data;
-        for (let i = 0; i < clientes.value.length; i++) {
-            clienteSelecao.value.push(clientes.value[i].name);
-        }
-    });
-
-    api.get('/etapa/all').then(response => {
-        etapas.value = response.data;
-        for (let i = 0; i < etapas.value.length; i++) {
-            etapasSelecao.value.push(etapas.value[i].name);
-        }
-    });
+api.get('/etapa/all').then(response => {
+    etapas.value = response.data;
+    for (let i = 0; i < etapas.value.length; i++) {
+        etapasSelecao.value.push(etapas.value[i].name);
+    }
 });
+
+api.get('/cliente/all').then(response => {
+    clientes.value = response.data;
+    for (let i = 0; i < clientes.value.length; i++) {
+        clienteSelecao.value.push(clientes.value[i].name);
+    }
+});
+
 
 const getClientId = () => {
     const client = clientes.value.find(client => client.name === cliente.value);
@@ -58,23 +57,48 @@ const getClientId = () => {
     return client.id;
 }
 
-const cadastrar = async () => {
-    console.log(etapasSelecionadas.value);
+onMounted(async () => {
     try {
-        const response = await api.post("/obra", {
+        const response = api.get("/obra/" + currentPath);
+        const obra = (await response).data;
+        nome.value = obra.nome;
+        cliente.value = obra.cliente.name;
+        dataInicio.value = obra.dataInicio;
+        endereco.value = obra.description;
+        dataPrevista.value = obra.dataPrevista;
+        etapasTabela.value = obra.etapa
+        console.log(obra, "obra loaded");
+    } catch (error) {
+        console.error("Error fetching obra data:", error);
+    }
+});
+
+const cadastrar = async () => {
+
+    try {
+        for (const etapaId of etapasRemover) {
+            await api.delete(`/obra/etapa/${etapaId}`);
+        }
+        etapasRemover.length = 0; // Clear the array after deletion
+    } catch (error) {
+        console.error("Erro ao deletar etapas:", error);
+    }
+
+    try {
+        const response = await api.put("/obra", {
+            id: currentPath,
             nome: nome.value,
             dataInicio: dataInicio.value,
             dataPrevista: dataPrevista.value,
             status: 0,
-            etapa: etapasSelecionadas.value,
             cliente: { id: getClientId() },
-            description: endereco.value
+            description: endereco.value,
+            etapa: etapasTabela.value,
         });
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
     }
 }
-
 
 
 function addEtapa() {
@@ -83,31 +107,24 @@ function addEtapa() {
         return;
     }
 
-    const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
+    var founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
-        etapasSelecionadas.value.splice(etapasSelecionadas.value.indexOf(etapasSelecionadas.value.find((etapa) => etapa.name === etapaSelecionada.value)), 1);
+    
+    }else{
+        
     }
     const selected = etapas.value.find(etapa => etapa.name === etapaSelecionada.value);
 
     etapasTabela.value.push({
-        id: selected.id,
-        etapa: selected.name,
-        valor: etapaValue.value,
-        prazo: etapaPrazo.value,
-        inicio: etapaInicio.value
-    });
-
-    etapasSelecionadas.value.push({
-        id: selected.id,
-        etapa: { id: selected.id },
-        name: selected.name,
+        id: founded ? founded.id : 0,
+        etapa: { id: selected.id, name : selected.name },
         price: etapaValue.value,
         deadline: etapaPrazo.value,
         status: 0,
         dataInicio: etapaInicio.value
     });
-    console.log(etapasSelecionadas.value);
+    console.log(etapasTabela.value);
 }
 
 function removeEtapa() {
@@ -116,22 +133,23 @@ function removeEtapa() {
         return;
     }
 
-    const founded = etapasTabela.value.find((etapa) => etapa.etapa === etapaSelecionada.value);
+    const founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
+        etapasRemover.push(founded.id)
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
-        etapasSelecionadas.value.splice(etapasSelecionadas.value.indexOf(etapasSelecionadas.value.find((etapa) => etapa.name === etapaSelecionada.value)), 1);
     }
-    console.log(etapasSelecionadas.value);
+    console.log(etapasTabela.value, etapaSelecionada.value);
 }
 
 function toggleContainers() {
     showTopContainer.value = !showTopContainer.value;
 }
+
 </script>
 
 <template>
     <div id="main-container">
-        <h2>Obra/Nova</h2>
+        <h2>Obra/Editar</h2>
         <div id="sides-container">
             <div id="left-container">
                 <div id="top-container" v-show="showTopContainer">
@@ -167,12 +185,12 @@ function toggleContainers() {
             </div>
             <div id="right-container">
                 <div id="table-container">
-                    <TabelaObraNova v-bind:values="etapasTabela" />
+                    <TabelaObraEdit :values="etapasTabela" />
                 </div>
                 <RouterLink to="/app/obra" id="RouterLink">
                     <div id="button-container">
-                        <ButtonRed class="button-form" label="Cancelar" />
-                        <Button class="button-form" label="Criar Nova Obra" @click="cadastrar()" />
+                        <ButtonRed class="button-form" label="Voltar" />
+                        <Button class="button-form" label="Editar Obra" @click="cadastrar()" />
 
                     </div>
                 </RouterLink>

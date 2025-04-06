@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.coraduarte.erp.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -17,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,7 +48,7 @@ public class EtapaObra {
     private Obra obra;
 
     @Column(name = "price", nullable = false)
-    @NotNull
+    //@NotNull
     private Long price;
 
     @Column(name = "deadline", nullable = false)
@@ -59,6 +61,12 @@ public class EtapaObra {
    @OneToMany
    @JsonManagedReference
     private List<ItemEtapa> itens = new ArrayList<ItemEtapa>();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(name = "dataInicio", nullable = false)
+    @NotBlank
+    
+    private String dataInicio;
 
     @ManyToOne
     @JoinColumn(name = "etapa_id", nullable = false)

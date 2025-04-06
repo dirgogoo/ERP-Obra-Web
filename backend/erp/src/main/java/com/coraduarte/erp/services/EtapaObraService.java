@@ -93,6 +93,22 @@ public class EtapaObraService {
         return obj;
     }
 
+    public EtapaObra update(EtapaObra obj) {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        
+        EtapaObra newObj = findById(obj.getId());
+        newObj.setPrice(obj.getPrice());
+        newObj.setDeadline(obj.getDeadline());
+        newObj.setDataInicio(obj.getDataInicio());
+        
+        return this.etapaObraRepository.save(obj);
+    }
+
     public void delete(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 

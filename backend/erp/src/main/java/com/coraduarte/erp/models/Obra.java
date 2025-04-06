@@ -13,6 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -40,8 +42,12 @@ public class Obra {
     @NotBlank
     private String nome;
 
+    @Column(name = "description", nullable = false)
+    @NotBlank
+    private String description;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @Column(name = "dataLancamento", nullable = false)
+    @Column(name = "dataLancamento", nullable = true)
     //@NotBlank
     private String dataLancamento;
 
@@ -50,22 +56,21 @@ public class Obra {
     @NotBlank
     private String dataInicio;
 
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    //@Column(name = "dataPrevista", nullable = false)
-    //@NotBlank
-    //private String dataPrevista;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(name = "dataPrevista", nullable = false)
+    @NotBlank
+    private String dataPrevista;
 
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-   // @Column(name = "dataTermino", nullable = false)
-   // @NotBlank
-   // private String dataTermino;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(name = "dataTermino", nullable = true)
+    private String dataTermino;
 
     @Column(name = "status", nullable = false)
     private Integer status;
 
-    //@ManyToOne
-    //@JoinColumn(name = "cliente_id", nullable = false)
-    //private Cliente cliente;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = true)
+    private Cliente cliente;
 
     @OneToMany(mappedBy = "obra")
     @JsonManagedReference
