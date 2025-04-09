@@ -16,7 +16,7 @@
                     <td>{{ obra.nome }}</td>
                     <td>{{ obra.cliente }}</td>
                     <td>{{ obra.dataCriacao }}</td>
-                    <td>{{ obra.status }}</td>
+                    <td>{{ statusMap[obra.status] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -50,6 +50,13 @@ const obras = ref([]);
 const currentPage = ref(1);
 const perPage = ref(16);
 
+const statusMap = ref({
+    1: "NAOINICIADO",
+    2: "ANDAMENTO",
+    3: "CONCLUIDO",
+    4: "ATRASADO"
+});
+
 const fetchObras = async (page) => {
     try {
         const response = await api.get('/obra', {
@@ -71,7 +78,6 @@ const fetchObras = async (page) => {
             dataCriacao: obra.dataLancamento,
             status: obra.status
         }));
-
         currentPage.value = page;
 
     } catch (error) {
