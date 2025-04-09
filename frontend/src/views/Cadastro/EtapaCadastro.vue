@@ -12,6 +12,10 @@ const nome = ref('');
 const search = ref('');
 
 const cadastrar = async () => {
+    if (!nome.value) {
+        alert("Nome é obrigatório.");
+        return;
+    }
     try {
         const response = await api.post("/etapa", {
             name: nome.value,
