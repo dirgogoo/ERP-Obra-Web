@@ -13,10 +13,10 @@
             <tbody >
                 <tr v-for="item in items" :key="item.Id" @click="handleItemSelected(item)">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.nome }}</td>
+                    <td>{{ item.name }}</td>
                     <td>{{ item.tipo }}</td>
-                    <td>{{ item.und }}</td>
-                    <td>R${{ item.preço }}</td>
+                    <td>{{ item.unidade }}</td>
+                    <td>R${{ item.valor }}</td>
                 </tr>
             </tbody>
         </table>
@@ -68,14 +68,7 @@ const fetchItens = async (page) => {
             }
         });
         console.log(response.data.content);
-        items.value = response.data.content.map(item => ({
-            id: item.id,
-            nome: item.name,
-            tipo: item.tipo,
-            und: item.unidade,
-            preço: item.valor,
-        }));
-
+        items.value = response.data.content
         currentPage.value = page;
 
     } catch (error) {
