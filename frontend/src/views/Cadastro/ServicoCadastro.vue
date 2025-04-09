@@ -18,6 +18,14 @@
     const search = ref('');
 
     const cadastrar = async () => {
+        if (!nome.value || !unidade.value || !valor.value) {
+            alert("Nome, Unidade e Preço são obrigatórios.");
+            return;
+        }
+        if (isNaN(valor.value)) {
+            alert("Preço deve ser um número.");
+            return;
+        }
         try{
             const response = await api.post("/item", {
                 name: nome.value,
