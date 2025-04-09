@@ -13,6 +13,10 @@
     const permission = ref('');
 
     const cadastrar = async () => {
+        if (!username.value || !password.value || !permission.value) {
+            alert("Nome, Senha e Permissão são obrigatórios.");
+            return;
+        }
         const profiles = [1]
         if (permission.value === "SUPERADMIN"){
             profiles.push(2);
