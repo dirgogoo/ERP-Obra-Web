@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.Cliente;
-import com.coraduarte.erp.models.Etapa;
 import com.coraduarte.erp.services.ClienteService;
 
 import jakarta.validation.Valid;
