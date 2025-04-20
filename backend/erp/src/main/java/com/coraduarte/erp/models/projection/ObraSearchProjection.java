@@ -1,7 +1,6 @@
 package com.coraduarte.erp.models.projection;
 
 import com.coraduarte.erp.models.Cliente;
-import com.coraduarte.erp.models.enums.Status;
 
 public interface ObraSearchProjection {
 
@@ -12,6 +11,6 @@ public interface ObraSearchProjection {
 
     public String getDataLancamento();
 
-    public Status getStatus();
+    public Integer getStatus();
 
 }

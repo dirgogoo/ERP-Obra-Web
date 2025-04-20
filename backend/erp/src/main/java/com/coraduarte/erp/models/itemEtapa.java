@@ -13,13 +13,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table (name = "itemEtapa")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 public class ItemEtapa {
    
@@ -38,7 +40,6 @@ public class ItemEtapa {
 
      @ManyToOne
      @JoinColumn(name = "etapa_id", nullable = false)
-     @NotNull
      @JsonBackReference
     private EtapaObra etapa;
 

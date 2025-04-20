@@ -110,9 +110,6 @@ function addEtapa() {
     var founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
         etapasTabela.value.splice(etapasTabela.value.indexOf(founded), 1);
-    
-    }else{
-        
     }
     const selected = etapas.value.find(etapa => etapa.name === etapaSelecionada.value);
 

@@ -59,14 +59,11 @@ const etapaId = ref();
 
 const fetchItens = async (page) => {
   try {
-    const response = await api.get(`/obra/etapa/item/EtapaObra/${etapaId.value}`, {
-      params: {
-        page: page - 1,
-        size: perPage.value
-      }
-    });
+    const response = await api.get(`/obra/etapa/item/EtapaObra/${etapaId.value}`);
 
-    items.value = response.data.content.map(item => ({
+    console.log(response.data, etapaId.value);
+
+    items.value = response.data.map(item => ({
       id: item.id,
       qtd: item.quantidade,
       dataLancamento: item.dataLancamento,

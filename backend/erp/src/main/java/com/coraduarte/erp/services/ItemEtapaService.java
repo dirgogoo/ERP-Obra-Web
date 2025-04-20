@@ -5,18 +5,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.Item;
-import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.models.ItemEtapa;
+import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.ItemEtapaRepository;
 import com.coraduarte.erp.security.UserSpringSecurity;
 import com.coraduarte.erp.services.exceptions.ObjectNotFoundException;
@@ -50,23 +46,6 @@ public class ItemEtapaService {
                 "Item da etapa não encontrado!"
         ));
     }
-
-    public Page<ItemEtapa> findAllbyEtapaObraId(Long id ,Pageable pageable){
-        UserSpringSecurity userSpringSecurity = UserService.authenticated();
-
-        if (Objects.isNull(userSpringSecurity)) {
-            throw new AuthorizationDeniedException("Acesso negado!");
-        }
-
-        if (pageable == null || pageable.isUnpaged()) {
-            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
-        }
-
-        Page<ItemEtapa> items = this.itemEtapaRepository.findAllByEtapaObra_Id(id, pageable);
-        return items;
-        
-    }
-
 
 
     public List<ItemEtapa> findAllbyEtapaObraIdAll(Long id){
@@ -102,6 +81,24 @@ public class ItemEtapaService {
 
     }
 
+    @Transactional
+    public ItemEtapa update(ItemEtapa obj) {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity) || !(userSpringSecurity.hasRole(ProfileEnum.ADMIN))) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        ItemEtapa itemUpdated =  findById(obj.getId());
+        Item item = this.itemService.findById(obj.getItem().getId());
+
+        itemUpdated.setQuantidade(obj.getQuantidade());
+        itemUpdated.setItem(item);
+    
+
+        obj = this.itemEtapaRepository.save(itemUpdated);
+        return obj;
+    }
     
 
     public void delete(Long id) {

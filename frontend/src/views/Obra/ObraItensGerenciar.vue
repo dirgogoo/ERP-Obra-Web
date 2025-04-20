@@ -27,17 +27,26 @@ const EtapaObraID = route.currentRoute.value.query.etapaobra
 const saveItems = async () => {
     for (const item of toSaveItens.value) {
         try {
-            const response = await api.post("/obra/etapa/item", item);
-            console.log(`Item ${item.item.nome} saved successfully`);
+            if (item.id == 0) {
+                const response = await api.post("/obra/etapa/item", item);
+            }else{
+                const response = await api.put("/obra/etapa/item", item);
+            }
+            
+            console.log(`Item ${item.item.name} saved successfully`);
         } catch (error) {
-            console.error(`Error saving item ${item.item.nome}:`, error);
+            console.error(`Error saving item ${item.item.name}:`, error);
         }
     }
     route.push(`/app/obra/${route.currentRoute.value.params.id}/itens`);
 };
 
 watch(itemSelected, (newVal) => {
-    itemSelectedName.value = newVal.nome;
+    itemSelectedName.value = newVal.name;
+});
+
+watch(toSaveItens, (newVal) => {
+    console.log("toSaveItens atualizado no pai:", newVal);
 });
 
 const changeSelectId = (id) => {
@@ -46,23 +55,28 @@ const changeSelectId = (id) => {
 
 const addItem = () => {
     if (itemSelected.value || itemQtd.value) {
-    toSaveItens.value.push({
-        item: itemSelected.value,
-        quantidade: itemQtd.value,
-        valorTotal : 0,
-        etapa : {id : EtapaObraID }
-    });
+        var founded = toSaveItens.value.find(x => x.item.name == itemSelected.value.name)
+        if (founded) {
+            toSaveItens.value.splice(toSaveItens.value.indexOf(founded),1)
+        }
+        toSaveItens.value.push({
+            id: founded ? founded.id : 0,
+            item: itemSelected.value,
+            quantidade: itemQtd.value,
+            valorTotal: 0,
+            etapa: { id: EtapaObraID }
+        });
+}
     console.log(toSaveItens.value);
 }
-};
 
 watch(toSaveItens, (newVal) => {
     console.log(newVal);
 });
 
 const deleteE = async () => {
-    try { 
-        
+    try {
+
         const response = await api.delete(`/obra/etapa/item/${selectedId.value}`);
         const event = new CustomEvent('itemetapa-registered');
         window.dispatchEvent(event);
@@ -72,6 +86,27 @@ const deleteE = async () => {
 }
 
 
+const fetchItens = async () => {
+    try {
+        console.log(EtapaObraID)
+        const response = await api.get(`/obra/etapa/item/EtapaObra/${EtapaObraID}`, {
+        });
+
+        console.log(response.data, EtapaObraID);
+
+    toSaveItens.value = response.data
+
+    } catch (error) {
+        console.error("Erro ao buscar itens:", error);
+    }
+};
+
+onMounted(() => {
+    fetchItens();
+    console.log(toSaveItens.value)
+});
+
+
 </script>
 
 <template>
@@ -79,26 +114,27 @@ const deleteE = async () => {
         <div id="sides-container">
             <div id="left-container">
                 <div id="search-container">
-                    <SearchBar v-model="search"/>
-                    <FilterSelector label="Tipo:"/>
+                    <SearchBar v-model="search" />
+                    <FilterSelector label="Tipo:" />
                 </div>
                 <div id="table-container">
-                    <TabelaItens v-model="itemSelected"  :search="search"/>
+                    <TabelaItens v-model="itemSelected" :search="search" />
                 </div>
                 <div id="form-container">
                     <div id="input-container">
-                        <TopLabelTextBox label="Item" id="input-item" v-model="itemSelectedName"/>
-                        <TopLabelTextBox label="Quantidade" id="input-qtd" v-model="itemQtd"/>
+                        <TopLabelTextBox label="Item" id="input-item" v-model="itemSelectedName" />
+                        <TopLabelTextBox label="Quantidade" id="input-qtd" v-model="itemQtd" />
                     </div>
                     <div id="button-container">
-                        <Button label="Adicionar" class="button" @click="addItem"/>
-                        <ButtonRed class="button" label="Excluir" @click="deleteE"/>
+                        <Button label="Adicionar" class="button" @click="addItem" />
+                        <ButtonRed class="button" label="Excluir" @click="deleteE" />
                     </div>
                 </div>
             </div>
             <div id="right-container">
                 <div id="table-container2">
-                    <TabelaItensEtapa :etapa-id="EtapaObraID" v-model="toSaveItens"  @update:selectedID="changeSelectId"/>
+                    <TabelaItensEtapa :etapa-id="EtapaObraID" :itenss="toSaveItens"
+                        @update:selectedID="changeSelectId" />
                 </div>
                 <div id="button-container2">
                     <Button label="Salvar Mudanças" @click="saveItems" />
@@ -110,91 +146,91 @@ const deleteE = async () => {
 
 
 <style scoped>
+#main-container {
+    height: 100%;
+    width: 100%;
+}
 
-    #main-container{
-        height: 100%;
-        width: 100%;
-    }
+#sides-container {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+}
 
-    #sides-container{
-        display: flex;
-        margin-top: 10px;
-        justify-content: space-around;
-        width: 100%;
-        height: 100%;
-    }
+#left-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 46%;
+    height: 100%;
+}
 
-    #left-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 46%;
-        height: 100%;
-    }
+#right-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 46%;
+    height: 100%;
+}
 
-    #right-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 46%;
-        height: 100%;
-    }
+#search-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 10%;
+    gap: 20px;
+}
 
-    #search-container{
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        height: 10%;
-        gap:20px;
-    }
+#table-container {
+    width: 100%;
+    height: 60%;
+}
 
-    #table-container{
-        width: 100%;
-        height: 60%;
-    }
+#form-container {
+    width: 100%;
+    height: 30%;
+    font-size: 0.68em;
+}
 
-    #form-container{
-        width: 100%;
-        height: 30%;
-        font-size: 0.68em;
-    }
+#input-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 50%;
+}
 
-    #input-container{
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        height: 50%;
-    }
+#input-qtd {
+    width: 25%;
+}
 
-    #input-qtd{
-        width: 25%;
-    }
-    #input-item{
-        width: 65%;
-    }
+#input-item {
+    width: 65%;
+}
 
-    #button-container{
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        height: 23%;
-        font-size: 0.8em;
-    }
+#button-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 23%;
+    font-size: 0.8em;
+}
 
-    #table-container2{
-        width: 100%;
-        height: 85%;
-    }
+#table-container2 {
+    width: 100%;
+    height: 85%;
+}
 
-    #button-container2{
-        align-self: flex-end;
-        width: 40%;
-        height: 10%;
-        font-size: 0.7em;
-    }
+#button-container2 {
+    align-self: flex-end;
+    width: 40%;
+    height: 10%;
+    font-size: 0.7em;
+}
 
-    .button{
-        width: 30%;
-    }
+.button {
+    width: 30%;
+}
 </style>

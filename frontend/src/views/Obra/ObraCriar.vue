@@ -6,6 +6,7 @@ import TopLabelSelect from '../../components/TopLabelSelect';
 import TabelaObraNova from '@/components/TabelaObraNova.vue';
 import { onMounted, ref, watch } from 'vue';
 import api from '@/services/axios';
+import { useRouter } from 'vue-router';
 
 
 const nome = ref('');
@@ -34,6 +35,15 @@ watch(cliente, (newVal, oldVal) => {
     console.log(newVal, oldVal);
 })
 
+const router = useRouter();
+
+const toRouteId = (id) => {
+    if (id == 0) {
+        router.push("/app/obra/");
+    } else {
+        router.push("/app/obra/" + id);
+    }
+};
 
 
 onMounted(() => {
@@ -60,6 +70,27 @@ const getClientId = () => {
 
 const cadastrar = async () => {
     console.log(etapasSelecionadas.value);
+    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value) {
+        alert("Preencha todos os campos");
+        return;
+    }
+    if (etapasSelecionadas.value.length === 0) {
+        alert("Adicione etapas!");
+        return;
+    }
+    if (dataInicio.value > dataPrevista.value) {
+        alert("Data de inicio não pode ser maior que a data prevista!");
+        return;
+    }
+    if (dataInicio.value < new Date()) {
+        alert("Data de inicio não pode ser menor que a data atual!");
+        return;
+    }
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(dataInicio.value) || !dateRegex.test(dataPrevista.value)) {
+        alert("As datas devem estar no formato dd/mm/aaaa!");
+        return;
+    }
     try {
         const response = await api.post("/obra", {
             nome: nome.value,
@@ -70,16 +101,30 @@ const cadastrar = async () => {
             cliente: { id: getClientId() },
             description: endereco.value
         });
+        toRouteId(0);
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
+        toRouteId(0);
     }
+
 }
 
 
 
 function addEtapa() {
-    if (!etapaSelecionada.value || !etapaValue.value || !etapaPrazo.value) {
+    if (!etapaSelecionada.value || !etapaValue.value || !etapaPrazo.value || !etapaInicio.value) {
         alert("Preencha todos os campos");
+        return;
+    }
+
+    if (isNaN(etapaValue.value)) {
+        alert("Valor deve ser um número!");
+        return;
+    }
+
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(etapaPrazo.value) || !dateRegex.test(etapaInicio.value)) {
+        alert("Data de prazo da Etapa deve estar no formato dd/mm/aaaa!");
         return;
     }
 
@@ -169,13 +214,11 @@ function toggleContainers() {
                 <div id="table-container">
                     <TabelaObraNova v-bind:values="etapasTabela" />
                 </div>
-                <RouterLink to="/app/obra" id="RouterLink">
                     <div id="button-container">
-                        <ButtonRed class="button-form" label="Cancelar" />
+                        <ButtonRed class="button-form" label="Cancelar" @click="toRouteId(0)"/>
                         <Button class="button-form" label="Criar Nova Obra" @click="cadastrar()" />
 
                     </div>
-                </RouterLink>
             </div>
 
         </div>

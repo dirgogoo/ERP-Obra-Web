@@ -4,7 +4,7 @@ import TabelaItemObra from '@/components/TabelaItemObra.vue';
 import Button from '@/components/Button.vue';
 import { useRouter } from 'vue-router';
 
-import { onBeforeMount, ref, watch } from 'vue';
+import { onBeforeMount, onMounted, ref, watch } from 'vue';
 const props = defineProps({
     obra: {
         type: Object,
@@ -43,6 +43,10 @@ watch(etapa, (newVal) => {
         const event = new CustomEvent('etapa-updated',{ detail: { etapaId: etapaObj.value } });
         window.dispatchEvent(event);
     }
+});
+
+onMounted(() => {
+    etapa.value = etapasSelecao.value[0];
 });
 
 </script>

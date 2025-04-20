@@ -16,6 +16,10 @@
     const search = ref('');
 
     const cadastrar = async () => {
+        if (!nome.value || !cnpj.value) {
+            alert("Nome e CNPJ são obrigatórios.");
+            return;
+        }
         try{
             const response = await api.post("/cliente", {
                 name: nome.value,
