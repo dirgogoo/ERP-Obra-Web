@@ -3,7 +3,9 @@
         <h1>Informações da Obra</h1>
         <ul>
             <li><strong>Cliente:</strong>{{ obra.cliente.name }} </li>
-            <li><strong>Código:</strong> {{ obra.id }}</li>
+            <li><strong>ID:</strong> {{ obra.id }}</li>
+            <li><strong>Codigo UPE:</strong> {{ obra.codigoUPE }}</li>
+            <li><strong>Centro de Custos:</strong> {{ obra.centroCusto }}</li>
             <li><strong>Endereço:</strong> {{ obra.description }}</li>
             <li><strong>Data de Criação:</strong> {{ obra.dataLancamento }}</li>
             <li><strong>Data de Início:</strong> {{ obra.dataInicio }}</li>

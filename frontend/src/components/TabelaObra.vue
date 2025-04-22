@@ -3,7 +3,8 @@
         <table>
             <thead>
                 <tr>
-                    <th id="id-collumn">Id</th>
+                    <th id="id-collumn">CDG UPE</th>
+                    <th id="id-collumn">CT VD</th>
                     <th>Nome</th>
                     <th id="client-collumn">Cliente</th>
                     <th id="date-collumn">Data de Criação</th>
@@ -12,7 +13,8 @@
             </thead>
             <tbody>
                 <tr v-for="obra in obras" :key="obra.Id" @click="toRouteId(obra.id)">
-                    <td>{{ obra.id }}</td>
+                    <td>{{ obra.codigoUPE }}</td>
+                    <td>{{ obra.centroCusto }}</td>
                     <td>{{ obra.nome }}</td>
                     <td>{{ obra.cliente }}</td>
                     <td>{{ obra.dataCriacao }}</td>
@@ -74,12 +76,14 @@ const fetchObras = async (page) => {
         obras.value = response.data.content.map(obra => ({
             id: obra.id,
             nome: obra.nome,
+            codigoUPE : obra.codigoUPE,
+            centroCusto: obra.centroCusto,
             cliente: obra.cliente.name,
             dataCriacao: obra.dataLancamento,
             status: obra.status
         }));
         currentPage.value = page;
-
+        console.log("OBRA CARREGADA", response.data.content);
     } catch (error) {
         console.error("Erro ao buscar obras:", error);
     }

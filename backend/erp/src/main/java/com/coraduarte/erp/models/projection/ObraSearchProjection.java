@@ -10,6 +10,9 @@ public interface ObraSearchProjection {
     public Cliente getCliente();
 
     public String getDataLancamento();
+    
+    public String getCodigoUPE();
+    public String getCentroCusto();
 
     public Integer getStatus();
 

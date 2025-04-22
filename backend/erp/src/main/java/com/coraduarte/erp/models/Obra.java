@@ -65,6 +65,12 @@ public class Obra {
     @Column(name = "dataTermino", nullable = true)
     private String dataTermino;
 
+    @Column(name = "codigoUPE", nullable = true)
+    private String codigoUPE;
+
+    @Column(name = "centroCusto", nullable = true)
+    private String centroCusto;
+
     @Column(name = "status", nullable = false)
     private Integer status;
 

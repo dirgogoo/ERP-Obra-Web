@@ -13,7 +13,9 @@ const route = useRouter();
 
 const nome = ref('');
 const endereco = ref('');
+const codigoupe = ref('');
 const cliente = ref('');
+const centroCusto = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
 
@@ -34,6 +36,16 @@ const showTopContainer = ref(true);
 
 const currentPath = route.currentRoute.value.params.id;
 
+
+const router = useRouter();
+
+const toRouteId = (id) => {
+    if (id == 0) {
+        router.push("/app/obra/");
+    } else {
+        router.push("/app/obra/" + id);
+    }
+};
 
 
 api.get('/etapa/all').then(response => {
@@ -64,6 +76,8 @@ onMounted(async () => {
         nome.value = obra.nome;
         cliente.value = obra.cliente.name;
         dataInicio.value = obra.dataInicio;
+        codigoupe.value = obra.codigoUPE;
+        centroCusto.value = obra.centroCusto;
         endereco.value = obra.description;
         dataPrevista.value = obra.dataPrevista;
         etapasTabela.value = obra.etapa
@@ -73,7 +87,38 @@ onMounted(async () => {
     }
 });
 
+const parseDate = (dateString) => {
+    if (dateString.length !== 10) {
+        return 0; // Invalid date format
+    }
+    // Split the date string into day, month, and year
+    // and convert them to numbers
+        const [day, month, year] = dateString.split('/').map(Number);
+        return new Date(year, month - 1, day);
+    };
+
 const cadastrar = async () => {
+
+    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value) {
+        alert("Preencha todos os campos");
+        return;
+    }
+    if ( etapasTabela.value.length === 0) {
+        alert("Adicione etapas!");
+        return;
+    }
+
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(dataInicio.value) || !dateRegex.test(dataPrevista.value)) {
+        alert("As datas devem estar no formato dd/mm/aaaa!");
+        return;
+    }
+
+    
+    if (parseDate(dataInicio.value) > parseDate(dataPrevista.value)) {
+        alert("Data de início não pode ser maior que a data prevista!");
+        return;
+    }
 
     try {
         for (const etapaId of etapasRemover) {
@@ -90,6 +135,8 @@ const cadastrar = async () => {
             nome: nome.value,
             dataInicio: dataInicio.value,
             dataPrevista: dataPrevista.value,
+            codigoUPE: codigoupe.value,
+            centroCusto: centroCusto.value,
             status: 0,
             cliente: { id: getClientId() },
             description: endereco.value,
@@ -98,14 +145,43 @@ const cadastrar = async () => {
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
     }
+    toRouteId(0)
 }
 
 
 function addEtapa() {
-    if (!etapaSelecionada.value || !etapaValue.value || !etapaPrazo.value) {
+    if (! etapasTabela.value || !etapaValue.value || !etapaPrazo.value || !etapaInicio.value) {
         alert("Preencha todos os campos");
         return;
     }
+
+    if (isNaN(etapaValue.value)) {
+        alert("Valor deve ser um número!");
+        return;
+    }
+
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(etapaPrazo.value) || !dateRegex.test(etapaInicio.value)) {
+        alert("Data de prazo da Etapa deve estar no formato dd/mm/aaaa!");
+        return;
+    }
+
+    
+    if(parseDate(etapaInicio.value) > parseDate(etapaPrazo.value)) {
+        alert("Data de início da Etapa não pode ser maior que a data prevista!");
+        return;
+    }
+
+    if(parseDate(etapaInicio.value) < parseDate(dataInicio.value)) {
+        alert("Data de início da Etapa não pode ser menor que a data de início da obra!");
+        return;
+    }
+
+    if(parseDate(etapaPrazo.value) > parseDate(dataPrevista.value)) {
+        alert("Data de prazo da Etapa não pode ser maior que a data prevista da obra!");
+        return;
+    }
+
 
     var founded = etapasTabela.value.find((etapa) => etapa.etapa.name === etapaSelecionada.value);
     if (founded) {
@@ -154,6 +230,8 @@ function toggleContainers() {
                     <div id="form1-container">
                         <TopLabelTextBox label="Nome" v-model="nome" />
                         <TopLabelTextBox label="Endereço" v-model="endereco" />
+                        <TopLabelTextBox label="Código UPE" v-model="codigoupe" />
+                        <TopLabelTextBox label="Centro de custos" v-model="centroCusto" />
                         <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" />
                         <TopLabelTextBox label="Data Inicio" v-model="dataInicio" />
                         <TopLabelTextBox label="Data Prevista" v-model="dataPrevista" />
@@ -184,13 +262,11 @@ function toggleContainers() {
                 <div id="table-container">
                     <TabelaObraEdit :values="etapasTabela" />
                 </div>
-                <RouterLink to="/app/obra" id="RouterLink">
                     <div id="button-container">
-                        <ButtonRed class="button-form" label="Voltar" />
+                        <ButtonRed class="button-form" label="Voltar" @click="toRouteId(0)"/>
                         <Button class="button-form" label="Editar Obra" @click="cadastrar()" />
 
                     </div>
-                </RouterLink>
             </div>
 
         </div>

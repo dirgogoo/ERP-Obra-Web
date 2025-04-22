@@ -84,7 +84,7 @@ public class ObraService {
 
             Cliente client = this.clienteService.findById(obj.getCliente().getId());
             obj.setCliente(client);
-
+//
         for (EtapaObra etapaObra : obj.getEtapa()) {
                 etapaObra.setObra(obj);
                 etapas.add(this.EtapaObraService.create(etapaObra));
@@ -113,6 +113,8 @@ public class ObraService {
         newObj.setDataInicio(obj.getDataInicio());
         newObj.setDataPrevista(obj.getDataPrevista());
         newObj.setDataTermino(obj.getDataTermino());
+        newObj.setCodigoUPE(obj.getCodigoUPE());
+        newObj.setCentroCusto(obj.getCentroCusto());
         newObj.setCliente(obj.getCliente());
 
         for (EtapaObra etapaObra : obj.getEtapa()) {

@@ -4,6 +4,7 @@ import TopLabelTextBox from '../../components/TopLabelTextBox';
 import Button from '../../components/Button';
 import TopLabelSelect from '../../components/TopLabelSelect';
 import TabelaObraNova from '@/components/TabelaObraNova.vue';
+import TopLabelDateBox from '../../components/TopLabelDateBox';
 import { onMounted, ref, watch } from 'vue';
 import api from '@/services/axios';
 import { useRouter } from 'vue-router';
@@ -11,6 +12,8 @@ import { useRouter } from 'vue-router';
 
 const nome = ref('');
 const endereco = ref('');
+const codigoupe = ref('');
+const centroCusto = ref('');
 const cliente = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
@@ -68,9 +71,19 @@ const getClientId = () => {
     return client.id;
 }
 
+const parseDate = (dateString) => {
+    if (dateString.length !== 10) {
+        return 0; // Invalid date format
+    }
+    // Split the date string into day, month, and year
+    // and convert them to numbers
+        const [day, month, year] = dateString.split('/').map(Number);
+        return new Date(year, month - 1, day);
+    };
+
 const cadastrar = async () => {
-    console.log(etapasSelecionadas.value);
-    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value) {
+
+    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value) {
         alert("Preencha todos os campos");
         return;
     }
@@ -78,17 +91,15 @@ const cadastrar = async () => {
         alert("Adicione etapas!");
         return;
     }
-    if (dataInicio.value > dataPrevista.value) {
-        alert("Data de inicio não pode ser maior que a data prevista!");
-        return;
-    }
-    if (dataInicio.value < new Date()) {
-        alert("Data de inicio não pode ser menor que a data atual!");
-        return;
-    }
+
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
     if (!dateRegex.test(dataInicio.value) || !dateRegex.test(dataPrevista.value)) {
         alert("As datas devem estar no formato dd/mm/aaaa!");
+        return;
+    }
+
+    if (parseDate(dataInicio.value) > parseDate(dataPrevista.value)) {
+        alert("Data de início não pode ser maior que a data prevista!");
         return;
     }
     try {
@@ -97,6 +108,8 @@ const cadastrar = async () => {
             dataInicio: dataInicio.value,
             dataPrevista: dataPrevista.value,
             status: 0,
+            codigoUPE : codigoupe.value,
+            centroCusto: centroCusto.value,
             etapa: etapasSelecionadas.value,
             cliente: { id: getClientId() },
             description: endereco.value
@@ -125,6 +138,21 @@ function addEtapa() {
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
     if (!dateRegex.test(etapaPrazo.value) || !dateRegex.test(etapaInicio.value)) {
         alert("Data de prazo da Etapa deve estar no formato dd/mm/aaaa!");
+        return;
+    }
+
+    if(parseDate(etapaInicio.value) > parseDate(etapaPrazo.value)) {
+        alert("Data de início da Etapa não pode ser maior que a data prevista!");
+        return;
+    }
+
+    if(parseDate(etapaInicio.value) < parseDate(dataInicio.value)) {
+        alert("Data de início da Etapa não pode ser menor que a data de início da obra!");
+        return;
+    }
+
+    if(parseDate(etapaPrazo.value) > parseDate(dataPrevista.value)) {
+        alert("Data de prazo da Etapa não pode ser maior que a data prevista da obra!");
         return;
     }
 
@@ -182,11 +210,13 @@ function toggleContainers() {
                 <div id="top-container" v-show="showTopContainer">
                     <h1>Informações Gerais</h1>
                     <div id="form1-container">
-                        <TopLabelTextBox label="Nome" v-model="nome" />
-                        <TopLabelTextBox label="Endereço" v-model="endereco" />
-                        <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" />
-                        <TopLabelTextBox label="Data Inicio" v-model="dataInicio" />
-                        <TopLabelTextBox label="Data Prevista" v-model="dataPrevista" />
+                        <TopLabelTextBox label="Nome" v-model="nome" placeholder="Nome" />
+                        <TopLabelTextBox label="Endereço" v-model="endereco" placeholder="Endereço" />
+                        <TopLabelTextBox label="Código UPE" v-model="codigoupe" />
+                        <TopLabelTextBox label="Centro de custos" v-model="centroCusto" />
+                        <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" placeholder="Aperte para Selecionar" />
+                        <TopLabelDateBox label="Data Inicio" v-model="dataInicio" />
+                        <TopLabelDateBox label="Data Prevista" v-model="dataPrevista" />
                     </div>
                 </div>
                 <div id="bottom-container" v-show="!showTopContainer">
@@ -195,8 +225,8 @@ function toggleContainers() {
                         <div id="textbox-container">
                             <TopLabelSelect label="Nome" :content="etapasSelecao" v-model="etapaSelecionada" />
                             <TopLabelTextBox label="Valor" v-model="etapaValue" />
-                            <TopLabelTextBox label="Data Prevista" v-model="etapaPrazo" />
-                            <TopLabelTextBox label="Data Inicio" v-model="etapaInicio" />
+                            <TopLabelDateBox label="Data Prevista" v-model="etapaPrazo" />
+                            <TopLabelDateBox label="Data Inicio" v-model="etapaInicio" />
                         </div>
                         <div id="form-button-container">
                             <Button class="button-form" label="Adicionar" @click="addEtapa()" />
@@ -217,10 +247,8 @@ function toggleContainers() {
                     <div id="button-container">
                         <ButtonRed class="button-form" label="Cancelar" @click="toRouteId(0)"/>
                         <Button class="button-form" label="Criar Nova Obra" @click="cadastrar()" />
-
                     </div>
             </div>
-
         </div>
 
     </div>
