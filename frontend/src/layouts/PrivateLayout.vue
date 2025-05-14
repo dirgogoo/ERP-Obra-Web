@@ -1,8 +1,23 @@
 <script setup>
+    import { onMounted, ref, watch } from 'vue';
+    import api from '@/services/axios';
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
     }
+    const roles = ref([]);
+    const isLoadingRoles = ref(true);
+    onMounted(() => {
+        // Fetch the roles when the component is mounted
+        api.get('user/roles').then(response => {
+            roles.value = response.data;
+            isLoadingRoles.value = false;
+            //console.log(roles.value)
+            //console.log(roles.value.some(role => role === 'SUPERADMIN'));
+        }).catch(() => {
+            isLoadingRoles.value = false;
+        });
+    });
 
     const username = localStorage.getItem("username");
 </script>
@@ -37,7 +52,7 @@
             <div id="menu-container-bottom">
 
             
-                <RouterLink class="menu-element" id="menu-logout" to="/app/admin">
+                <RouterLink class="menu-element" id="menu-logout" to="/app/admin" v-show="!isLoadingRoles && roles.some(role => role === 'SUPERADMIN')">
                         <img id="admin" src="../assets/img/admin.png" alt="Logout">
                         <h2 class="menu-element-text">Admin</h2>
                 </RouterLink>

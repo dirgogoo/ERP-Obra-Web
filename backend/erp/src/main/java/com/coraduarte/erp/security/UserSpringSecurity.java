@@ -28,6 +28,10 @@ public class UserSpringSecurity implements  UserDetails {
         this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public boolean hasRole(ProfileEnum profile) {
         return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
     }

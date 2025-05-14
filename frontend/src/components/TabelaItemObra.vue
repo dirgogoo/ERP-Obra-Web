@@ -6,11 +6,13 @@
           <th id="id-column">Id</th>
           <th>Nome</th>
           <th id="tipo-column">Tipo</th>
+          <th id="fornecedor-column">Fornecedor</th>
           <th id="data-lancamento-column">Data Lanç.</th>
           <th id="unidade-column">Und</th>
           <th id="valor-unitario-column">Valor Unitário</th>
           <th id="qtd-column">Qtd</th>
           <th id="valor-total-column">Valor Total</th>
+          
         </tr>
       </thead>
       <tbody>
@@ -18,6 +20,7 @@
           <td>{{ item.id }}</td>
           <td>{{ item.nome }}</td>
           <td>{{ item.tipo }}</td>
+          <td>{{ item.fornecedor}}</td>
           <td>{{ item.dataLancamento }}</td>
           <td>{{ item.unidade }}</td>
           <td>R${{ item.valorUnitario }}</td>
@@ -70,6 +73,7 @@ const fetchItens = async (page) => {
       unidade: item.item.unidade,
       nome: item.item.name,
       tipo: item.item.tipo,
+      fornecedor: item.item.fornecedor.nome,
       valorUnitario: item.item.valor,
     }));
 
@@ -150,6 +154,10 @@ tr:hover {
   width: 8%;
 }
 
+#fornecedor-column {
+  width: 15%;
+}
+
 #data-lancamento-column {
   width: 7%;
 }
@@ -163,7 +171,7 @@ tr:hover {
 }
 
 #qtd-column {
-  width: 10%;
+  width: 7%;
 }
 
 #valor-total-column {

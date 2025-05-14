@@ -11,7 +11,6 @@ const statusMessage = ref('');
 const router = useRouter();
 
 const form = ref(false)
-
 const login = async () => {
     console.log(username.value, password.value);
 
@@ -24,7 +23,7 @@ const login = async () => {
         console.log(response.headers);
         const token = response.headers["authorization"];
         console.log("Token: ", token);
-        localStorage.setItem("token", token); // Salva no localStorage
+        localStorage.setItem("token", token); //Salva no localStorage
         localStorage.setItem("username", username.value);
         router.push("/app/home"); // Redireciona para home    
     } catch (error) {
@@ -100,6 +99,8 @@ const login = async () => {
 #login_container {
     width: 50vh;
     height: 60vh;
+    min-width: 350px;
+    min-height: 450px;
     border-radius: 30px;
     background-color: rgb(255, 255, 255);
     box-shadow: rgba(17, 12, 46, 0.4) 10px 10px 50px 25px;

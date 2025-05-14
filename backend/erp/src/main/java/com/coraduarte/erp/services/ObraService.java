@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.coraduarte.erp.models.Cliente;
 import com.coraduarte.erp.models.EtapaObra;
 import com.coraduarte.erp.models.Obra;
+import com.coraduarte.erp.models.Regiao;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.models.projection.ObraSearchProjection;
 import com.coraduarte.erp.repositories.ObraRepository;
@@ -38,6 +39,9 @@ public class ObraService {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private RegiaoService regiaoService;
 
     public Obra findById(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
@@ -90,6 +94,9 @@ public class ObraService {
                 etapas.add(this.EtapaObraService.create(etapaObra));
         }
 
+        Regiao regionFounded = this.regiaoService.findById(obj.getRegiao().getId());
+        obj.setRegiao(regionFounded);
+
         obj.setEtapa(etapas);
 
         obj = this.obraRepository.save(obj);
@@ -114,6 +121,7 @@ public class ObraService {
         newObj.setDataPrevista(obj.getDataPrevista());
         newObj.setDataTermino(obj.getDataTermino());
         newObj.setCodigoUPE(obj.getCodigoUPE());
+        newObj.setRegiao(obj.getRegiao());
         newObj.setCentroCusto(obj.getCentroCusto());
         newObj.setCliente(obj.getCliente());
 

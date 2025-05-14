@@ -3,20 +3,18 @@
         <table>
             <thead>
                 <tr>
-                    <th id="coluna-id">ID</th>
-                    <th id="coluna-nome">Nome</th>
-                    <th id="coluna-unidade">Unidade</th>
-                    <th id="coluna-preco">Preço</th>
-                    <th>Fornecedor</th>
+                    <th id="id-coluna">ID</th>
+                    <th id="nome-coluna">Nome</th>
+                    <th id="cnpj-coluna">CNPJ</th>
+                    <th>Regiao</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="servico in servicos" :key="servico.Id" :class="{selected: servico.id === selectedId}" @click="selectRow(servico.id)">
-                    <td>{{ servico.id }}</td>
-                    <td>{{ servico.name }}</td>
-                    <td>{{ servico.unidade }}</td>
-                    <td>R${{ servico.valor }}</td>
-                    <td>{{ servico.fornecedor.nome }}</td>
+                <tr v-for="fornecedor in fornecedores" :key="fornecedor.id" :class="{selected: fornecedor.id === selectedId}" @click="selectRow(fornecedor.id)">
+                    <td>{{ fornecedor.id }}</td>
+                    <td>{{ fornecedor.nome }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td>{{ fornecedor.regiao.nome }}</td>
                 </tr>
             </tbody>
         </table>
@@ -31,14 +29,13 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import api from "../services/axios";
 
-const servicos = ref([]);
+
+const fornecedores = ref([]);
 const currentPage = ref(1);
 const perPage = ref(16);
-const selectedId = ref(null);
-
 
 const props = defineProps({
     search: {
@@ -51,16 +48,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
+const selectedId = ref(null);
 
 watch(() => props.search, () => {
-    fetchServicos(currentPage.value);
+    fetchFornecedores(currentPage.value);
 });
 
-const fetchServicos = async (page) => {
+const fetchFornecedores = async (page) => {
     try {
-        const response = await api.get('/item', {
+        const response = await api.get('/fornecedor', {
             params: {
-                type: 1,
                 page: page - 1,
                 size: perPage.value,
                 search: props.search,
@@ -68,44 +65,48 @@ const fetchServicos = async (page) => {
             }
         });
 
-        servicos.value = response.data.content;
+        fornecedores.value = response.data.content
+
+        console.log(response.data.content);
+        console.log(fornecedores.value);
 
         currentPage.value = page;
 
     } catch (error) {
-        console.error("Erro ao buscar servicos:", error);
+        console.error("Erro ao buscar fornecedores:", error);
     }
 };
 
 
 
 const handleUserRegistered = () => {
-    fetchServicos(currentPage.value);
+    fetchFornecedores(currentPage.value);
 };
-
-onMounted(() => {
-    fetchServicos(currentPage.value);
-    window.addEventListener('servico-registered', handleUserRegistered);
-});
 
 const selectRow = (id) => {
     selectedId.value = id;
     emit('update:modelValue', id);
 };
 
+onMounted(() => {
+    fetchFornecedores(currentPage.value);
+    window.addEventListener('fornecedor-registered', handleUserRegistered);
+});
+
 onBeforeUnmount(() => {
-    window.removeEventListener('servico-registered', handleUserRegistered);
+    window.removeEventListener('fornecedor-registered', handleUserRegistered);
 });
 
 const updatePage = (page) => {
     {
         if (page > 0) {
-            fetchServicos(page);
+            fetchFornecedores(page);
         }
 
     }
 };
 </script>
+
 
 <style scoped>
 table {
@@ -141,19 +142,16 @@ tr:nth-child(even) {
     margin: 0 10px;
 }
 
-#coluna-id{
-    width: 7%;
-}
-
-#coluna-nome{
+#nome-coluna {
     width: 45%;
 }
 
-#coluna-unidade{
-    width: 10%;
+#cnpj-coluna {
+    width: 25%;
 }
-#coluna-preco{
-    width: 18%;
+
+#id-coluna {
+    width: 7%;
 }
 
 tr:hover {
@@ -164,5 +162,6 @@ tr:hover {
 tr.selected {
     background-color: #2889e477;
 }
+
 
 </style>

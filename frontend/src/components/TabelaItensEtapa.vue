@@ -18,7 +18,7 @@
                     <td>{{ item.item.tipo }}</td>
                     <td>{{ item.item.unidade }}</td>
                     <td>{{ item.quantidade }}</td>
-                    <td>R${{ item.item.valor * item.quantidade }}</td>
+                    <td>R${{ item.item.valor * item.quantidade}}</td>
                 </tr>
             </tbody>
         </table>

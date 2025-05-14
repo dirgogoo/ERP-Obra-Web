@@ -1,6 +1,7 @@
 package com.coraduarte.erp.controllers;
 
 import java.net.URI;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.coraduarte.erp.models.User;
+// Ensure the correct import for ProfileEnum
+import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.services.UserService;
 
 import jakarta.validation.Valid;
@@ -40,6 +43,12 @@ public class UserController {
     public ResponseEntity<Page<User>> findAll(Pageable pageable){
        Page<User> users = this.userService.findAll(pageable);
        return ResponseEntity.ok().body(users);
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<Set<ProfileEnum>> findByIdWithRoles(){
+        Set<ProfileEnum> obj = this.userService.findRoles();
+        return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping

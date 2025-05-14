@@ -3,9 +3,25 @@
     import Button from '../../components/Button';
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
-    import { ref, watch } from 'vue';
+    import { onMounted, ref, watch } from 'vue';
+    import api from '@/services/axios';
 
+
+    const roles = ref(["ASD"]);
     const search = ref('');
+    const isLoadingRoles = ref(true);
+    onMounted(() => {
+        // Fetch the roles when the component is mounted
+        api.get('user/roles').then(response => {
+            roles.value = response.data;
+            isLoadingRoles.value = false;
+            console.log(roles.value[1])
+            console.log(roles.value.some(role => role === 'ADMIN'));
+        }).catch(() => {
+            isLoadingRoles.value = false;
+        });
+    });
+
 </script>
 
 <template>
@@ -22,9 +38,9 @@
             <div class="filter-container">
                 <FilterSelector label="Filtrar por:"/>
             </div>
-            <RouterLink to="/app/obra/criar" id="button-container">
+            <RouterLink to="/app/obra/criar" id="button-container" v-show="!isLoadingRoles && roles.some(role => role === 'ADMIN')">
                 
-                <Button label="Nova Obra"/>
+                <Button  label="Nova Obra"/>
             </RouterLink>
         </div>
 

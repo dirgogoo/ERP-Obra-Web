@@ -4,17 +4,19 @@
             <thead>
                 <tr>
                     <th id="coluna-id">ID</th>
-                    <th>Nome</th>
+                    <th id="coluna-nome">Nome</th>
                     <th id="coluna-unidade">Unidade</th>
                     <th id="coluna-preco">Preço</th>
+                    <th>Fornecedor</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="material in materiais" :key="material.Id" :class="{selected: material.id === selectedId}" @click="selectRow(material.id)">
                     <td>{{ material.id }}</td>
-                    <td>{{ material.nome }}</td>
+                    <td>{{ material.name }}</td>
                     <td>{{ material.unidade }}</td>
-                    <td>R${{ material.preço }}</td>
+                    <td>R${{ material.valor }}</td>
+                    <td>{{ material.fornecedor.nome }}</td>
                 </tr>
             </tbody>
         </table>
@@ -64,12 +66,7 @@ const selectedId = ref(null);
                     }
                 });
                 
-                materiais.value = response.data.content.map(material => ({
-                    id: material.id,
-                    nome: material.name,
-                    unidade:material.unidade,
-                    preço :material.valor
-                }));
+                materiais.value = response.data.content;
 
                 currentPage.value = page;
 
@@ -146,11 +143,15 @@ tr:nth-child(even) {
     width: 7%;
 }
 
+#coluna-nome{
+    width: 45%;
+}
+
 #coluna-unidade{
-    width: 8%;
+    width: 10%;
 }
 #coluna-preco{
-    width: 15%;
+    width: 18%;
 }
 
 tr:hover {

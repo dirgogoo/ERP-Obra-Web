@@ -1,12 +1,18 @@
 package com.coraduarte.erp.services;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.coraduarte.erp.models.Etapa;
 import com.coraduarte.erp.models.Regiao;
 import com.coraduarte.erp.models.enums.ProfileEnum;
 import com.coraduarte.erp.repositories.RegiaoRepository;
@@ -45,6 +51,34 @@ public class RegiaoService {
         obj = this.regiaoRepository.save(obj); 
         return obj;
     }
+
+    public Page<Regiao> findAll(String nome,Pageable pageable){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        if (pageable == null || pageable.isUnpaged()) {
+            pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        }
+
+        Page<Regiao> regiaos = this.regiaoRepository.findByNomeContainingIgnoreCase(nome,pageable);
+        return regiaos;
+    }
+
+    public List<Regiao> findAll() {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        List<Regiao> regioes = this.regiaoRepository.findAll();
+
+        return regioes;
+    }
+
 
     public void delete(Long id) {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();

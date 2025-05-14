@@ -24,6 +24,9 @@ const dataHoje = new Date();
 
 const getDataAtual = (data1) => {
     console.log(data1)
+    if (!data1) {
+        return null;
+    }
     const [day1, month1, year1] = data1.split('/');
     const data1N = `${year1}-${month1}-${day1}`;
     const data1Date = new Date(data1N);
@@ -64,6 +67,9 @@ onMounted(async () => {
     var obra = props.obra;
     var saldoObra = 0;
     var obraTotal = 0
+    if (!props.obra.etapa) {
+        return;
+    }
     for (let i = 0; i < props.obra.etapa.length; i++) {
         try {
             const response = await api.get(`/obra/etapa/${obra.etapa[i].id}/saldo`);

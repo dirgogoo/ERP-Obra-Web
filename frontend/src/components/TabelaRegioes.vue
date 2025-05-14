@@ -3,20 +3,14 @@
         <table>
             <thead>
                 <tr>
-                    <th id="coluna-id">ID</th>
-                    <th id="coluna-nome">Nome</th>
-                    <th id="coluna-unidade">Unidade</th>
-                    <th id="coluna-preco">Preço</th>
-                    <th>Fornecedor</th>
+                    <th id="numero-coluna">ID</th>
+                    <th>Nome</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="servico in servicos" :key="servico.Id" :class="{selected: servico.id === selectedId}" @click="selectRow(servico.id)">
-                    <td>{{ servico.id }}</td>
-                    <td>{{ servico.name }}</td>
-                    <td>{{ servico.unidade }}</td>
-                    <td>R${{ servico.valor }}</td>
-                    <td>{{ servico.fornecedor.nome }}</td>
+                <tr v-for="regiao in regioes" :key="regiao.id" :class="{selected: regiao.id === selectedId}" @click="selectRow(regiao.id)">
+                    <td>{{ regiao.id }}</td>
+                    <td>{{ regiao.nome }}</td>
                 </tr>
             </tbody>
         </table>
@@ -24,20 +18,19 @@
             <h1 @click="updatePage(currentPage - 1)">&lt;</h1>
             <h1 id="page-label">{{ currentPage }}</h1>
             <div @click="updatePage(currentPage + 1)">
+                
                 <h1>&gt;</h1>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
-import api from "../services/axios";
 
-const servicos = ref([]);
-const currentPage = ref(1);
-const perPage = ref(16);
-const selectedId = ref(null);
+
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import api from "../services/axios";
+import { EmitFlags } from 'typescript';
 
 
 const props = defineProps({
@@ -52,62 +45,77 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+
 watch(() => props.search, () => {
-    fetchServicos(currentPage.value);
+    fetchEtapas(currentPage.value);
 });
 
-const fetchServicos = async (page) => {
+const regioes = ref([]);
+const currentPage = ref(1);
+const perPage = ref(16);
+const selectedId = ref(null);
+
+
+
+const fetchEtapas = async (page) => {
     try {
-        const response = await api.get('/item', {
+        const response = await api.get('/regiao', {
             params: {
-                type: 1,
                 page: page - 1,
                 size: perPage.value,
-                search: props.search,
                 sort: 'id,desc',
+                search: props.search
             }
         });
 
-        servicos.value = response.data.content;
-
+        regioes.value = response.data.content
         currentPage.value = page;
 
     } catch (error) {
-        console.error("Erro ao buscar servicos:", error);
+        console.error("Erro ao buscar regioes:", error);
     }
 };
-
-
-
-const handleUserRegistered = () => {
-    fetchServicos(currentPage.value);
-};
-
-onMounted(() => {
-    fetchServicos(currentPage.value);
-    window.addEventListener('servico-registered', handleUserRegistered);
-});
 
 const selectRow = (id) => {
     selectedId.value = id;
     emit('update:modelValue', id);
 };
 
+const handleUserRegistered = () => {
+    fetchEtapas(currentPage.value);
+};
+
+onMounted(() => {
+    fetchEtapas(currentPage.value);
+    window.addEventListener('regiao-registered', handleUserRegistered);
+});
+
 onBeforeUnmount(() => {
-    window.removeEventListener('servico-registered', handleUserRegistered);
+    window.removeEventListener('regiao-registered', handleUserRegistered);
 });
 
 const updatePage = (page) => {
     {
         if (page > 0) {
-            fetchServicos(page);
+            fetchEtapas(page);
         }
 
     }
 };
+
 </script>
 
+
 <style scoped>
+#selectionPage-container {
+    display: flex;
+    margin-top: 10px;
+}
+
+#page-label {
+    margin: 0 10px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -123,6 +131,8 @@ th {
     background-color: #2888E4;
     color: white;
 }
+
+
 
 tr {
     background-color: #EDEDED;
@@ -141,19 +151,8 @@ tr:nth-child(even) {
     margin: 0 10px;
 }
 
-#coluna-id{
+#numero-coluna {
     width: 7%;
-}
-
-#coluna-nome{
-    width: 45%;
-}
-
-#coluna-unidade{
-    width: 10%;
-}
-#coluna-preco{
-    width: 18%;
 }
 
 tr:hover {
@@ -164,5 +163,6 @@ tr:hover {
 tr.selected {
     background-color: #2889e477;
 }
+
 
 </style>

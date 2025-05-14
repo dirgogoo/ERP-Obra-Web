@@ -7,6 +7,7 @@
             <li><strong>Codigo UPE:</strong> {{ obra.codigoUPE }}</li>
             <li><strong>Centro de Custos:</strong> {{ obra.centroCusto }}</li>
             <li><strong>Endereço:</strong> {{ obra.description }}</li>
+            <li><strong>Regiao:</strong> {{ obra.regiao.nome}}</li>
             <li><strong>Data de Criação:</strong> {{ obra.dataLancamento }}</li>
             <li><strong>Data de Início:</strong> {{ obra.dataInicio }}</li>
             <li><strong>Data Prevista:</strong>{{ obra.dataPrevista }} </li>

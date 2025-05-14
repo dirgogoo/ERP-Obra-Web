@@ -78,6 +78,10 @@ public class Obra {
     @JoinColumn(name = "cliente_id", nullable = true)
     private Cliente cliente;
 
+    @ManyToOne
+    @JoinColumn(name = "regiao_id", nullable = false)
+    private Regiao regiao;
+
     @OneToMany(mappedBy = "obra")
     @JsonManagedReference
     private List<EtapaObra> etapa = new ArrayList<EtapaObra>();

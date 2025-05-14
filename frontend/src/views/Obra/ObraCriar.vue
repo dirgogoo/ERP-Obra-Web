@@ -18,6 +18,7 @@ const cliente = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
 
+
 const clientes = ref([]);
 const clienteSelecao = ref([]);
 
@@ -30,7 +31,11 @@ const etapaInicio = ref('');
 const etapasTabela = ref([]);
 const etapasSelecionadas = ref([]);
 
-const showTopContainer = ref(true);
+const showTopContainer = ref(0);
+
+const regioes = ref([]);
+const regioeSelecionadaSelecao = ref();
+const regioeSelecao = ref([]);
 
 
 
@@ -63,12 +68,24 @@ onMounted(() => {
             etapasSelecao.value.push(etapas.value[i].name);
         }
     });
+    api.get('/regiao/all').then(response => {
+        regioes.value = response.data;
+        for (let i = 0; i < regioes.value.length; i++) {
+           regioeSelecao.value.push(regioes.value[i].nome);
+        }
+    });
 });
 
 const getClientId = () => {
     const client = clientes.value.find(client => client.name === cliente.value);
     console.log(client.id);
     return client.id;
+}
+
+const getRegiaoId = () => {
+    const regiao = regioes.value.find(regiao => regiao.nome === regioeSelecionadaSelecao.value);
+    console.log(regiao.id);
+    return regiao.id;
 }
 
 const parseDate = (dateString) => {
@@ -83,7 +100,7 @@ const parseDate = (dateString) => {
 
 const cadastrar = async () => {
 
-    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value) {
+    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value || !regioeSelecionadaSelecao.value ) {
         alert("Preencha todos os campos");
         return;
     }
@@ -110,6 +127,7 @@ const cadastrar = async () => {
             status: 0,
             codigoUPE : codigoupe.value,
             centroCusto: centroCusto.value,
+            regiao : {"id" : getRegiaoId()},
             etapa: etapasSelecionadas.value,
             cliente: { id: getClientId() },
             description: endereco.value
@@ -198,7 +216,7 @@ function removeEtapa() {
 }
 
 function toggleContainers() {
-    showTopContainer.value = !showTopContainer.value;
+    showTopContainer.value = (showTopContainer.value + 1) % 2;
 }
 </script>
 
@@ -207,19 +225,25 @@ function toggleContainers() {
         <h2>Obra/Nova</h2>
         <div id="sides-container">
             <div id="left-container">
-                <div id="top-container" v-show="showTopContainer">
+                <div id="top-container" v-show="showTopContainer == 0">
                     <h1>Informações Gerais</h1>
                     <div id="form1-container">
                         <TopLabelTextBox label="Nome" v-model="nome" placeholder="Nome" />
-                        <TopLabelTextBox label="Endereço" v-model="endereco" placeholder="Endereço" />
+                        <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" placeholder="Aperte para Selecionar" />
+                        
                         <TopLabelTextBox label="Código UPE" v-model="codigoupe" />
                         <TopLabelTextBox label="Centro de custos" v-model="centroCusto" />
-                        <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" placeholder="Aperte para Selecionar" />
+                    </div>
+                </div>
+                <div id="top-container" v-show="showTopContainer == 0">
+                    <div id="form1-container">
+                        <TopLabelTextBox label="Endereço" v-model="endereco" placeholder="Endereço" />
+                        <TopLabelSelect label="Regiao" :content="regioeSelecao" v-model="regioeSelecionadaSelecao"/>
                         <TopLabelDateBox label="Data Inicio" v-model="dataInicio" />
                         <TopLabelDateBox label="Data Prevista" v-model="dataPrevista" />
                     </div>
                 </div>
-                <div id="bottom-container" v-show="!showTopContainer">
+                <div id="bottom-container" v-show="showTopContainer == 1">
                     <h1>Etapas</h1>
                     <div id="form1-container">
                         <div id="textbox-container">

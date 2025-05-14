@@ -19,6 +19,10 @@ const centroCusto = ref('');
 const dataInicio = ref('');
 const dataPrevista = ref('');
 
+const regioes = ref([]);
+const regioeSelecionadaSelecao = ref();
+const regioeSelecao = ref([]);
+
 
 const clientes = ref([]);
 const clienteSelecao = ref([]);
@@ -62,11 +66,23 @@ api.get('/cliente/all').then(response => {
     }
 });
 
+api.get('/regiao/all').then(response => {
+        regioes.value = response.data;
+        for (let i = 0; i < regioes.value.length; i++) {
+           regioeSelecao.value.push(regioes.value[i].nome);
+        }
+    });
 
 const getClientId = () => {
     const client = clientes.value.find(client => client.name === cliente.value);
     console.log(client.id);
     return client.id;
+}
+
+const getRegiaoId = () => {
+    const regiao = regioes.value.find(regiao => regiao.nome === regioeSelecionadaSelecao.value);
+    console.log(regiao.id);
+    return regiao.id;
 }
 
 onMounted(async () => {
@@ -79,6 +95,7 @@ onMounted(async () => {
         codigoupe.value = obra.codigoUPE;
         centroCusto.value = obra.centroCusto;
         endereco.value = obra.description;
+        regioeSelecionadaSelecao.value = obra.regiao.nome;
         dataPrevista.value = obra.dataPrevista;
         etapasTabela.value = obra.etapa
         console.log(obra, "obra loaded");
@@ -99,7 +116,7 @@ const parseDate = (dateString) => {
 
 const cadastrar = async () => {
 
-    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value) {
+    if (!nome.value || !endereco.value || !cliente.value || !dataInicio.value || !dataPrevista.value || !codigoupe.value || !centroCusto.value || !regioeSelecionadaSelecao.value) {
         alert("Preencha todos os campos");
         return;
     }
@@ -138,9 +155,11 @@ const cadastrar = async () => {
             codigoUPE: codigoupe.value,
             centroCusto: centroCusto.value,
             status: 0,
+            regiao: { id: getRegiaoId()},
             cliente: { id: getClientId() },
             description: endereco.value,
             etapa: etapasTabela.value,
+
         });
     } catch (error) {
         console.error("Erro ao cadastrar obra:", error);
@@ -229,12 +248,18 @@ function toggleContainers() {
                     <h1>Informações Gerais</h1>
                     <div id="form1-container">
                         <TopLabelTextBox label="Nome" v-model="nome" />
-                        <TopLabelTextBox label="Endereço" v-model="endereco" />
                         <TopLabelTextBox label="Código UPE" v-model="codigoupe" />
                         <TopLabelTextBox label="Centro de custos" v-model="centroCusto" />
                         <TopLabelSelect label="Cliente" :content="clienteSelecao" v-model="cliente" />
+                    </div>
+                </div>
+                <div id="top-container" v-show="showTopContainer">
+                    <div id="form1-container">
+                        <TopLabelTextBox label="Endereço" v-model="endereco" />
+                        <TopLabelSelect label="Regiao" :content="regioeSelecao" v-model="regioeSelecionadaSelecao"/>
                         <TopLabelTextBox label="Data Inicio" v-model="dataInicio" />
                         <TopLabelTextBox label="Data Prevista" v-model="dataPrevista" />
+                        
                     </div>
                 </div>
                 <div id="bottom-container" v-show="!showTopContainer">

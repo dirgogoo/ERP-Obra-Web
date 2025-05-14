@@ -11,11 +11,26 @@
   const status = ref("");
   const isLoading = ref(true);
 
+  
+
   const currentPath = route.currentRoute.value.params.id;
 
   import { onMounted } from "vue";
 import api from "@/services/axios";
 
+const roles = ref([]);
+    const isLoadingRoles = ref(true);
+    onMounted(() => {
+        // Fetch the roles when the component is mounted
+        api.get('user/roles').then(response => {
+            roles.value = response.data;
+            isLoadingRoles.value = false;
+            console.log(roles.value[1])
+            console.log(roles.value.some(role => role === 'ADMIN'));
+        }).catch(() => {
+            isLoadingRoles.value = false;
+        });
+    });
 
   onMounted(async () => {
     try {
@@ -64,7 +79,7 @@ import api from "@/services/axios";
         v-for="item in menuOptions"
         :key="item"
         :class="{ active: selected === item }"
-        @click="selectItem(item)">
+        @click="selectItem(item)" v-show="item != 'Editar' || roles.some(role => role === 'ADMIN')">
         {{ item }}
       </li>
     </ul>

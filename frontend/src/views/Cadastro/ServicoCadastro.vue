@@ -4,8 +4,9 @@
     import ButtonRed from '../../components/ButtonRed';
     import Searchbar from '../../components/Searchbar.vue';
     import FilterSelector from '../../components/FilterSelector.vue';
+    import TopLabelSelect from '../../components/TopLabelSelect';
     import TabelaServicos from '../../components/TabelaServicos.vue';
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import api from '../../services/axios';
 
 
@@ -13,12 +14,30 @@
     const unidade = ref('');
     const valor = ref('');
 
+    const fornecedores = ref([]);
+    const fornecedorSelecionadaSelecao = ref();
+    const fornecedorSelecao = ref([]);
+
     const selectedId = ref(null);
 
     const search = ref('');
 
+    onMounted(() => {
+    api.get('/fornecedor/all').then(response => {
+        fornecedores.value = response.data;
+        for (let i = 0; i < fornecedores.value.length; i++) {
+           fornecedorSelecao.value.push(fornecedores.value[i].nome);
+        }
+    });
+});
+
+const getFornecedorId = () => {
+    const fornecedor = fornecedores.value.find(f => f.nome === fornecedorSelecionadaSelecao.value);
+    return fornecedor ? fornecedor.id : null;
+}
+
     const cadastrar = async () => {
-        if (!nome.value || !unidade.value || !valor.value) {
+        if (!nome.value || !unidade.value || !valor.value || !fornecedorSelecionadaSelecao.value) {
             alert("Nome, Unidade e Preço são obrigatórios.");
             return;
         }
@@ -31,6 +50,7 @@
                 name: nome.value,
                 unidade: unidade.value,
                 valor: valor.value,
+                fornecedor : {"id" : getFornecedorId()},
                 tipo : 0,
             });
             const event = new CustomEvent('servico-registered');
@@ -74,6 +94,7 @@
                 <h1>Cadastro Serviços</h1>
                 <TopLabelTextBox label="Nome" v-model="nome"/>
                 <TopLabelTextBox label="Unidade" v-model="unidade"/>
+                <TopLabelSelect label="Fornecedor" :content="fornecedorSelecao" v-model="fornecedorSelecionadaSelecao" />
                 <TopLabelTextBox label="Preço" v-model="valor"/>
                 <div id="button-container">
                     <Button label="Cadastrar" class="button" @click="cadastrar()"/>
@@ -129,10 +150,11 @@
     #form-container{
         display: flex;
         flex-direction: column;
-        height: 60%;
+        height: 80%;
         width: 20%;
         margin-left: 2.5%;
         margin-top: 4%;
+        gap:30px;
         text-align: center;
         font-size: 0.65em;
         justify-content: space-between;

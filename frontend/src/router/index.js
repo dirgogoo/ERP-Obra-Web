@@ -19,6 +19,8 @@ import ObraItensGerenciar from '@/views/Obra/ObraItensGerenciar.vue';
 import ObraInfo from '@/views/Obra/ObraInfo.vue';
 import Admin from '@/views/Admin.vue';
 import ObraEditar from '@/views/Obra/ObraEditar.vue';
+import FornecedorCadastro from '@/views/Cadastro/FornecedorCadastro.vue';
+import RegiaoCadastro from '@/views/Cadastro/RegiaoCadastro.vue';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("token");
@@ -67,6 +69,8 @@ const routes = [
       { path: '/app/cadastro/etapa', name: 'Etapa', component:EtapaCadastro},
       { path: '/app/cadastro/material', name: 'Material', component:MaterialCadastro},
       { path: '/app/cadastro/servico', name: 'Servico', component:ServicoCadastro},
+      { path: '/app/cadastro/fornecedor', name: 'Fornecedor', component:FornecedorCadastro},
+      { path: '/app/cadastro/regiao', name: 'Regiao', component:RegiaoCadastro},
       { path: '/app/admin', name: 'Admin', component:Admin},
     ],
   },

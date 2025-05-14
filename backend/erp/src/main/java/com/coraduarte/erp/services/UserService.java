@@ -2,6 +2,7 @@ package com.coraduarte.erp.services;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -99,6 +100,17 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException("Não é possível excluir este usuário!");
         }
+    }
+
+    public Set<ProfileEnum> findRoles() {
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        if (Objects.isNull(userSpringSecurity)) {
+            throw new AuthorizationDeniedException("Acesso negado!");
+        }
+
+        User user = findById(userSpringSecurity.getId());
+        return user.getProfiles();
     }
 
     public static UserSpringSecurity authenticated() {

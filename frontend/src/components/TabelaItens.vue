@@ -8,6 +8,7 @@
                     <th id="coluna-tipo">Tipo</th>
                     <th id="coluna-unidade">Und</th>
                     <th id="coluna-preco">Preço</th>
+                    <th id="coluna-fornecedor">Fornecedor</th>
                 </tr>
             </thead>
             <tbody >
@@ -17,6 +18,7 @@
                     <td>{{ item.tipo }}</td>
                     <td>{{ item.unidade }}</td>
                     <td>R${{ item.valor }}</td>
+                    <td>{{ item.fornecedor.nome }}</td>
                 </tr>
             </tbody>
         </table>
@@ -55,7 +57,7 @@ const itemSelected = ref(props.modelValue);
 
 const items = ref([]);
 const currentPage = ref(1);
-const perPage = ref(10);
+const perPage = ref(8);
 
 const fetchItens = async (page) => {
     try {
@@ -108,6 +110,9 @@ td {
     padding: 8px;
 }
 
+#coluna-fornecedor{
+    width: 20%;
+}
 th {
     background-color: #2888E4;
     color: white;

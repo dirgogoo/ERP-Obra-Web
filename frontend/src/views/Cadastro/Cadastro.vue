@@ -20,9 +20,20 @@ import { RouterLink } from 'vue-router';
                 <img id="helmet" src="../../assets/img/cliente.png" alt="Clientes">
                 <h2 class="label-element" id="label-cliente">Cliente</h2>
             </RouterLink>
+            
+        </div>
+        <div id="menu-container">
             <RouterLink class="menu-element" to="/app/cadastro/etapa">
                 <img id="helmet" src="../../assets/img/etapa.png" alt="Etapas">
                 <h2 class="label-element">Etapa</h2>
+            </RouterLink>
+            <RouterLink class="menu-element" to="/app/cadastro/fornecedor">
+                <img id="helmet" src="../../assets/img/caminhao.png" alt="Etapas">
+                <h2 class="label-element">Fornecedor</h2>
+            </RouterLink>
+            <RouterLink class="menu-element" to="/app/cadastro/regiao">
+                <img id="helmet" src="../../assets/img/regiao.png" alt="Etapas">
+                <h2 class="label-element">Região</h2>
             </RouterLink>
         </div>
     </div>
@@ -37,11 +48,13 @@ import { RouterLink } from 'vue-router';
     }
 
     #menu-container{
-        margin-top:7%;
+        margin-top:2.5%;
         display: flex;
+        
         justify-content: space-around;
         align-items: center;
-        height: 45vh;
+        height: 35vh;
+        
         overflow: visible;
     }
 
@@ -49,7 +62,7 @@ import { RouterLink } from 'vue-router';
         color: white;
         background-color: #1988F3;
         height: 100%;
-        width: 18%;
+        width: 25%;
         text-align: center;
         border-radius: 30px;
         text-decoration: none;
@@ -59,14 +72,14 @@ import { RouterLink } from 'vue-router';
     }
 
     .label-element{
-        margin-top: 10%;
+        margin-top: 5%;
         font-size: 2.5em;
     }
 
     img{
-        height: 150px;
-        width: 150px;
-        margin-top: 100px;
+        height: 40%;
+        width: 30%;
+        margin-top: 10%;
     }
 
 </style>

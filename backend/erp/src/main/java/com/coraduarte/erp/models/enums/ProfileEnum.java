@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public enum ProfileEnum {
 
-    SUPERADMIN(1,"ROLE_SUPERADMIN"),
+    SUPERADMIN(1,"ROLE_USER"),
     ADMIN(2,"ROLE_ADMIN"),
-    USER(3,"ROLE_USER");
+    USER(3,"ROLE_SUPERADMIN");
 
     private Integer code;
     private String description;
@@ -33,6 +33,11 @@ public enum ProfileEnum {
 
         throw new IllegalArgumentException("Invalid Code ProfileEnum");
 
+    }
+
+    public Object toEnum(String authority) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toEnum'");
     }
 
     

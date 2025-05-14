@@ -9,5 +9,5 @@ import com.coraduarte.erp.models.Fornecedor;
 
 @Repository
 public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
-    Page<Fornecedor> findByNameContainingIgnoreCase(String nome, Pageable pageable);
+    Page<Fornecedor> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

@@ -10,6 +10,6 @@ import com.coraduarte.erp.models.projection.ObraSearchProjection;
 
 @Repository
 public interface RegiaoRepository extends JpaRepository<Regiao, Long>{
-    Page<ObraSearchProjection> findAllBy(Pageable pageable);
-    Page<ObraSearchProjection> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
+    Page<Regiao> findAllBy(Pageable pageable);
+    Page<Regiao> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 }
