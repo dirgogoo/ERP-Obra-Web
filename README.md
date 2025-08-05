@@ -1,0 +1,1 @@
+Um sistema ERP web completo voltado para empresas da construção civil, permitindo o controle de clientes, etapas de obras e itens relacionados. Desenvolvido com Java 21, Spring Boot, MySQL e Vue.js 3, o projeto visa oferecer uma solução moderna, segura e personalizável para gerenciamento de obras.
